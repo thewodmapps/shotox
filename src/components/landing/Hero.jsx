@@ -49,6 +49,12 @@ export default function Hero() {
             <div className="glass-card"><Sparkles className="w-4 h-4 text-pink-300" /> 20 designer templates</div>
           </Float>
         </motion.div>
+
+        <div className="sm:hidden mt-8 flex flex-col items-center gap-3">
+          <div className="glass-card"><Smartphone className="w-4 h-4 text-violet-300" /> Store-ready sizes for every device</div>
+          <div className="glass-card"><Zap className="w-4 h-4 text-lime-300" /> Pixel-perfect PNG & JPEG export</div>
+          <div className="glass-card"><Sparkles className="w-4 h-4 text-pink-300" /> 20 designer templates</div>
+        </div>
       </div>
     </section>
   );
