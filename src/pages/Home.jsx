@@ -6,6 +6,7 @@ import Features from '@/components/landing/Features';
 import TemplateShowcase from '@/components/landing/TemplateShowcase';
 import FaqSection from '@/components/landing/FaqSection';
 import Pricing from '@/components/landing/Pricing';
+import FinalCta from '@/components/landing/FinalCta';
 import Footer from '@/components/landing/Footer';
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
       <TemplateShowcase />
       <FaqSection />
       <Pricing />
+      <FinalCta />
       <Footer />
     </div>
   );
