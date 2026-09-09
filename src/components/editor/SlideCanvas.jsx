@@ -235,7 +235,7 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
           return (
             <div className="relative w-full h-full">
               <Blob color={c2} style={{ [L.dev === 'right' ? 'left' : 'right']: '-8%', top: '8%', width: '40%', height: '60%' }} />
-              <Orb size={orbSize} color={oColor} style={L.dev === 'right' ? { left: '5%', top: '16%' } : { right: '5%', top: '16%' }} />
+              <Orb size={orbSize * 0.8} color={oColor} style={L.dev === 'right' ? { right: '4%', bottom: '6%' } : { left: '4%', bottom: '6%' }} />
               <div className="absolute inset-y-0 flex items-center z-10" style={{ [L.text]: 0, width: `${L.textW * 100}%`, padding: textLeft ? '0 4% 0 8%' : '0 8% 0 4%' }}>
                 <div className="w-full" style={{ textAlign: L.tAlign, fontFamily: `'${slide.font}', sans-serif` }}>
                   <h2 style={{ color: slide.headingColor, fontSize: 26 * lk, lineHeight: 1.02, fontWeight: 800, letterSpacing: -0.5 * lk, textShadow: headShadow }}>{slide.heading}</h2>
