@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Trash2, Share2, Pencil, Check } from 'lucide-react';
+import { Trash2, Share2, Pencil } from 'lucide-react';
 import { format } from 'date-fns';
 import { resolveDevice } from '@/lib/templates';
 import ScaledSlide from '@/components/editor/ScaledSlide';
 import ShareModal from './ShareModal';
+import ConfirmDeleteModal from './ConfirmDeleteModal';
 
 const ICON = 'w-4 h-4';
 const BTN_BASE = 'grid place-items-center w-8 h-8 rounded-lg backdrop-blur transition-all text-white/60 opacity-70 hover:opacity-100 hover:text-white hover:bg-white/10';
@@ -12,14 +13,10 @@ const BTN_BASE = 'grid place-items-center w-8 h-8 rounded-lg backdrop-blur trans
 export default function ProjectCard({ project, onDelete }) {
   const p = project;
   const navigate = useNavigate();
-  const [confirming, setConfirming] = useState(false);
-  const [busy, setBusy] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
-  const timer = useRef(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const shareUrl = `${window.location.origin}/editor?id=${p.id}`;
-
-  useEffect(() => () => clearTimeout(timer.current), []);
 
   const edit = (e) => {
     e.preventDefault();
@@ -36,15 +33,12 @@ export default function ProjectCard({ project, onDelete }) {
   const onTrash = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (busy) return;
-    if (confirming) {
-      setBusy(true);
-      onDelete(p.id);
-      return;
-    }
-    setConfirming(true);
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => setConfirming(false), 3000);
+    setDeleteOpen(true);
+  };
+
+  const confirmDelete = () => {
+    setDeleteOpen(false);
+    onDelete(p.id);
   };
 
   return (
@@ -73,18 +67,16 @@ export default function ProjectCard({ project, onDelete }) {
             </button>
             <button
               onClick={onTrash}
-              disabled={busy}
-              aria-label={confirming ? 'Confirm delete' : 'Delete design'}
-              className={`grid place-items-center w-8 h-8 rounded-lg backdrop-blur transition-all ${
-                confirming ? 'bg-red-500 text-white opacity-100 scale-110' : BTN_BASE + ' hover:!bg-red-500/25 hover:!text-red-300'
-              }`}
+              aria-label="Delete design"
+              className={`${BTN_BASE} hover:!bg-red-500/25 hover:!text-red-300`}
             >
-              {confirming ? <Check className={ICON} /> : <Trash2 className={ICON} />}
+              <Trash2 className={ICON} />
             </button>
           </div>
         </div>
       </div>
       <ShareModal open={shareOpen} url={shareUrl} title={p.name} onClose={() => setShareOpen(false)} />
+      <ConfirmDeleteModal open={deleteOpen} name={p.name} onConfirm={confirmDelete} onClose={() => setDeleteOpen(false)} />
     </>
   );
 }
