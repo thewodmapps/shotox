@@ -4,15 +4,30 @@ import { BASE_W, slideHeight } from '@/lib/templates';
 
 export const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-const renderCanvas = async (el, device) =>
-  html2canvas(el, {
-    scale: device.w / BASE_W,
-    useCORS: true,
-    backgroundColor: null,
-    width: BASE_W,
-    height: slideHeight(device),
-    logging: false,
-  });
+// html2canvas clones the entire document into an iframe, then walks it to
+// re-locate the target element. Deeply nested, transformed, SVG-rich trees
+// (our slide canvas) break that walk and throw "Unable to find element in
+// cloned iframe". Rendering a fresh clone placed directly under <body> keeps
+// the lookup path trivial and stable.
+const renderCanvas = async (el, device) => {
+  const h = slideHeight(device);
+  const holder = document.createElement('div');
+  holder.style.cssText = `position:fixed;left:-99999px;top:0;width:${BASE_W}px;height:${h}px;overflow:hidden;pointer-events:none;`;
+  holder.appendChild(el.cloneNode(true));
+  document.body.appendChild(holder);
+  try {
+    return await html2canvas(holder, {
+      scale: device.w / BASE_W,
+      useCORS: true,
+      backgroundColor: null,
+      width: BASE_W,
+      height: h,
+      logging: false,
+    });
+  } finally {
+    document.body.removeChild(holder);
+  }
+};
 
 const triggerDownload = (blob, filename) => {
   const url = URL.createObjectURL(blob);
