@@ -8,10 +8,10 @@ import SlideCanvas from '@/components/editor/SlideCanvas';
 // rather than a rigid row.
 const ITEMS = [
   { id: 'magnolia', device: 'android-phone', slide: 0, w: 128, x: '2%',  y: '56%', rot: -10, z: 10, delay: 0,   float: 10 },
-  { id: 'aura',     device: 'iphone-6.7',    slide: 1, w: 138, x: '18%', y: '14%', rot: -5,  z: 20, delay: 0.4, float: 14 },
+  { id: 'aura',     device: 'iphone-6.7',    slide: 1, w: 138, x: '18%', y: '14%', rot: -5,  z: 20, delay: 0.4, float: 14, hide: true },
   { id: 'royale',   device: 'ipad-11',      slide: 2, w: 170, x: '32%', y: '52%', rot: 4,   z: 30, delay: 0.8, float: 12 },
   { id: 'halo',     device: 'iphone-6.7',    slide: 0, w: 144, x: '52%', y: '10%', rot: 7,   z: 25, delay: 1.2, float: 16 },
-  { id: 'drift',    device: 'android-tab-10', slide: 3, w: 162, x: '64%', y: '50%', rot: 11,  z: 15, delay: 1.6, float: 11 },
+  { id: 'drift',    device: 'android-tab-10', slide: 3, w: 162, x: '64%', y: '50%', rot: 11,  z: 15, delay: 1.6, float: 11, hide: true },
   { id: 'sprint',   device: 'android-phone', slide: 1, w: 122, x: '84%', y: '20%', rot: -7,  z: 8,  delay: 2.0, float: 13 },
 ];
 
@@ -31,7 +31,7 @@ const CONFETTI = [
 
 export default function HeroShowcase() {
   return (
-    <div className="relative h-[320px] sm:h-[420px] w-full overflow-hidden">
+    <div className="relative h-[260px] sm:h-[420px] w-full overflow-hidden">
       {/* Confetti */}
       {CONFETTI.map((c, i) => (
         <motion.div
@@ -44,14 +44,14 @@ export default function HeroShowcase() {
       ))}
 
       {/* Overlapping mockups */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 scale-[0.5] sm:scale-100 origin-center">
         {ITEMS.map((it) => {
           const slide = getTemplate(it.id).slides[it.slide] || getTemplate(it.id).slides[0];
           const device = getDevice(it.device);
           return (
             <motion.div
               key={it.id}
-              className="absolute"
+              className={`absolute ${it.hide ? 'hidden sm:block' : ''}`}
               style={{ left: it.x, top: it.y, zIndex: it.z, rotate: `${it.rot}deg` }}
               animate={{ y: [0, -it.float, 0] }}
               transition={{ duration: 6, delay: it.delay, repeat: Infinity, ease: 'easeInOut' }}
