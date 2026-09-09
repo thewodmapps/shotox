@@ -2,7 +2,12 @@ import React, { forwardRef } from 'react';
 import { BASE_W, slideHeight, getDevice } from '@/lib/templates';
 import DeviceFrame from './DeviceFrame';
 
-const PHONE_W = { phone: 252, tablet: 268 };
+// Reference canvas height the pose constants were tuned against. Every layout
+// value is scaled by k = h / H_REF so a template composes identically on any
+// device — phone or tablet — regardless of aspect ratio.
+const H_REF = 650;
+const DEVICE_FILL = 0.81;
+const RATIO = { phone: 2.1, tablet: 1.36 };
 
 const bgStyle = (bg) =>
   bg.type === 'gradient'
@@ -94,22 +99,16 @@ const Decor = ({ style, accent }) => {
   }
 };
 
-// Form-aware device placement. Phones bleed out the bottom under the text;
-// tablets are shorter, so the device is sized to the canvas and seated below
-// the text to avoid any overlap.
-const phonePos = (layout, pW, off, isTab, h) => {
+// Scaled per-template pose. Same template → same composition on every device.
+const phonePos = (layout, pW, off, k) => {
   let top, rot = 0, x = 0;
-  if (isTab) {
-    top = h * 0.30;
-  } else {
-    if (layout === 'phone-top') top = -90;
-    else if (layout === 'tilted') { top = 192; rot = -8; x = 8; }
-    else top = 176;
-  }
-  if (off && !isTab) {
+  if (layout === 'phone-top') top = -90 * k;
+  else if (layout === 'tilted') { top = 192 * k; rot = -8; x = 8; }
+  else top = 176 * k;
+  if (off) {
     x += off.x;
     rot += off.rot;
-    if (layout !== 'phone-top') top += off.topDelta;
+    if (layout !== 'phone-top') top += (off.topDelta || 0) * k;
   }
   return { marginLeft: -pW / 2 + (x / 100) * BASE_W, top, transform: `rotate(${rot}deg)` };
 };
@@ -120,28 +119,32 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
   const scale = width / BASE_W;
   const landscape = dev.w > dev.h;
   const form = dev.form || 'phone';
-  const isTab = form === 'tablet';
-  const phoneW = landscape ? (h * 0.82) / 2.1 : PHONE_W[form] || 252;
+  const ratio = RATIO[form] || 2.1;
+  const k = h / H_REF;
   const pScale = slide.pose?.scale ?? 1;
-  const pW = isTab ? (h * 0.82) / 1.36 : phoneW * pScale;
+  const phoneW = landscape ? (h * 0.82) / 2.1 : (DEVICE_FILL * h) / ratio;
+  const pW = landscape ? phoneW : phoneW * pScale;
 
   const accent = slide.headingColor && slide.headingColor.startsWith('#') ? slide.headingColor : (isLight(slide.bg.from || slide.bg.color) ? '#0B0B12' : '#FFFFFF');
   const theme = slide.style || 'swipe';
-  const hFs = landscape ? 24 : isTab ? 21 : 33;
-  const sFs = landscape ? 11.5 : isTab ? 11 : 13.5;
+  const hFs = landscape ? 24 : 33 * k;
+  const sFs = landscape ? 11.5 : 13.5 * k;
 
-  const renderText = (pad) => (
-    <div style={{ textAlign: slide.align, fontFamily: `'${slide.font}', sans-serif`, padding: pad ? `${isTab ? 26 : 34}px 26px 0` : 0 }}>
-      <h2 style={{ color: slide.headingColor, fontSize: hFs, lineHeight: 1.02, fontWeight: 800, letterSpacing: -1 }}>
-        {slide.heading}
-      </h2>
-      {slide.subheading && (
-        <p style={{ color: slide.subColor, fontSize: sFs, marginTop: 10, lineHeight: 1.4, fontWeight: 500, maxWidth: landscape ? '100%' : '88%' }}>
-          {slide.subheading}
-        </p>
-      )}
-    </div>
-  );
+  const renderText = (pos) => {
+    const pad = pos === 'bottom' ? `0 26px ${28 * k}px` : pos === 'center' ? '0 26px' : `${34 * k}px 26px 0`;
+    return (
+      <div style={{ textAlign: slide.align, fontFamily: `'${slide.font}', sans-serif`, padding: pad }}>
+        <h2 style={{ color: slide.headingColor, fontSize: hFs, lineHeight: 1.02, fontWeight: 800, letterSpacing: -1 }}>
+          {slide.heading}
+        </h2>
+        {slide.subheading && (
+          <p style={{ color: slide.subColor, fontSize: sFs, marginTop: 10 * k, lineHeight: 1.4, fontWeight: 500, maxWidth: landscape ? '100%' : '88%' }}>
+            {slide.subheading}
+          </p>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className={className} style={{ width, height: h * scale, flexShrink: 0 }}>
@@ -155,7 +158,7 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
         {landscape ? (
           <div className="flex h-full relative">
             <div className="flex flex-col justify-center relative z-10" style={{ width: '58%', paddingLeft: '8%', paddingRight: '4%' }}>
-              {renderText(false)}
+              {renderText('center')}
             </div>
             <div className="relative flex items-center justify-center z-[1]" style={{ width: '42%' }}>
               {slide.layout !== 'text-only' && <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={phoneW} form="phone" platform={dev.platform} />}
@@ -164,11 +167,13 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
         ) : (
           <>
             {slide.layout === 'text-only' ? (
-              <div className="absolute inset-0 flex items-center">{renderText(true)}</div>
+              <div className="absolute inset-0 flex items-center">{renderText('center')}</div>
             ) : (
               <>
-                <div className={`absolute inset-x-0 z-10 ${!isTab && slide.layout === 'phone-top' ? 'bottom-0 pb-7' : 'top-0'}`}>{renderText(true)}</div>
-                <div className="absolute left-1/2 z-[1]" style={phonePos(slide.layout, pW, slide.pose, isTab, h)}>
+                <div className={`absolute inset-x-0 z-10 ${slide.layout === 'phone-top' ? 'bottom-0' : 'top-0'}`}>
+                  {renderText(slide.layout === 'phone-top' ? 'bottom' : 'top')}
+                </div>
+                <div className="absolute left-1/2 z-[1]" style={phonePos(slide.layout, pW, slide.pose, k)}>
                   <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={pW} form={form} platform={dev.platform} />
                 </div>
               </>
