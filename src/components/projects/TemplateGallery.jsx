@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { TEMPLATES, TEMPLATE_TAGS, CATEGORIES } from '@/lib/templates';
-import TemplateBlock from '@/components/landing/TemplateBlock';
+import ScaledSlide from '@/components/editor/ScaledSlide';
 
 export default function TemplateGallery({ onCreate, creating }) {
   const [cat, setCat] = useState('All');
@@ -17,7 +17,7 @@ export default function TemplateGallery({ onCreate, creating }) {
   return (
     <section>
       <h2 className="font-display text-xl font-bold text-[#0B0B12] mb-3">Templates</h2>
-      <div className="space-y-2 mb-6">
+      <div className="space-y-2 mb-5">
         <div className="flex flex-wrap gap-2">
           <span className="text-[11px] text-[#0B0B12]/40 self-center mr-1">Category</span>
           {CATEGORIES.map((c) => <Pill key={c} active={cat === c} onClick={() => setCat(c)}>{c}</Pill>)}
@@ -33,14 +33,22 @@ export default function TemplateGallery({ onCreate, creating }) {
       {list.length === 0 ? (
         <p className="text-sm text-[#0B0B12]/50 rounded-2xl border border-dashed border-black/10 p-6 text-center">No templates match this filter — try another category or style.</p>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {list.map((tpl) => (
-            <TemplateBlock
-              key={tpl.id}
-              template={tpl}
-              ctaLabel="Use template"
-              onOpen={() => onCreate({ templateId: tpl.id, platform: 'ios' })}
-            />
+            <button key={tpl.id} disabled={!!creating} onClick={() => onCreate({ templateId: tpl.id, platform: 'ios' })} className="text-left rounded-2xl overflow-hidden border border-black/5 bg-white hover:shadow-[0_30px_60px_-30px_rgba(0,0,0,0.35)] hover:-translate-y-1 transition-all disabled:opacity-60">
+              <div className="flex gap-1.5 p-2.5 bg-[#0B0B12]">
+                {tpl.slides.slice(0, 4).map((s) => (
+                  <div key={s.id} className="flex-1 aspect-[1290/2796] relative overflow-hidden rounded-lg"><ScaledSlide slide={s} /></div>
+                ))}
+              </div>
+              <div className="px-4 py-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-sm text-[#0B0B12]">{tpl.name}</span>
+                  <span className="text-[11px] text-violet-600 font-medium">{tpl.category}</span>
+                </div>
+                <div className="text-xs text-[#0B0B12]/50 mt-0.5">{tpl.tags.join(' · ')}</div>
+              </div>
+            </button>
           ))}
         </div>
       )}
