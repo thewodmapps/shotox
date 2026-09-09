@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { getTemplate, getDevice } from '@/lib/templates';
 import SlideCanvas from '@/components/editor/SlideCanvas';
 
+// Fixed design canvas. The composition is authored once at this size and scaled
+// uniformly via CSS transform so it renders identically on every viewport —
+// phone, tablet, and desktop — with no reflow or collision.
+const DESIGN_W = 1024;
+const DESIGN_H = 420;
+
 // Organic, overlapping stack of phone mockups across brand-aligned templates.
-// Each item is positioned absolutely to create a free-form scattered layout
-// rather than a rigid row.
 const ITEMS = [
   { id: 'magnolia', device: 'android-phone', slide: 0, w: 128, x: '2%',  y: '56%', rot: -10, z: 10, delay: 0,   float: 10 },
-  { id: 'aura',     device: 'iphone-6.7',    slide: 1, w: 138, x: '18%', y: '14%', rot: -5,  z: 20, delay: 0.4, float: 14, hide: true },
+  { id: 'aura',     device: 'iphone-6.7',    slide: 1, w: 138, x: '18%', y: '14%', rot: -5,  z: 20, delay: 0.4, float: 14 },
   { id: 'royale',   device: 'ipad-11',      slide: 2, w: 170, x: '32%', y: '52%', rot: 4,   z: 30, delay: 0.8, float: 12 },
   { id: 'halo',     device: 'iphone-6.7',    slide: 0, w: 144, x: '52%', y: '10%', rot: 7,   z: 25, delay: 1.2, float: 16 },
-  { id: 'drift',    device: 'android-tab-10', slide: 3, w: 162, x: '64%', y: '50%', rot: 11,  z: 15, delay: 1.6, float: 11, hide: true },
+  { id: 'drift',    device: 'android-tab-10', slide: 3, w: 162, x: '64%', y: '50%', rot: 11,  z: 15, delay: 1.6, float: 11 },
   { id: 'sprint',   device: 'android-phone', slide: 1, w: 122, x: '84%', y: '20%', rot: -7,  z: 8,  delay: 2.0, float: 13 },
 ];
 
@@ -30,28 +34,44 @@ const CONFETTI = [
 ];
 
 export default function HeroShowcase() {
-  return (
-    <div className="relative h-[260px] sm:h-[420px] w-full overflow-hidden">
-      {/* Confetti */}
-      {CONFETTI.map((c, i) => (
-        <motion.div
-          key={i}
-          className={`absolute rounded-sm ${c.c}`}
-          style={{ left: c.x, top: c.y, width: c.s, height: c.s, rotate: `${c.r}deg` }}
-          animate={{ y: [0, -10, 0], rotate: [c.r, c.r + 20, c.r] }}
-          transition={{ duration: 5 + i, delay: c.delay, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      ))}
+  const wrapRef = useRef(null);
+  const [scale, setScale] = useState(1);
 
-      {/* Overlapping mockups */}
-      <div className="absolute inset-0 scale-[0.5] sm:scale-100 origin-center">
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const update = () => setScale(el.clientWidth / DESIGN_W);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  return (
+    <div ref={wrapRef} className="relative w-full overflow-hidden" style={{ height: DESIGN_H * scale }}>
+      <div
+        className="absolute top-0 left-0 origin-top-left"
+        style={{ width: DESIGN_W, height: DESIGN_H, transform: `scale(${scale})` }}
+      >
+        {/* Confetti */}
+        {CONFETTI.map((c, i) => (
+          <motion.div
+            key={i}
+            className={`absolute rounded-sm ${c.c}`}
+            style={{ left: c.x, top: c.y, width: c.s, height: c.s, rotate: `${c.r}deg` }}
+            animate={{ y: [0, -10, 0], rotate: [c.r, c.r + 20, c.r] }}
+            transition={{ duration: 5 + i, delay: c.delay, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        ))}
+
+        {/* Overlapping mockups */}
         {ITEMS.map((it) => {
           const slide = getTemplate(it.id).slides[it.slide] || getTemplate(it.id).slides[0];
           const device = getDevice(it.device);
           return (
             <motion.div
               key={it.id}
-              className={`absolute ${it.hide ? 'hidden sm:block' : ''}`}
+              className="absolute"
               style={{ left: it.x, top: it.y, zIndex: it.z, rotate: `${it.rot}deg` }}
               animate={{ y: [0, -it.float, 0] }}
               transition={{ duration: 6, delay: it.delay, repeat: Infinity, ease: 'easeInOut' }}
