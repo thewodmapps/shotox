@@ -124,33 +124,20 @@ const AndroidTabletScreen = ({ tint }) => {
   );
 };
 
-/* ── Feature graphic: Android phone UI laid out horizontally (landscape) ── */
-const AndroidFeatureScreen = ({ tint }) => {
+/* ── Feature graphic: app icon + title + tagline + CTA (landscape banner) ── */
+const FeatureScreen = ({ tint }) => {
   const [from, to] = tint;
   return (
-    <div className="w-full h-full flex flex-col">
-      <div className="flex items-center justify-between px-[5%] pt-[5%]" style={{ height: '13%' }}>
-        <div className="w-[8%] h-[55%] rounded-full bg-white/50" />
-        <div className="flex items-center gap-[2%]">
-          <div className="w-[3%] h-[55%] rounded-full bg-white/35" />
-          <div className="w-[6%] h-[70%] rounded-[2px] border border-white/50" />
+    <div className="w-full h-full flex items-center gap-[9%] px-[9%]">
+      <div className="rounded-[24%] shrink-0" style={{ width: '34%', aspectRatio: '1 / 1', background: `linear-gradient(135deg, ${from}, ${to})`, boxShadow: '0 8px 18px -6px rgba(0,0,0,0.55)' }} />
+      <div className="flex-1 flex flex-col gap-[15%] min-w-0">
+        <div className="h-[30%] w-[90%] rounded-[3px] bg-white/90" />
+        <div className="h-[16%] w-[62%] rounded-[2px] bg-white/40" />
+        <div className="inline-flex items-center gap-[14%] rounded-full bg-white/[0.12] border border-white/15 px-[10%] self-start" style={{ height: '26%' }}>
+          <div className="rounded-full" style={{ height: '60%', aspectRatio: '1 / 1', background: `linear-gradient(135deg, ${from}, ${to})` }} />
+          <div className="rounded-full bg-white/70" style={{ height: '45%', aspectRatio: '5 / 1' }} />
         </div>
       </div>
-      <div className="px-[5%] flex items-center gap-[4%]" style={{ height: '18%', background: `linear-gradient(125deg, ${from}, ${to})` }}>
-        <div className="w-[5%] h-[50%] rounded-full bg-white/75" />
-        <div className="h-[42%] w-[26%] rounded-full bg-white/65" />
-        <div className="ml-auto w-[5%] h-[50%] rounded-full bg-white/55" />
-      </div>
-      <div className="flex gap-[4%] px-[5%] mt-[5%] flex-1 items-stretch">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="rounded-lg bg-white/[0.07] flex flex-col gap-[12%] p-[8%]" style={{ flex: 1, boxShadow: '0 2px 6px -2px rgba(0,0,0,0.5)' }}>
-            <div className="rounded-md" style={{ height: '42%', background: `linear-gradient(135deg, ${from}, ${to})` }} />
-            <div className="h-[18%] w-[80%] rounded-full bg-white/45" />
-            <div className="h-[14%] w-[55%] rounded-full bg-white/20" />
-          </div>
-        ))}
-      </div>
-      <div className="mx-auto mb-[5%] rounded-full bg-white/50" style={{ width: '16%', height: '5%' }} />
     </div>
   );
 };
@@ -177,7 +164,7 @@ export default function FormPreview({ form, platform, style, tint }) {
   const Screen = form === 'tablet'
     ? (isAndroid ? AndroidTabletScreen : IosTabletScreen)
     : form === 'feature'
-      ? AndroidFeatureScreen
+      ? FeatureScreen
       : (isAndroid ? AndroidPhoneScreen : IosPhoneScreen);
 
   return (
