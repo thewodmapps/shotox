@@ -94,11 +94,16 @@ const Decor = ({ style, accent }) => {
   }
 };
 
-const phonePos = (layout, phoneW) => {
-  const base = { width: phoneW, marginLeft: -phoneW / 2 };
-  if (layout === 'phone-top') return { ...base, top: -90 };
-  if (layout === 'tilted') return { ...base, top: 192, transform: 'rotate(-8deg) translateX(8px)' };
-  return { ...base, top: 176 };
+const phonePos = (layout, pW, off) => {
+  let top = 176, rot = 0, x = 0;
+  if (layout === 'phone-top') top = -90;
+  else if (layout === 'tilted') { top = 192; rot = -8; x = 8; }
+  if (off) {
+    x += off.x;
+    rot += off.rot;
+    if (layout !== 'phone-top') top += off.topDelta;
+  }
+  return { marginLeft: -pW / 2 + (x / 100) * BASE_W, top, transform: `rotate(${rot}deg)` };
 };
 
 const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, width = BASE_W, className = '' }, ref) {
@@ -108,6 +113,8 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
   const landscape = dev.w > dev.h;
   const form = dev.form || 'phone';
   const phoneW = landscape ? (h * 0.82) / 2.1 : PHONE_W[form] || 252;
+  const pScale = slide.pose?.scale ?? 1;
+  const pW = phoneW * pScale;
 
   const accent = slide.headingColor && slide.headingColor.startsWith('#') ? slide.headingColor : (isLight(slide.bg.from || slide.bg.color) ? '#0B0B12' : '#FFFFFF');
   const theme = slide.style || 'swipe';
@@ -148,8 +155,8 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
             {slide.layout === 'text-only' && <div className="absolute inset-0 flex items-center">{renderText(true)}</div>}
             {(slide.layout === 'phone-bottom' || slide.layout === 'tilted') && <div className="absolute inset-x-0 top-0 z-10">{renderText(true)}</div>}
             {slide.layout !== 'text-only' && (
-              <div className="absolute left-1/2 z-[1]" style={phonePos(slide.layout, phoneW)}>
-                <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={phoneW} form={form} platform={dev.platform} />
+              <div className="absolute left-1/2 z-[1]" style={phonePos(slide.layout, pW, slide.pose)}>
+                <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={pW} form={form} platform={dev.platform} />
               </div>
             )}
             {slide.layout === 'phone-top' && <div className="absolute inset-x-0 bottom-0 z-10 pb-7">{renderText(true)}</div>}

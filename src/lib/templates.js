@@ -49,6 +49,19 @@ export const CATEGORIES = ['All', 'Productivity', 'Finance', 'Beauty', 'Food', '
 
 export const MOCK_TYPES = ['hero', 'list', 'detail', 'stats', 'grid', 'chat', 'profile', 'success'];
 
+// Per-template device pose: shifts the phone's x offset, rotation, scale, and
+// vertical bleed so each template frames the mockup differently.
+export const POSES = [
+  { x: 0, rot: 0, scale: 1, topDelta: 0 },
+  { x: 12, rot: 8, scale: 0.97, topDelta: 8 },
+  { x: -12, rot: -8, scale: 0.97, topDelta: 8 },
+  { x: 0, rot: 14, scale: 1, topDelta: 6 },
+  { x: 0, rot: 0, scale: 0.88, topDelta: 42 },
+  { x: 0, rot: 0, scale: 1.06, topDelta: -68 },
+  { x: 8, rot: -10, scale: 1, topDelta: 10 },
+  { x: -8, rot: 10, scale: 1, topDelta: 10 },
+];
+
 let uid = 0;
 export const makeId = () => `${Date.now().toString(36)}${(uid++).toString(36)}`;
 export const grad = (from, to, angle = 135) => ({ type: 'gradient', color: from, from, to, angle });
@@ -67,6 +80,7 @@ export const makeSlide = (o = {}) => ({
   font: 'Sora',
   style: 'swipe',
   mock: 'hero',
+  pose: null,
   align: 'center',
   ...o,
 });
@@ -213,9 +227,10 @@ const tagsFor = (d) => {
 };
 
 const perCat = {};
-export const TEMPLATES = D.map((d) => {
+export const TEMPLATES = D.map((d, di) => {
   perCat[d.cat] = perCat[d.cat] || 0;
   const off = perCat[d.cat]++;
+  const pose = POSES[di % POSES.length];
   const pool = COPY[d.cat];
   const slides = [];
   for (let i = 0; i < 8; i++) {
@@ -224,6 +239,7 @@ export const TEMPLATES = D.map((d) => {
         font: d.font,
         style: d.style,
         mock: MOCK_TYPES[(off + i) % MOCK_TYPES.length],
+        pose,
         layout: L8[i % 8],
         heading: pool.h[(off * 3 + i) % pool.h.length],
         subheading: pool.s[(off * 2 + i) % pool.s.length],
