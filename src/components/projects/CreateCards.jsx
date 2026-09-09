@@ -26,7 +26,7 @@ export default function CreateCards({ onCreate, creating, isPro }) {
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {OPTIONS.map((o) => {
-          const locked = !isPro && o.key !== 'ios-phone';
+          const locked = !isPro && (o.key === 'feature' || o.key === 'custom');
           const handle = () => {
             if (locked) { window.location.href = '/#pricing'; return; }
             o.form === 'custom' ? setCustomOpen((v) => !v) : onCreate({ templateId: o.tpl, platform: o.platform, device: o.device });

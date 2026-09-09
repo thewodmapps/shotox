@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles, Smartphone, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/lib/AuthContext';
 import HeroShowcase from './HeroShowcase';
 
 const Float = ({ className, delay = 0, children }) => (
@@ -12,6 +13,7 @@ const Float = ({ className, delay = 0, children }) => (
 );
 
 export default function Hero() {
+  const { isAuthenticated } = useAuth();
   return (
     <section className="relative min-h-screen bg-[#0B0B12] text-white overflow-hidden pt-36 pb-20 px-6 bg-grid">
       <motion.div className="absolute -top-32 -left-24 w-[520px] h-[520px] rounded-full bg-violet-600/40 blur-[120px]" animate={{ x: [0, 40, 0], y: [0, 30, 0] }} transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }} />
@@ -30,7 +32,7 @@ export default function Hero() {
         </motion.p>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Button asChild size="lg" className="rounded-full h-12 px-7 bg-white text-[#0B0B12] hover:bg-white/90 text-base shadow-[0_20px_50px_-15px_rgba(255,255,255,0.4)]">
-            <Link to="/projects">Get started for free <ArrowRight className="w-4 h-4 ml-2" /></Link>
+            <Link to="/projects">{isAuthenticated ? 'Go to Dashboard' : 'Get started for free'} <ArrowRight className="w-4 h-4 ml-2" /></Link>
           </Button>
           <a href="#features" className="text-sm text-white/60 hover:text-white transition-colors px-4 py-3">See how it works</a>
         </motion.div>

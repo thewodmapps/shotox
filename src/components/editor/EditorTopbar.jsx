@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Download, Check, Loader2, Cloud } from 'lucide-react';
+import { ArrowLeft, Download, Check, Loader2, Cloud, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { resolveDevice } from '@/lib/templates';
 import { Brand } from '@/components/Logo';
+import { base44 } from '@/api/base44Client';
 
 const STATUS = {
   saved: { icon: Check, label: 'Saved' },
@@ -47,7 +48,10 @@ export default function EditorTopbar({ project, status, onRename, onExport, expo
           <DropdownMenuItem onClick={() => onExport('all', 'png')}>All slides · PNG</DropdownMenuItem>
           <DropdownMenuItem onClick={() => onExport('all', 'jpeg')}>All slides · JPEG</DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
-    </header>
+        </DropdownMenu>
+        <button onClick={() => base44.auth.logout('/')} className="p-2 rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Sign out" aria-label="Sign out">
+        <LogOut className="w-4 h-4" />
+        </button>
+        </header>
   );
 }
