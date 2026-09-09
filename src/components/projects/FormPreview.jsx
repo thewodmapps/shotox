@@ -124,17 +124,33 @@ const AndroidTabletScreen = ({ tint }) => {
   );
 };
 
-/* ── Feature graphic: landscape banner (text + device block) ── */
-const FeatureScreen = ({ tint }) => {
+/* ── Feature graphic: Android phone UI laid out horizontally (landscape) ── */
+const AndroidFeatureScreen = ({ tint }) => {
   const [from, to] = tint;
   return (
-    <div className="w-full h-full flex items-center gap-[6%] px-[6%]">
-      <div className="flex-1 flex flex-col gap-[8%]">
-        <div className="h-[26%] w-[82%] rounded-[3px] bg-white/90" />
-        <div className="h-[15%] w-[58%] rounded-[2px] bg-white/35" />
-        <div className="h-[11%] w-[44%] rounded-full mt-[3%]" style={{ background: `linear-gradient(90deg, ${from}, ${to})` }} />
+    <div className="w-full h-full flex flex-col">
+      <div className="flex items-center justify-between px-[5%] pt-[5%]" style={{ height: '13%' }}>
+        <div className="w-[8%] h-[55%] rounded-full bg-white/50" />
+        <div className="flex items-center gap-[2%]">
+          <div className="w-[3%] h-[55%] rounded-full bg-white/35" />
+          <div className="w-[6%] h-[70%] rounded-[2px] border border-white/50" />
+        </div>
       </div>
-      <div className="w-[26%] h-[86%] rounded-lg" style={{ background: `linear-gradient(150deg, ${from}, ${to})`, boxShadow: '0 10px 22px -6px rgba(0,0,0,0.6)' }} />
+      <div className="px-[5%] flex items-center gap-[4%]" style={{ height: '18%', background: `linear-gradient(125deg, ${from}, ${to})` }}>
+        <div className="w-[5%] h-[50%] rounded-full bg-white/75" />
+        <div className="h-[42%] w-[26%] rounded-full bg-white/65" />
+        <div className="ml-auto w-[5%] h-[50%] rounded-full bg-white/55" />
+      </div>
+      <div className="flex gap-[4%] px-[5%] mt-[5%] flex-1 items-stretch">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="rounded-lg bg-white/[0.07] flex flex-col gap-[12%] p-[8%]" style={{ flex: 1, boxShadow: '0 2px 6px -2px rgba(0,0,0,0.5)' }}>
+            <div className="rounded-md" style={{ height: '42%', background: `linear-gradient(135deg, ${from}, ${to})` }} />
+            <div className="h-[18%] w-[80%] rounded-full bg-white/45" />
+            <div className="h-[14%] w-[55%] rounded-full bg-white/20" />
+          </div>
+        ))}
+      </div>
+      <div className="mx-auto mb-[5%] rounded-full bg-white/50" style={{ width: '16%', height: '5%' }} />
     </div>
   );
 };
@@ -149,7 +165,7 @@ export default function FormPreview({ form, platform, style, tint }) {
   }
 
   const isAndroid = platform === 'android';
-  const resolvedTint = tint || (form === 'feature' ? ['#F97316', '#EC4899'] : isAndroid ? ['#6366F1', '#22D3EE'] : ['#8B5CF6', '#F472B6']);
+  const resolvedTint = tint || (isAndroid ? ['#6366F1', '#22D3EE'] : ['#8B5CF6', '#F472B6']);
   const frameStyle = style || (isAndroid ? 'titanium' : 'black');
   const w = form === 'tablet' ? 80 : form === 'feature' ? 188 : 62;
   const ratio = RATIO[form] || 2.1;
@@ -161,7 +177,7 @@ export default function FormPreview({ form, platform, style, tint }) {
   const Screen = form === 'tablet'
     ? (isAndroid ? AndroidTabletScreen : IosTabletScreen)
     : form === 'feature'
-      ? FeatureScreen
+      ? AndroidFeatureScreen
       : (isAndroid ? AndroidPhoneScreen : IosPhoneScreen);
 
   return (
