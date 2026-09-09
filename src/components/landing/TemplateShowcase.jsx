@@ -49,8 +49,8 @@ export default function TemplateShowcase() {
                   <div className="px-4 py-4 flex items-center justify-between">
                     <div className="min-w-0">
                       <span className="font-display font-semibold text-white block truncate">{tpl.name}</span>
-                      <span className="inline-flex items-center gap-1.5 text-[11px] text-white/50 mt-0.5">
-                        <Icon className="w-3 h-3" /> {s.label}
+                      <span className="inline-flex items-center gap-1.5 text-[11px] text-white/50 mt-0.5 whitespace-nowrap">
+                        <Icon className="w-3 h-3 shrink-0" /> {s.label}
                       </span>
                     </div>
                     <span className="text-[10px] font-medium px-2 py-1 rounded-full bg-violet-500/20 text-violet-300 border border-violet-400/30 whitespace-nowrap">{s.category}</span>
