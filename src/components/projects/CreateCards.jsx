@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Apple, Play, Tablet, ImagePlus, Settings, ArrowRight, Loader2 } from 'lucide-react';
+import { Tablet, ImagePlus, Settings, ArrowRight, Loader2 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import FormPreview from './FormPreview';
+import { AppStoreIcon, GooglePlayIcon } from './StoreIcons';
 
 const OPTIONS = [
-  { key: 'ios-phone', title: 'App Store', sub: 'iPhone 6.7" · 1290×2796', form: 'phone', platform: 'ios', device: 'iphone-6.7', icon: Apple, tpl: 'aurora' },
-  { key: 'android-phone', title: 'Google Play', sub: 'Phone · 1080×1920', form: 'phone', platform: 'android', device: 'android-phone', icon: Play, tpl: 'ocean' },
+  { key: 'ios-phone', title: 'App Store', sub: 'iPhone 6.7" · 1290×2796', form: 'phone', platform: 'ios', device: 'iphone-6.7', brand: AppStoreIcon, tpl: 'aurora' },
+  { key: 'android-phone', title: 'Google Play', sub: 'Phone · 1080×1920', form: 'phone', platform: 'android', device: 'android-phone', brand: GooglePlayIcon, tpl: 'ocean' },
   { key: 'ipad', title: 'iPad', sub: '13" · 2064×2752', form: 'tablet', platform: 'ios', device: 'ipad-13', icon: Tablet, tpl: 'editorial' },
   { key: 'android-tab', title: 'Android Tablet', sub: '10" · 1200×1920', form: 'tablet', platform: 'android', device: 'android-tab-10', icon: Tablet, tpl: 'mint' },
   { key: 'feature', title: 'Feature Graphic', sub: 'Banner · 1024×500', form: 'feature', platform: 'android', device: 'feature-graphic', icon: ImagePlus, tpl: 'coral' },
@@ -36,14 +37,18 @@ export default function CreateCards({ onCreate, creating }) {
           >
             <div className="h-44 grid place-items-center bg-gradient-to-br from-[#16161e] to-[#0b0b10] relative overflow-hidden">
               <div className="absolute w-48 h-48 rounded-full" style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.22) 0%, transparent 70%)' }} />
-              <div className="relative z-10"><FormPreview form={o.form} /></div>
+              <div className="relative z-10"><FormPreview form={o.form} platform={o.platform} /></div>
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-violet-500/15 via-transparent to-pink-500/15" />
               {creating === o.platform && <Loader2 className="w-4 h-4 animate-spin text-white absolute top-2.5 right-2.5 z-10" />}
             </div>
             <div className="p-4 flex items-center gap-3">
-              <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500/25 to-pink-500/25 border border-white/10 text-white grid place-items-center shrink-0">
-                <o.icon className="w-4 h-4" />
-              </span>
+              {o.brand ? (
+                <o.brand className="w-9 h-9 rounded-xl shrink-0" />
+              ) : (
+                <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500/25 to-pink-500/25 border border-white/10 text-white grid place-items-center shrink-0">
+                  <o.icon className="w-4 h-4" />
+                </span>
+              )}
               <div className="min-w-0">
                 <div className="font-semibold text-white text-sm truncate">{o.title}</div>
                 <div className="text-[11px] text-white/45 truncate">{o.sub}</div>
