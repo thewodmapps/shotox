@@ -57,7 +57,7 @@ export const POSES = [
   { x: -12, rot: -8, scale: 0.97, topDelta: 8 },
   { x: 0, rot: 14, scale: 1, topDelta: 6 },
   { x: 0, rot: 0, scale: 0.88, topDelta: 42 },
-  { x: 0, rot: 0, scale: 1.06, topDelta: -68 },
+  { x: 0, rot: 0, scale: 1.06, topDelta: -40 },
   { x: 8, rot: -10, scale: 1, topDelta: 10 },
   { x: -8, rot: 10, scale: 1, topDelta: 10 },
 ];
