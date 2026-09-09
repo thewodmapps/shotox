@@ -17,19 +17,24 @@ export default function CheckoutNoticeModal({ open, onClose }) {
           <div className="mx-auto w-14 h-14 grid place-items-center rounded-2xl bg-gradient-to-br from-violet-500/30 to-pink-500/30 border border-white/10">
             <ExternalLink className="w-6 h-6 text-pink-300" />
           </div>
-          <h3 className="mt-5 font-display text-xl font-bold text-white tracking-tight">Open the live app to upgrade</h3>
+          <h3 className="mt-5 font-display text-xl font-bold text-white tracking-tight">Checkout runs on the live app</h3>
           <p className="mt-2 text-sm text-white/55 leading-relaxed">
-            Checkout only works from the published Shotox app, not inside the editor preview. Open it in a new tab to choose your plan.
+            Stripe checkout can't open inside the editor preview. Continue to the Shotox app in this tab to choose your plan.
           </p>
-          <a
-            href="https://zubilo-visual-flow.base44.app/#pricing"
-            target="_blank"
-            rel="noreferrer"
-            onClick={onClose}
+          <button
+            onClick={() => {
+              const url = "https://zubilo-visual-flow.base44.app/#pricing";
+              try {
+                window.top.location.href = url;
+              } catch (e) {
+                window.open(url, "_blank", "noopener");
+              }
+              onClose();
+            }}
             className="mt-6 w-full h-11 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 hover:opacity-90 text-white font-medium inline-flex items-center justify-center gap-2 transition-opacity"
           >
-            Open Shotox <ExternalLink className="w-4 h-4" />
-          </a>
+            Continue to Shotox <ExternalLink className="w-4 h-4" />
+          </button>
           <button onClick={onClose} className="mt-2 w-full h-10 rounded-xl text-sm text-white/45 hover:text-white/70 transition-colors">
             Maybe later
           </button>
