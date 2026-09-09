@@ -1,3 +1,4 @@
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
 import { secrets } from "base44:runtime";
 
 const PRICES = {
@@ -10,6 +11,10 @@ const STRIPE_VERSION = "2025-10-29.clover";
 
 export default async function (req: Request): Promise<Response> {
   try {
+    const base44 = createClientFromRequest(req);
+    const user = await base44.auth.me();
+    if (!user) return Response.json({ error: "Login required to upgrade" }, { status: 401 });
+
     const body = await req.json();
     const plan = PRICES[body.plan as keyof typeof PRICES];
     if (!plan) return Response.json({ error: "Invalid plan" }, { status: 400 });
@@ -22,11 +27,15 @@ export default async function (req: Request): Promise<Response> {
     params.set("mode", plan.mode);
     params.set("line_items[0][price]", plan.id);
     params.set("line_items[0][quantity]", "1");
+    params.set("client_reference_id", user.id);
+    if (user.email) params.set("customer_email", user.email);
     params.set("success_url", `${origin}/projects?upgraded=1`);
     params.set("cancel_url", `${origin}/#pricing`);
     params.set("metadata[base44_app_id]", appId);
+    params.set("metadata[user_id]", user.id);
     if (plan.mode === "subscription") {
       params.set("subscription_data[metadata][base44_app_id]", appId);
+      params.set("subscription_data[metadata][user_id]", user.id);
     }
 
     const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
@@ -35,6 +44,7 @@ export default async function (req: Request): Promise<Response> {
         Authorization: `Bearer ${key}`,
         "Stripe-Version": STRIPE_VERSION,
         "Content-Type": "application/x-www-form-urlencoded",
+        "Idempotency-Key": crypto.randomUUID(),
       },
       body: params.toString(),
     });

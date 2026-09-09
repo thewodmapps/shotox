@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
+import { useAuth } from '@/lib/AuthContext';
 
 const PLAN_KEY = { 'Pro Monthly': 'monthly', 'Pro Yearly': 'yearly', 'Lifetime': 'lifetime' };
 
@@ -41,10 +42,16 @@ const PLANS = [
 
 export default function Pricing() {
   const [loadingPlan, setLoadingPlan] = useState(null);
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   async function handleCheckout(name) {
     if (window.self !== window.top) {
       alert('Checkout works only from the published app. Open Shotox in a new tab to upgrade.');
+      return;
+    }
+    if (!isAuthenticated) {
+      navigate(`/login?returnTo=${encodeURIComponent('/projects')}`);
       return;
     }
     try {

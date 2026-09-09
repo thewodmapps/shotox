@@ -1,3 +1,4 @@
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
 import { secrets } from "base44:runtime";
 
 async function verifySignature(payload: string, header: string, secret: string): Promise<boolean> {
@@ -36,9 +37,37 @@ export default async function (req: Request): Promise<Response> {
     if (!ok) return Response.json({ error: "Invalid signature" }, { status: 400 });
 
     const event = JSON.parse(body);
-    // Transaction tracking is handled by Base44 via metadata[base44_app_id].
-    // Extend here to grant entitlements once user accounts exist.
-    console.log("Stripe webhook received:", event.type);
+    const base44 = createClientFromRequest(req);
+
+    if (event.type === "checkout.session.completed") {
+      const s = event.data.object;
+      const userId = s.client_reference_id || s.metadata?.user_id;
+      const customerId = s.customer || null;
+      if (userId) {
+        await base44.asServiceRole.entities.User.update(userId, {
+          plan: "pro",
+          stripe_customer_id: customerId,
+        });
+        console.log("Entitlement granted: pro for user", userId);
+      }
+    } else if (event.type === "customer.subscription.deleted") {
+      const sub = event.data.object;
+      const userId = sub.metadata?.user_id;
+      if (userId) {
+        await base44.asServiceRole.entities.User.update(userId, { plan: "free" });
+        console.log("Entitlement revoked: user", userId);
+      }
+    } else if (event.type === "customer.subscription.updated") {
+      const sub = event.data.object;
+      const userId = sub.metadata?.user_id;
+      if (userId) {
+        const active = sub.status === "active" || sub.status === "trialing";
+        await base44.asServiceRole.entities.User.update(userId, {
+          plan: active ? "pro" : "free",
+        });
+      }
+    }
+
     return Response.json({ received: true, type: event.type });
   } catch (error) {
     console.error("stripeWebhook error:", error.message);

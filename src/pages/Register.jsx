@@ -71,6 +71,10 @@ export default function Register() {
     base44.auth.loginWithProvider("google", safeReturnTo());
   };
 
+  const handleApple = () => {
+    base44.auth.loginWithProvider("apple", safeReturnTo());
+  };
+
   if (showOtp) {
     return (
       <AuthLayout
@@ -144,11 +148,22 @@ export default function Register() {
     >
       <Button
         variant="outline"
-        className="w-full h-12 text-sm font-medium mb-6"
+        className="w-full h-12 text-sm font-medium mb-3"
         onClick={handleGoogle}
       >
         <GoogleIcon className="w-5 h-5 mr-2" />
         Continue with Google
+      </Button>
+
+      <Button
+        variant="outline"
+        className="w-full h-12 text-sm font-medium mb-6 bg-black text-white border-black hover:bg-black/90"
+        onClick={handleApple}
+      >
+        <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M16.365 1.43c0 1.14-.42 2.21-1.25 3.06-.84.86-1.86 1.35-3.02 1.27-.13-1.08.42-2.23 1.16-3.04.76-.82 2.02-1.43 3.11-1.29zM20.5 17.36c-.46 1.06-.68 1.54-1.28 2.48-.83 1.31-2 2.95-3.45 2.96-1.29.01-1.62-.84-3.37-.83-1.75.01-2.11.84-3.4.83-1.45-.01-2.55-1.49-3.38-2.8-2.32-3.67-2.57-7.98-1.13-10.28.91-1.43 2.35-2.27 3.7-2.27 1.38 0 2.25.85 3.39.85 1.11 0 1.78-.85 3.39-.85 1.24 0 2.56.68 3.5 1.85-3.08 1.69-2.58 6.1.53 7.06z" />
+        </svg>
+        Continue with Apple
       </Button>
 
       <div className="relative mb-6">
