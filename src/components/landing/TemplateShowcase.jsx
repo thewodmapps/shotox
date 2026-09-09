@@ -1,16 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { ArrowRight, Apple, Play, Tablet } from 'lucide-react';
 import { getTemplate, getDevice } from '@/lib/templates';
 import { useAuth } from '@/lib/AuthContext';
-import ScaledSlide from '@/components/editor/ScaledSlide';
+import FeaturedTemplateCard from './FeaturedTemplateCard';
+import TemplateMarquee from './TemplateMarquee';
 
+// Curated, high-impact set: light + bold + dark-neon + vibrant across four
+// device form factors and four categories — the most conversion-representative
+// looks in the library.
 const SHOW = [
-  { id: 'tempo', device: 'iphone-6.7', label: 'iPhone 6.7"', icon: Apple, category: 'Music' },
-  { id: 'royale', device: 'android-phone', label: 'Google Play', icon: Play, category: 'Finance' },
-  { id: 'lotus', device: 'ipad-11', label: 'iPad 11"', icon: Tablet, category: 'Health' },
-  { id: 'velocity', device: 'android-tab-10', label: 'Android Tablet', icon: Tablet, category: 'Productivity' },
+  { id: 'lotus', device: 'iphone-6.7', label: 'iPhone 6.7"', icon: Apple, category: 'Health' },
+  { id: 'sprint', device: 'android-phone', label: 'Google Play', icon: Play, category: 'Productivity' },
+  { id: 'galaxy', device: 'ipad-11', label: 'iPad 11"', icon: Tablet, category: 'Social' },
+  { id: 'magnolia', device: 'android-tab-10', label: 'Android Tablet', icon: Tablet, category: 'Beauty' },
 ];
 
 export default function TemplateShowcase() {
@@ -32,34 +35,18 @@ export default function TemplateShowcase() {
           </Link>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {SHOW.map((s, i) => {
-            const tpl = getTemplate(s.id);
-            const device = getDevice(s.device);
-            const Icon = s.icon;
-            return (
-              <motion.div key={s.id} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.5 }}>
-                <Link to={dest} className="group block rounded-3xl overflow-hidden border border-white/10 bg-white/[0.03] hover:border-violet-400/50 hover:-translate-y-1.5 transition-all duration-300 shadow-[0_30px_80px_-40px_rgba(124,58,237,0.5)]">
-                  <div className="flex gap-1.5 p-3 bg-gradient-to-b from-white/[0.06] to-transparent">
-                    {tpl.slides.slice(0, 3).map((sl) => (
-                      <div key={sl.id} className="flex-1 min-w-0 aspect-[1290/2796] relative overflow-hidden rounded-lg ring-1 ring-white/10">
-                        <ScaledSlide slide={sl} device={device} />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="px-4 py-4 flex items-center justify-between">
-                    <div className="min-w-0">
-                      <span className="font-display font-semibold text-white block truncate">{tpl.name}</span>
-                      <span className="inline-flex items-center gap-1.5 text-[11px] text-white/50 mt-0.5 whitespace-nowrap">
-                        <Icon className="w-3 h-3 shrink-0" /> {s.label}
-                      </span>
-                    </div>
-                    <span className="text-[10px] font-medium px-2 py-1 rounded-full bg-violet-500/20 text-violet-300 border border-violet-400/30 whitespace-nowrap">{s.category}</span>
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
+          {SHOW.map((s) => (
+            <FeaturedTemplateCard
+              key={s.id}
+              template={getTemplate(s.id)}
+              device={getDevice(s.device)}
+              label={s.label}
+              Icon={s.icon}
+              category={s.category}
+            />
+          ))}
         </div>
+        <TemplateMarquee />
         <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-white/40">
           <span>iPhone 6.7" / 6.5" / 5.5"</span><span className="hidden sm:inline">•</span>
           <span>iPad 13" / 11"</span><span className="hidden sm:inline">•</span>
