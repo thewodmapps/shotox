@@ -36,6 +36,7 @@ const PLANS = [
     name: 'Lifetime',
     price: '$149',
     period: 'one-time',
+    featured: true,
     features: ['Everything in Pro Yearly, forever', 'Lifetime updates — all future templates & devices', 'All future AI features included', 'One payment, no subscription', 'Dedicated support'],
     cta: 'Buy once',
   },
