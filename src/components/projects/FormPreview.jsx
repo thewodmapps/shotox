@@ -154,7 +154,7 @@ export default function FormPreview({ form, platform, style, tint }) {
   const isAndroid = platform === 'android';
   const resolvedTint = tint || (isAndroid ? ['#6366F1', '#22D3EE'] : ['#8B5CF6', '#F472B6']);
   const frameStyle = style || (isAndroid ? 'titanium' : 'black');
-  const w = form === 'tablet' ? 80 : form === 'feature' ? 188 : 62;
+  const w = form === 'tablet' ? 80 : form === 'feature' ? 144 : 62;
   const ratio = RATIO[form] || 2.1;
   const h = Math.round(w * ratio);
   const radius = form === 'feature' ? w * 0.05 : isAndroid ? w * 0.135 : w * 0.19;
