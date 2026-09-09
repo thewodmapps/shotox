@@ -9,7 +9,7 @@ const STYLES = {
 // height/width ratio of the device frame
 const RATIO = { phone: 2.1, tablet: 1.36 };
 
-export default function DeviceFrame({ url, style = 'black', width = 232, form = 'phone', platform = 'ios', mock }) {
+export default function DeviceFrame({ url, style = 'black', width = 232, form = 'phone', platform = 'ios', mock, tint }) {
   if (form === 'feature' || form === 'none') return null;
   const s = STYLES[style] || STYLES.black;
   const ratio = RATIO[form] || 2.1;
@@ -32,7 +32,7 @@ export default function DeviceFrame({ url, style = 'black', width = 232, form = 
         {url ? (
           <img src={url} alt="App screenshot" crossOrigin="anonymous" className="w-full h-full object-cover" />
         ) : (
-          <MockScreen variant={mock} />
+          <MockScreen variant={mock} tint={tint} />
         )}
         {/* iPhone — dynamic island */}
         {form === 'phone' && platform === 'ios' && (

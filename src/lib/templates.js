@@ -47,6 +47,8 @@ export const THEME_STYLES = ['swipe', 'spotlight', 'split', 'grid', 'brush', 'or
 export const TEMPLATE_TAGS = ['All', '3D Devices', 'Dark', 'Colorful', 'Gradient', 'Minimal'];
 export const CATEGORIES = ['All', 'Productivity', 'Finance', 'Beauty', 'Food', 'Travel', 'Fitness', 'Education', 'Social', 'AI', 'Entertainment', 'Games', 'Health'];
 
+export const MOCK_TYPES = ['hero', 'list', 'detail', 'stats', 'grid', 'chat', 'profile', 'success'];
+
 let uid = 0;
 export const makeId = () => `${Date.now().toString(36)}${(uid++).toString(36)}`;
 export const grad = (from, to, angle = 135) => ({ type: 'gradient', color: from, from, to, angle });
@@ -64,7 +66,7 @@ export const makeSlide = (o = {}) => ({
   deviceStyle: 'black',
   font: 'Sora',
   style: 'swipe',
-  mock: 'productivity',
+  mock: 'hero',
   align: 'center',
   ...o,
 });
@@ -221,7 +223,7 @@ export const TEMPLATES = D.map((d) => {
       makeSlide({
         font: d.font,
         style: d.style,
-        mock: d.cat.toLowerCase(),
+        mock: MOCK_TYPES[(off + i) % MOCK_TYPES.length],
         layout: L8[i % 8],
         heading: pool.h[(off * 3 + i) % pool.h.length],
         subheading: pool.s[(off * 2 + i) % pool.s.length],
