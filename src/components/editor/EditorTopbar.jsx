@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Download, Check, Loader2, Cloud, LogOut } from 'lucide-react';
+import { ArrowLeft, Download, Check, Loader2, Cloud, LogOut, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { resolveDevice } from '@/lib/templates';
@@ -13,7 +13,7 @@ const STATUS = {
   saving: { icon: Loader2, label: 'Saving…' },
 };
 
-export default function EditorTopbar({ project, status, onRename, onExport, exporting }) {
+export default function EditorTopbar({ project, status, onRename, onExport, onShare, exporting }) {
   const S = STATUS[status] || STATUS.saved;
   const device = resolveDevice(project);
   return (
@@ -47,6 +47,10 @@ export default function EditorTopbar({ project, status, onRename, onExport, expo
           <DropdownMenuItem onClick={() => onExport('current', 'jpeg')}>Current slide · JPEG</DropdownMenuItem>
           <DropdownMenuItem onClick={() => onExport('all', 'png')}>All slides · PNG</DropdownMenuItem>
           <DropdownMenuItem onClick={() => onExport('all', 'jpeg')}>All slides · JPEG</DropdownMenuItem>
+          <div className="my-1 h-px bg-white/10" />
+          <DropdownMenuItem onClick={onShare} className="gap-2 text-violet-300 focus:text-violet-200 focus:bg-violet-500/10">
+            <Share2 className="w-4 h-4" /> Share design
+          </DropdownMenuItem>
         </DropdownMenuContent>
         </DropdownMenu>
         <button onClick={() => base44.auth.logout('/')} className="p-2 rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Sign out" aria-label="Sign out">

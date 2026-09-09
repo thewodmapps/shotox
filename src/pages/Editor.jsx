@@ -14,6 +14,7 @@ import EditorPanel from '@/components/editor/EditorPanel';
 import EditorStage from '@/components/editor/EditorStage';
 import SlideCanvas from '@/components/editor/SlideCanvas';
 import UndoBar from '@/components/editor/UndoBar';
+import ShareModal from '@/components/projects/ShareModal';
 
 export default function Editor() {
   const id = new URLSearchParams(window.location.search).get('id');
@@ -29,6 +30,7 @@ export default function Editor() {
   const [exporting, setExporting] = useState(false);
   const [exportPct, setExportPct] = useState(0);
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [showShare, setShowShare] = useState(false);
   const [undo, setUndo] = useState(null);
   const dirty = useRef(false);
   const exportRefs = useRef([]);
@@ -135,7 +137,7 @@ export default function Editor() {
   const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject };
   return (
     <div className="h-screen flex flex-col bg-[#08080d]">
-      <EditorTopbar project={project} status={status} exporting={exporting} onRename={(name) => updateProject({ name })} onExport={onExport} />
+      <EditorTopbar project={project} status={status} exporting={exporting} onRename={(name) => updateProject({ name })} onExport={onExport} onShare={() => setShowShare(true)} />
       <div className="flex-1 min-h-0 flex flex-col md:flex-row relative">
         <EditorRail
           active={panel}
@@ -156,6 +158,7 @@ export default function Editor() {
       </div>
       {exporting && <ExportOverlay pct={exportPct} />}
       <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} onUpgrade={() => navigate('/#pricing')} />
+      <ShareModal open={showShare} title={project.name} projectId={project.id} onClose={() => setShowShare(false)} />
     </div>
   );
 }
