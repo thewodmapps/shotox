@@ -23,7 +23,7 @@ export const getDevice = (id, custom) => {
 export const resolveDevice = (project) =>
   getDevice(project.device, project.custom_w ? { w: project.custom_w, h: project.custom_h } : null);
 
-export const slideHeight = (device) => Math.round((BASE_W * device.h) / device.w);
+export const slideHeight = (device) => (BASE_W * device.h) / device.w;
 
 export const FONTS = ['Sora', 'Inter', 'Space Grotesk', 'Playfair Display', 'Fraunces'];
 export const LAYOUTS = [

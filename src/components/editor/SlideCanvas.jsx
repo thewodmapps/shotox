@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { BASE_W, slideHeight, getDevice, POSES } from '@/lib/templates';
+import { BASE_W, slideHeight, getDevice, MOCK_TYPES } from '@/lib/templates';
 import DeviceFrame from './DeviceFrame';
 
 // Reference canvas height the pose constants were tuned against. Every layout
@@ -169,7 +169,7 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
         {slide.layout !== 'text-only' && <Decor style={theme} accent={accent} />}
 
         {landscape ? (() => {
-          const pi = slide.pose ? Math.max(0, POSES.findIndex((p) => p.x === slide.pose.x && p.rot === slide.pose.rot && p.scale === slide.pose.scale && p.topDelta === slide.pose.topDelta)) : 0;
+          const pi = Math.max(0, MOCK_TYPES.indexOf(slide.mock));
           const L = LAND[pi % LAND.length];
           const lk = h / 146;
           const devH = h * L.scale * L.bleed;
