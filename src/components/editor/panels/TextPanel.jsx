@@ -21,7 +21,7 @@ export default function TextPanel({ slide, updateSlide, updateTextStyle }) {
       </div>
       <div className="space-y-1.5">
         <Label className="text-white/70 text-xs">Font</Label>
-        <Select value={slide.font} onValueChange={(font) => updateTextStyle({ font })}>
+        <Select value={slide.font} onValueChange={(font) => updateSlide({ font })}>
           <SelectTrigger className="bg-white/5 border-white/10 text-white"><SelectValue /></SelectTrigger>
           <SelectContent>
             {FONTS.map((f) => <SelectItem key={f} value={f} style={{ fontFamily: f }}>{f}</SelectItem>)}
@@ -32,7 +32,7 @@ export default function TextPanel({ slide, updateSlide, updateTextStyle }) {
         <Label className="text-white/70 text-xs">Alignment</Label>
         <div className="grid grid-cols-2 gap-2">
           {[['left', AlignLeft], ['center', AlignCenter]].map(([a, Icon]) => (
-            <button key={a} onClick={() => updateTextStyle({ align: a })} className={`flex items-center justify-center gap-2 h-9 rounded-lg text-xs border transition-colors ${slide.align === a ? 'bg-white text-[#0B0B12] border-white' : 'border-white/10 text-white/70 hover:bg-white/5'}`}>
+            <button key={a} onClick={() => updateSlide({ align: a })} className={`flex items-center justify-center gap-2 h-9 rounded-lg text-xs border transition-colors ${slide.align === a ? 'bg-white text-[#0B0B12] border-white' : 'border-white/10 text-white/70 hover:bg-white/5'}`}>
               <Icon className="w-4 h-4" /> {a === 'left' ? 'Left' : 'Center'}
             </button>
           ))}
@@ -47,8 +47,8 @@ export default function TextPanel({ slide, updateSlide, updateTextStyle }) {
         <Slider value={[Math.round((slide.subScale ?? 1) * 100)]} min={50} max={200} step={5} onValueChange={([v]) => updateSlide({ subScale: v / 100 })} />
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <ColorField label="Headline color" value={slide.headingColor} onChange={(headingColor) => updateTextStyle({ headingColor })} />
-        <ColorField label="Subline color" value={slide.subColor} onChange={(subColor) => updateTextStyle({ subColor })} />
+        <ColorField label="Headline color" value={slide.headingColor} onChange={(headingColor) => updateSlide({ headingColor })} />
+        <ColorField label="Subline color" value={slide.subColor} onChange={(subColor) => updateSlide({ subColor })} />
       </div>
     </div>
   );

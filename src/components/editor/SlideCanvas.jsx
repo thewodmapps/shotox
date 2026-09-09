@@ -180,7 +180,7 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
           return (
             <div className="relative w-full h-full">
               <div className="absolute inset-y-0 flex items-center z-10" style={{ [L.text]: 0, width: `${L.textW * 100}%`, padding: textLeft ? '0 4% 0 8%' : '0 8% 0 4%' }}>
-                <div className="w-full" style={{ textAlign: L.tAlign, fontFamily: `'${slide.font}', sans-serif` }}>
+                <div className="w-full" style={{ textAlign: slide.align || L.tAlign, fontFamily: `'${slide.font}', sans-serif` }}>
                   <h2 style={{ color: slide.headingColor, fontSize: 26 * lk * hScale, lineHeight: 1.02, fontWeight: 800, letterSpacing: -0.5 * lk }}>{slide.heading}</h2>
                   {slide.subheading && <p style={{ color: slide.subColor, fontSize: 12 * lk * sScale, marginTop: 8 * lk, lineHeight: 1.35, fontWeight: 500 }}>{slide.subheading}</p>}
                 </div>
