@@ -7,7 +7,7 @@ export const POSTS = [
     title: 'How to Design App Store Screenshots That Convert',
     read: '6 min',
     accent: 'from-violet-500 to-fuchsia-500',
-    image: 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/f69eef0e9_generated_image.png',
+    image: 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/418a31e53_generated_image.png',
     updated: '2026-09-09',
     body: `Your first App Store screenshot is the single biggest driver of whether a visitor taps **Get**. Most users never scroll past the second image, so the first two screenshots have to do the heavy lifting.
 
@@ -37,7 +37,7 @@ Apple rejects screenshots that include other device brands, unrelated UI, or tex
     title: 'Google Play Screenshot Sizes & Feature Graphics in 2026',
     read: '5 min',
     accent: 'from-emerald-500 to-teal-500',
-    image: 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/62f080fdd_generated_image.png',
+    image: 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/f37ce424c_generated_image.png',
     updated: '2026-09-09',
     body: `Google Play requires a different set of assets than the App Store, and getting the dimensions right the first time saves rejections and re-uploads.
 
@@ -66,7 +66,7 @@ A single Shotox project can export phone, 7-inch, 10-inch and the feature graphi
     title: 'The Best Fonts for App Screenshots (and How to Pair Them)',
     read: '7 min',
     accent: 'from-orange-500 to-pink-500',
-    image: 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/0767dcc86_generated_image.png',
+    image: 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/e7ad050cd_generated_image.png',
     updated: '2026-09-09',
     body: `Typography makes or breaks an app screenshot. The right typeface communicates premium quality at a glance; the wrong one makes a great app look amateur.
 
@@ -98,7 +98,7 @@ Before shipping, shrink your screenshot to 120px wide. If the headline is still 
     title: 'Why Your App Screenshots Matter More Than Your Description',
     read: '4 min',
     accent: 'from-blue-500 to-indigo-500',
-    image: 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/e491487a3_generated_image.png',
+    image: 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/5c6966011_generated_image.png',
     updated: '2026-09-09',
     body: `Studies of App Store behavior consistently show that only about 2% of visitors read the full app description, while nearly everyone scrolls through the screenshots. Yet most teams spend more time writing the description than designing the screenshots.
 
@@ -124,7 +124,7 @@ Your screenshots are not set-and-forget. Revisit them after every major release.
     title: 'From Figma to Store-Ready: A Designer\u2019s Export Checklist',
     read: '8 min',
     accent: 'from-rose-500 to-violet-500',
-    image: 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/8f7446311_generated_image.png',
+    image: 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/f0da96d8f_generated_image.png',
     updated: '2026-09-09',
     body: `Designing the screenshot in Figma is half the job. The other half is exporting it so the store accepts it and it looks crisp on every device.
 
@@ -162,7 +162,7 @@ Shotox handles steps 1, 2, 4 and 5 automatically — you design once, and every 
     title: '10 App Screenshot Layouts That Work for Every Category',
     read: '6 min',
     accent: 'from-amber-500 to-orange-500',
-    image: 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/3cced2d46_generated_image.png',
+    image: 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/6ec483829_generated_image.png',
     updated: '2026-09-09',
     body: `Great screenshots follow a small number of proven layouts. Here are the patterns that work across finance, fitness, social and games.
 
