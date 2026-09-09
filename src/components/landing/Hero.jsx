@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Zap } from 'lucide-react';
+import { ArrowRight, Sparkles, Star, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Image } from '@/components/ui/image';
 
@@ -42,13 +42,13 @@ export default function Hero() {
             <Image src={HERO_IMG} alt="3D floating phones showing generated app screenshots" className="w-full aspect-[16/9]" />
           </motion.div>
           <Float className="-left-4 top-10 hidden sm:block" delay={0.5}>
-            <div className="glass-card"><Sparkles className="w-4 h-4 text-yellow-300" /> Store-ready in 60 seconds</div>
+            <div className="glass-card"><Star className="w-4 h-4 text-yellow-300 fill-yellow-300" /> 4.9 rating on the App Store</div>
           </Float>
           <Float className="-right-6 top-1/3 hidden sm:block" delay={1.2}>
             <div className="glass-card"><Zap className="w-4 h-4 text-lime-300" /> Exported in 1290 × 2796</div>
           </Float>
           <Float className="left-10 -bottom-6 hidden md:block" delay={2}>
-            <div className="glass-card"><Sparkles className="w-4 h-4 text-pink-300" /> AI writes your headlines</div>
+            <div className="glass-card"><Sparkles className="w-4 h-4 text-pink-300" /> 8 designer templates</div>
           </Float>
         </motion.div>
       </div>
