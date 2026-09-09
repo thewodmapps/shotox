@@ -17,8 +17,6 @@ export default function Footer() {
               <li><a href="/#templates" className="hover:text-white transition-colors">Templates</a></li>
               <li><a href="/#features" className="hover:text-white transition-colors">Features</a></li>
               <li><a href="/#pricing" className="hover:text-white transition-colors">Pricing</a></li>
-              <li><Link to="/#blog" className="hover:text-white transition-colors">Blog</Link></li>
-              <li><Link to="/#faq" className="hover:text-white transition-colors">FAQ</Link></li>
             </ul>
           </div>
           <div>
@@ -26,7 +24,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm">
               <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
-              <li><a href="/#faq" className="hover:text-white transition-colors">Support</a></li>
+              <a href="mailto:thewodmapps@gmail.com" className="hover:text-white transition-colors text-sm">Support</a>
             </ul>
           </div>
         </div>

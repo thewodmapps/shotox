@@ -8,7 +8,6 @@ import { useAuth } from '@/lib/AuthContext';
 const LINKS = [
   { href: '#templates', label: 'Templates' },
   { href: '#features', label: 'Features' },
-  { href: '#faq', label: 'FAQ' },
   { href: '#pricing', label: 'Pricing' },
 ];
 
