@@ -17,6 +17,7 @@ import ResetPassword from '@/pages/ResetPassword';
 import LogoDownload from '@/pages/LogoDownload';
 import Privacy from '@/pages/Privacy';
 import Terms from '@/pages/Terms';
+import BlogPost from '@/pages/BlogPost';
 import SharedDesign from '@/pages/SharedDesign';
 
 const AuthenticatedApp = () => {
@@ -53,6 +54,7 @@ const AuthenticatedApp = () => {
       <Route path="/logo-download" element={<LogoDownload />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
+      <Route path="/blog/:slug" element={<BlogPost />} />
       <Route path="/:slug" element={<SharedDesign />} />
       <Route element={<ProtectedRoute />}>
         <Route path="/projects" element={<Projects />} />
