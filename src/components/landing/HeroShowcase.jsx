@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Smartphone, Zap, Sparkles } from 'lucide-react';
 import { getTemplate, getDevice } from '@/lib/templates';
 import SlideCanvas from '@/components/editor/SlideCanvas';
 
@@ -33,6 +34,19 @@ const CONFETTI = [
   { x: '96%', y: '60%', s: 9,  r: -10, c: 'bg-orange-400/30', delay: 1.4 },
 ];
 
+// Floating glass callout bubbles — positioned at fixed design coordinates so
+// they scale uniformly with the mockups across every viewport.
+const BUBBLES = [
+  { left: 6,   top: 28,  delay: 0.5, icon: 'phone',    text: 'Store-ready sizes for every device', tint: 'text-violet-300' },
+  { left: 742, top: 96,  delay: 1.2, icon: 'zap',      text: 'Pixel-perfect PNG & JPEG export',    tint: 'text-lime-300' },
+  { left: 44,  top: 366, delay: 2.0, icon: 'sparkles', text: '100 designer templates',              tint: 'text-pink-300' },
+];
+
+const BubbleIcon = ({ icon, tint }) => {
+  const Cmp = icon === 'phone' ? Smartphone : icon === 'zap' ? Zap : Sparkles;
+  return <Cmp className={`w-4 h-4 ${tint}`} />;
+};
+
 export default function HeroShowcase() {
   const wrapRef = useRef(null);
   const [scale, setScale] = useState(1);
@@ -62,6 +76,19 @@ export default function HeroShowcase() {
             animate={{ y: [0, -10, 0], rotate: [c.r, c.r + 20, c.r] }}
             transition={{ duration: 5 + i, delay: c.delay, repeat: Infinity, ease: 'easeInOut' }}
           />
+        ))}
+
+        {/* Floating callout bubbles */}
+        {BUBBLES.map((b, i) => (
+          <motion.div
+            key={`b-${i}`}
+            className="absolute z-50"
+            style={{ left: b.left, top: b.top }}
+            animate={{ y: [0, -14, 0], rotate: [0, 4, 0] }}
+            transition={{ duration: 6, delay: b.delay, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <div className="glass-card"><BubbleIcon icon={b.icon} tint={b.tint} /> {b.text}</div>
+          </motion.div>
         ))}
 
         {/* Overlapping mockups */}
