@@ -77,7 +77,7 @@ export default function ResetPassword() {
               placeholder="••••••••"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="pl-10 h-12"
+              className="pl-10 h-12 rounded-xl"
               required
             />
           </div>
@@ -93,12 +93,12 @@ export default function ResetPassword() {
               placeholder="••••••••"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="pl-10 h-12"
+              className="pl-10 h-12 rounded-xl"
               required
             />
           </div>
         </div>
-        <Button type="submit" className="w-full h-12 font-medium" disabled={loading}>
+        <Button type="submit" className="w-full h-12 font-medium rounded-xl bg-gradient-to-r from-violet-600 to-pink-500 hover:opacity-90 text-white border-0 shadow-[0_18px_40px_-12px_rgba(124,58,237,0.55)]" disabled={loading}>
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />

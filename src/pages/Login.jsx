@@ -59,7 +59,7 @@ export default function Login() {
     >
       <Button
         variant="outline"
-        className="w-full h-12 text-sm font-medium mb-3"
+        className="w-full h-12 text-sm font-medium mb-3 rounded-xl"
         onClick={handleGoogle}
       >
         <GoogleIcon className="w-5 h-5 mr-2" />
@@ -68,7 +68,7 @@ export default function Login() {
 
       <Button
         variant="outline"
-        className="w-full h-12 text-sm font-medium mb-6 bg-black text-white border-black hover:bg-black/90"
+        className="w-full h-12 text-sm font-medium mb-6 rounded-xl bg-black text-white border-black hover:bg-black/90"
         onClick={handleApple}
       >
         <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -105,7 +105,7 @@ export default function Login() {
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="pl-10 h-12"
+              className="pl-10 h-12 rounded-xl"
               required
             />
           </div>
@@ -126,12 +126,12 @@ export default function Login() {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="pl-10 h-12"
+              className="pl-10 h-12 rounded-xl"
               required
             />
           </div>
         </div>
-        <Button type="submit" className="w-full h-12 font-medium" disabled={loading}>
+        <Button type="submit" className="w-full h-12 font-medium rounded-xl bg-gradient-to-r from-violet-600 to-pink-500 hover:opacity-90 text-white border-0 shadow-[0_18px_40px_-12px_rgba(124,58,237,0.55)]" disabled={loading}>
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
