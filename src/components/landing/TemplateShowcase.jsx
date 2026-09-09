@@ -7,10 +7,10 @@ import { useAuth } from '@/lib/AuthContext';
 import ScaledSlide from '@/components/editor/ScaledSlide';
 
 const SHOW = [
-  { id: 'neon', device: 'iphone-6.7', label: 'iPhone 6.7"', icon: Apple, category: 'AI' },
-  { id: 'sunset', device: 'android-phone', label: 'Google Play', icon: Play, category: 'Travel' },
-  { id: 'pulse', device: 'ipad-11', label: 'iPad 11"', icon: Tablet, category: 'Fitness' },
-  { id: 'galaxy', device: 'android-tab-10', label: 'Android Tablet', icon: Tablet, category: 'Social' },
+  { id: 'tempo', device: 'iphone-6.7', label: 'iPhone 6.7"', icon: Apple, category: 'Music' },
+  { id: 'royale', device: 'android-phone', label: 'Google Play', icon: Play, category: 'Finance' },
+  { id: 'lotus', device: 'ipad-11', label: 'iPad 11"', icon: Tablet, category: 'Health' },
+  { id: 'velocity', device: 'android-tab-10', label: 'Android Tablet', icon: Tablet, category: 'Productivity' },
 ];
 
 export default function TemplateShowcase() {
@@ -25,7 +25,7 @@ export default function TemplateShowcase() {
           <div>
             <p className="text-sm font-medium text-pink-400 mb-3">Templates</p>
             <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight">Pick a look. Make it yours.</h2>
-            <p className="mt-3 text-white/55 max-w-md">20 designer templates across iPhone, iPad and Android — every device, every category.</p>
+            <p className="mt-3 text-white/55 max-w-md">50+ designer templates across iPhone, iPad and Android — every device, every category.</p>
           </div>
           <Link to={dest} className="inline-flex items-center gap-1.5 text-sm font-medium text-white hover:gap-3 transition-all whitespace-nowrap">
             Browse all templates <ArrowRight className="w-4 h-4" />

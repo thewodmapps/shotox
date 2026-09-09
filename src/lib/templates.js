@@ -50,7 +50,7 @@ export const GRADIENTS = [
 
 export const THEME_STYLES = ['swipe', 'spotlight', 'split', 'grid', 'brush', 'orbs', 'neon', 'minimal'];
 export const TEMPLATE_TAGS = ['All', '3D Devices', 'Dark', 'Colorful', 'Gradient', 'Minimal'];
-export const CATEGORIES = ['All', 'Productivity', 'Finance', 'Beauty', 'Food', 'Travel', 'Fitness', 'Education', 'Social', 'AI', 'Entertainment', 'Games', 'Health', 'Commerce'];
+export const CATEGORIES = ['All', 'Productivity', 'Finance', 'Beauty', 'Food', 'Travel', 'Fitness', 'Education', 'Social', 'AI', 'Entertainment', 'Games', 'Health', 'Commerce', 'Music'];
 
 export const MOCK_TYPES = ['hero', 'list', 'detail', 'stats', 'grid', 'chat', 'profile', 'success'];
 
@@ -154,11 +154,21 @@ const COPY = {
     h: ['Discover sneaker culture', 'Verified products only', 'Streetwear starts here', 'Explore sneaker culture', 'Elevate your style', 'Find your pair', 'Cop the latest drops', 'Track every sale', 'Authentic, always', 'Your sneaker source'],
     s: ['Thousands of verified listings', 'Every pair checked by experts', 'From grails to daily beaters', 'Curated drops, every week', 'Match your fit in seconds', 'Bid, buy and sell in one tap', 'Real-time market prices', 'A community of 520k sneakerheads'],
   },
+  Music: {
+    h: ['Your soundtrack, always', 'Made for your taste', 'Millions of songs', 'Discover weekly', 'Play it anywhere', 'Soundtrack your day', 'Never stop the music', 'Feel every beat', 'Your ears, delighted', 'Press play, escape'],
+    s: ['Personalized playlists in seconds', 'Fresh tracks every single week', 'Stream the whole world ad-free', 'Offline listening on the go', 'Songs that match your mood', 'Share what you love with friends', 'Stations that learn what you like', 'Studio-quality audio, always'],
+  },
 };
 
 // Template descriptors: (style, palette, font, device) make each visually distinct.
 // style: swipe | spotlight | split | grid | brush | orbs | neon | minimal
 const D = [
+  // ── New: inspired by the world's best app screenshots ──
+  { id: 'lotus', name: 'Lotus', cat: 'Health', style: 'orbs', font: 'Fraunces', dev: 'white', hc: '#7C2D12', sc: 'rgba(124,45,18,0.7)', colors: [solid('#FFE4D6'), grad('#FFD8A8', '#FBCFE8'), solid('#FFEFD5'), grad('#FED7AA', '#FDBA74')] },
+  { id: 'royale', name: 'Royale', cat: 'Finance', style: 'neon', font: 'Sora', dev: 'titanium', hc: '#FFFFFF', sc: 'rgba(196,197,253,0.8)', colors: [solid('#0F0524'), grad('#1E1B4B', '#7C3AED'), solid('#4C1D95'), grad('#0F0524', '#6D28D9')] },
+  { id: 'tempo', name: 'Tempo', cat: 'Music', style: 'spotlight', font: 'Sora', dev: 'black', hc: '#FFFFFF', sc: 'rgba(255,255,255,0.85)', colors: [solid('#0B0B12'), grad('#0B0B12', '#16A34A'), solid('#16A34A'), grad('#16A34A', '#0EA5E9')] },
+  { id: 'velocity', name: 'Velocity', cat: 'Productivity', style: 'neon', font: 'Space Grotesk', dev: 'black', hc: '#A5B4FC', sc: 'rgba(255,255,255,0.7)', colors: [solid('#0B0B12'), grad('#0B0B12', '#6366F1'), solid('#020617'), grad('#0F0524', '#3B82F6')] },
+  { id: 'aura', name: 'Aura', cat: 'Social', style: 'swipe', font: 'Sora', dev: 'titanium', hc: '#FFFFFF', sc: 'rgba(255,255,255,0.8)', colors: [grad('#8B5CF6', '#EC4899'), grad('#F43F5E', '#F97316'), grad('#6366F1', '#EC4899'), grad('#EC4899', '#8B5CF6')] },
   // ── Productivity ──
   { id: 'aurora', name: 'Aurora', cat: 'Productivity', style: 'swipe', font: 'Sora', dev: 'titanium', hc: '#FFFFFF', sc: 'rgba(255,255,255,0.8)', colors: [grad('#7C3AED', '#EC4899'), grad('#6366F1', '#0EA5E9'), solid('#1E1B4B'), grad('#8B5CF6', '#EC4899')] },
   { id: 'momentum', name: 'Momentum', cat: 'Productivity', style: 'spotlight', font: 'Inter', dev: 'black', hc: '#FFFFFF', sc: 'rgba(255,255,255,0.8)', colors: [grad('#4F46E5', '#0EA5E9'), solid('#312E81'), grad('#6366F1', '#A855F7'), solid('#1E1B4B')] },
