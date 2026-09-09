@@ -4,7 +4,7 @@ import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const PLANS = [
-  { name: 'Free', price: '$0', period: 'forever', features: ['3 templates', 'All device sizes', 'PNG export', 'Up to 3 projects'], cta: 'Start free' },
+  { name: 'Free', price: '$0', period: 'forever', features: ['1 device size', '1 template', 'PNG export', '1 project', 'Ad-supported'], cta: 'Start free' },
   { name: 'Pro', price: '$9', period: 'per month', featured: true, features: ['All templates', 'Unlimited projects', 'PNG + JPEG export', 'Priority new templates', 'Commercial use'], cta: 'Go Pro' },
   { name: 'Lifetime', price: '$49', period: 'one-time', features: ['Everything in Pro', 'Lifetime updates', 'Early access to AI features'], cta: 'Buy once' },
 ];

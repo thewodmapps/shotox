@@ -8,7 +8,7 @@ const FEATURES = [
   { icon: Palette, title: 'Backgrounds & fonts', text: 'Solid colors, rich gradients and five display typefaces.' },
   { icon: Layers, title: 'Multi-slide stories', text: 'Build the full set side by side. Duplicate, reorder, delete.' },
   { icon: Download, title: 'One-click export', text: 'PNG or JPEG at the exact resolution each store expects.' },
-  { icon: Sparkles, title: 'No design skills', text: 'Upload screenshots, tweak the words, ship in minutes.' },
+  { icon: Sparkles, title: 'AI copy writer', text: 'Describe your app — AI writes every slide headline for you.' },
 ];
 
 export default function Features() {
