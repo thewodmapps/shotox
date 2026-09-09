@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import Navbar from '@/components/landing/Navbar';
 import Footer from '@/components/landing/Footer';
+import { Image } from '@/components/ui/image';
 import { getPostBySlug, BLOG_POSTS } from '@/lib/blogPosts';
 
 export default function BlogPost() {
@@ -32,8 +33,9 @@ export default function BlogPost() {
       <article className="max-w-2xl mx-auto px-6 pt-32 pb-24">
         <Link to="/#blog" className="inline-flex items-center gap-2 text-sm text-[#0B0B12]/50 hover:text-[#0B0B12] transition-colors"><ArrowLeft className="w-4 h-4" /> All posts</Link>
 
-        <div className={`mt-8 h-44 sm:h-56 rounded-3xl bg-gradient-to-br ${post.accent} flex items-end p-6`}>
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-white/90 bg-black/25 backdrop-blur px-2.5 py-1 rounded-full">{post.category}</span>
+        <div className="relative mt-8 h-44 sm:h-64 rounded-3xl overflow-hidden">
+          <Image src={post.cover} alt={post.title} className="w-full h-full" fittingType="fill" />
+          <span className="absolute top-4 left-4 text-[11px] font-semibold uppercase tracking-widest text-white bg-black/30 backdrop-blur px-2.5 py-1 rounded-full">{post.category}</span>
         </div>
 
         <header className="mt-8">
