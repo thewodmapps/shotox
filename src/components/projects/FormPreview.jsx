@@ -1,6 +1,6 @@
 import React from 'react';
 
-const RATIO = { phone: 2.1, tablet: 1.36, feature: 2.048 };
+const RATIO = { phone: 2.1, tablet: 1.36, feature: 0.488 };
 
 const FRAME = {
   black: ['#2a2a32', '#0d0d12'],
