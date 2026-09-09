@@ -5,9 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Brand } from '@/components/Logo';
 import { useAuth } from '@/lib/AuthContext';
 
+// Ordered to match the homepage scroll flow: Features → Templates → FAQ → Pricing → Blog
 const LINKS = [
-  { href: '#templates', label: 'Templates' },
   { href: '#features', label: 'Features' },
+  { href: '#templates', label: 'Templates' },
   { href: '#faq', label: 'FAQ' },
   { href: '#pricing', label: 'Pricing' },
   { href: '#blog', label: 'Blog' },
