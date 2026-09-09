@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Apple, Play, Tablet } from 'lucide-react';
 import { getTemplate, getDevice } from '@/lib/templates';
+import { useAuth } from '@/lib/AuthContext';
 import ScaledSlide from '@/components/editor/ScaledSlide';
 
 const SHOW = [
@@ -13,8 +14,10 @@ const SHOW = [
 ];
 
 export default function TemplateShowcase() {
+  const { isAuthenticated } = useAuth();
+  const dest = isAuthenticated ? '/projects' : `/login?returnTo=${encodeURIComponent('/projects')}`;
   return (
-    <section className="py-24 px-6 bg-[#0B0B12] text-white relative overflow-hidden">
+    <section id="templates" className="py-24 px-6 bg-[#0B0B12] text-white relative overflow-hidden scroll-mt-24">
       <div className="absolute -top-40 -left-24 w-[520px] h-[520px] rounded-full bg-violet-600/30 blur-[140px] pointer-events-none" />
       <div className="absolute -bottom-40 -right-24 w-[520px] h-[520px] rounded-full bg-pink-500/25 blur-[140px] pointer-events-none" />
       <div className="max-w-6xl mx-auto relative">
@@ -24,7 +27,7 @@ export default function TemplateShowcase() {
             <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight">Pick a look. Make it yours.</h2>
             <p className="mt-3 text-white/55 max-w-md">20 designer templates across iPhone, iPad and Android — every device, every category.</p>
           </div>
-          <Link to="/projects" className="inline-flex items-center gap-1.5 text-sm font-medium text-white hover:gap-3 transition-all whitespace-nowrap">
+          <Link to={dest} className="inline-flex items-center gap-1.5 text-sm font-medium text-white hover:gap-3 transition-all whitespace-nowrap">
             Browse all templates <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -35,7 +38,7 @@ export default function TemplateShowcase() {
             const Icon = s.icon;
             return (
               <motion.div key={s.id} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.5 }}>
-                <Link to="/projects" className="group block rounded-3xl overflow-hidden border border-white/10 bg-white/[0.03] hover:border-violet-400/50 hover:-translate-y-1.5 transition-all duration-300 shadow-[0_30px_80px_-40px_rgba(124,58,237,0.5)]">
+                <Link to={dest} className="group block rounded-3xl overflow-hidden border border-white/10 bg-white/[0.03] hover:border-violet-400/50 hover:-translate-y-1.5 transition-all duration-300 shadow-[0_30px_80px_-40px_rgba(124,58,237,0.5)]">
                   <div className="flex gap-1.5 p-3 bg-gradient-to-b from-white/[0.06] to-transparent">
                     {tpl.slides.slice(0, 3).map((sl) => (
                       <div key={sl.id} className="flex-1 min-w-0 aspect-[1290/2796] relative overflow-hidden rounded-lg ring-1 ring-white/10">
