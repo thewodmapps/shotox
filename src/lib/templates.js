@@ -64,6 +64,7 @@ export const makeSlide = (o = {}) => ({
   deviceStyle: 'black',
   font: 'Sora',
   style: 'swipe',
+  mock: 'productivity',
   align: 'center',
   ...o,
 });
@@ -220,6 +221,7 @@ export const TEMPLATES = D.map((d) => {
       makeSlide({
         font: d.font,
         style: d.style,
+        mock: d.cat.toLowerCase(),
         layout: L8[i % 8],
         heading: pool.h[(off * 3 + i) % pool.h.length],
         subheading: pool.s[(off * 2 + i) % pool.s.length],

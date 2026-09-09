@@ -140,7 +140,7 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
               {renderText(false)}
             </div>
             <div className="relative flex items-center justify-center z-[1]" style={{ width: '42%' }}>
-              {slide.layout !== 'text-only' && <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} width={phoneW} form="phone" platform={dev.platform} />}
+              {slide.layout !== 'text-only' && <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} width={phoneW} form="phone" platform={dev.platform} />}
             </div>
           </div>
         ) : (
@@ -149,7 +149,7 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
             {(slide.layout === 'phone-bottom' || slide.layout === 'tilted') && <div className="absolute inset-x-0 top-0 z-10">{renderText(true)}</div>}
             {slide.layout !== 'text-only' && (
               <div className="absolute left-1/2 z-[1]" style={phonePos(slide.layout, phoneW)}>
-                <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} width={phoneW} form={form} platform={dev.platform} />
+                <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} width={phoneW} form={form} platform={dev.platform} />
               </div>
             )}
             {slide.layout === 'phone-top' && <div className="absolute inset-x-0 bottom-0 z-10 pb-7">{renderText(true)}</div>}
