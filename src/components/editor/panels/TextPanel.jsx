@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlignLeft, AlignCenter } from 'lucide-react';
+import { AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -30,23 +30,27 @@ export default function TextPanel({ slide, updateSlide, updateTextStyle }) {
       </div>
       <div className="space-y-1.5">
         <Label className="text-white/70 text-xs">Headline alignment</Label>
-        <div className="grid grid-cols-2 gap-2">
-          {[['left', AlignLeft], ['center', AlignCenter]].map(([a, Icon]) => (
-            <button key={a} onClick={() => updateSlide({ headingAlign: a })} className={`flex items-center justify-center gap-2 h-9 rounded-lg text-xs border transition-colors ${(slide.headingAlign || slide.align) === a ? 'bg-white text-[#0B0B12] border-white' : 'border-white/10 text-white/70 hover:bg-white/5'}`}>
-              <Icon className="w-4 h-4" /> {a === 'left' ? 'Left' : 'Center'}
+        <div className="grid grid-cols-3 gap-2">
+          {[['left', AlignLeft], ['center', AlignCenter], ['right', AlignRight]].map(([a, Icon]) => (
+            <button key={a} onClick={() => updateSlide({ headingAlign: a })} className={`flex items-center justify-center gap-1.5 h-9 rounded-lg text-xs border transition-colors ${(slide.headingAlign || slide.align) === a ? 'bg-white text-[#0B0B12] border-white' : 'border-white/10 text-white/70 hover:bg-white/5'}`}>
+              <Icon className="w-4 h-4" /> {a === 'left' ? 'Left' : a === 'center' ? 'Center' : 'Right'}
             </button>
           ))}
         </div>
       </div>
       <div className="space-y-1.5">
         <Label className="text-white/70 text-xs">Subheadline alignment</Label>
-        <div className="grid grid-cols-2 gap-2">
-          {[['left', AlignLeft], ['center', AlignCenter]].map(([a, Icon]) => (
-            <button key={a} onClick={() => updateSlide({ subAlign: a })} className={`flex items-center justify-center gap-2 h-9 rounded-lg text-xs border transition-colors ${(slide.subAlign || slide.align) === a ? 'bg-white text-[#0B0B12] border-white' : 'border-white/10 text-white/70 hover:bg-white/5'}`}>
-              <Icon className="w-4 h-4" /> {a === 'left' ? 'Left' : 'Center'}
+        <div className="grid grid-cols-3 gap-2">
+          {[['left', AlignLeft], ['center', AlignCenter], ['right', AlignRight]].map(([a, Icon]) => (
+            <button key={a} onClick={() => updateSlide({ subAlign: a })} className={`flex items-center justify-center gap-1.5 h-9 rounded-lg text-xs border transition-colors ${(slide.subAlign || slide.align) === a ? 'bg-white text-[#0B0B12] border-white' : 'border-white/10 text-white/70 hover:bg-white/5'}`}>
+              <Icon className="w-4 h-4" /> {a === 'left' ? 'Left' : a === 'center' ? 'Center' : 'Right'}
             </button>
           ))}
         </div>
+      </div>
+      <div className="space-y-2">
+        <Label className="text-white/70 text-xs">Text position · {slide.textY ?? 0}</Label>
+        <Slider value={[slide.textY ?? 0]} min={-30} max={30} step={1} onValueChange={([v]) => updateSlide({ textY: v })} />
       </div>
       <div className="space-y-2">
         <Label className="text-white/70 text-xs">Headline size · {Math.round((slide.headingScale ?? 1) * 100)}%</Label>

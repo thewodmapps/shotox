@@ -146,6 +146,7 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
   const sFs = landscape ? 11.5 * sScale : 13.5 * k * sScale;
   const hAlign = slide.headingAlign || slide.align;
   const sAlign = slide.subAlign || slide.align;
+  const ty = ((slide.textY || 0) / 100) * h;
 
   const renderText = (pos) => {
     const pad = pos === 'bottom' ? `0 26px ${28 * k}px` : pos === 'center' ? '0 26px' : `${34 * k}px 26px 0`;
@@ -181,7 +182,7 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
           const textLeft = L.text === 'left';
           return (
             <div className="relative w-full h-full">
-              <div className="absolute inset-y-0 flex items-center z-10" style={{ [L.text]: 0, width: `${L.textW * 100}%`, padding: textLeft ? '0 4% 0 8%' : '0 8% 0 4%' }}>
+              <div className="absolute inset-y-0 flex items-center z-10" style={{ [L.text]: 0, width: `${L.textW * 100}%`, padding: textLeft ? '0 4% 0 8%' : '0 8% 0 4%', transform: `translateY(${ty}px)` }}>
                 <div className="w-full" style={{ textAlign: hAlign || L.tAlign, fontFamily: `'${slide.font}', sans-serif` }}>
                   <h2 style={{ color: slide.headingColor, fontSize: 26 * lk * hScale, lineHeight: 1.02, fontWeight: 800, letterSpacing: -0.5 * lk }}>{slide.heading}</h2>
                   {slide.subheading && <p style={{ color: slide.subColor, fontSize: 12 * lk * sScale, marginTop: 8 * lk, lineHeight: 1.35, fontWeight: 500, textAlign: sAlign || L.tAlign }}>{slide.subheading}</p>}
@@ -197,10 +198,10 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
         })() : (
           <>
             {slide.layout === 'text-only' ? (
-              <div className="absolute inset-0 flex items-center">{renderText('center')}</div>
+              <div className="absolute inset-0 flex items-center" style={{ transform: `translateY(${ty}px)` }}>{renderText('center')}</div>
             ) : (
               <>
-                <div className={`absolute inset-x-0 z-10 ${slide.layout === 'phone-top' ? 'bottom-0' : 'top-0'}`}>
+                <div className={`absolute inset-x-0 z-10 ${slide.layout === 'phone-top' ? 'bottom-0' : 'top-0'}`} style={{ transform: `translateY(${ty}px)` }}>
                   {renderText(slide.layout === 'phone-top' ? 'bottom' : 'top')}
                 </div>
                 <div className="absolute left-1/2 z-[1]" style={phonePos(slide.layout, pW, slide.pose, k)}>
