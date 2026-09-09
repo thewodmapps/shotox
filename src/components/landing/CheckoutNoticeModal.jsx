@@ -10,7 +10,7 @@ export default function CheckoutNoticeModal({ open, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-72 h-48 rounded-full bg-gradient-to-r from-violet-600/40 to-pink-600/40 blur-[90px] pointer-events-none" />
-        <button onClick={onClose} className="absolute top-3.5 right-3.5 p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors" aria-label="Close">
+        <button onClick={onClose} className="absolute top-3.5 right-3.5 z-10 p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors" aria-label="Close">
           <X className="w-4 h-4" />
         </button>
         <div className="relative p-7 text-center">
