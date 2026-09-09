@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Colorful, recognizable App Store + Google Play brand marks (rounded square icons).
+// Official-style App Store + Google Play brand marks (rounded square icons).
 export function AppStoreIcon({ className = '' }) {
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden>
@@ -11,10 +11,11 @@ export function AppStoreIcon({ className = '' }) {
         </linearGradient>
       </defs>
       <rect width="48" height="48" rx="11" fill="url(#as-g)" />
-      <g stroke="#fff" strokeWidth="3.4" strokeLinecap="round" fill="none">
-        <path d="M18 37 L24 14" />
-        <path d="M30 37 L24 14" />
-        <path d="M14 28 L34 28" />
+      {/* "A" formed by three crossed brush strokes — the App Store mark */}
+      <g stroke="#fff" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none">
+        <path d="M16 38 L29 10" />
+        <path d="M32 38 L19 10" />
+        <path d="M12 29 L36 29" />
       </g>
     </svg>
   );
