@@ -16,7 +16,7 @@ export function Logo({ size = 30, className = '', rounded = 11 }) {
       fittingType="fill"
       width={size}
       height={size}
-      className={`shrink-0 ${className}`}
+      className={`shrink-0 overflow-hidden ${className}`}
       style={{ width: size, height: size, borderRadius: radius }}
     />
   );
