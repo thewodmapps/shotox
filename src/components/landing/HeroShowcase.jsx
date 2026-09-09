@@ -4,10 +4,10 @@ import { getTemplate, getDevice } from '@/lib/templates';
 import SlideCanvas from '@/components/editor/SlideCanvas';
 
 const ITEMS = [
-  { id: 'royale', device: 'iphone-6.7', slide: 0, w: 150, rot: -8, y: 0, delay: 0 },
+  { id: 'aura', device: 'iphone-6.7', slide: 0, w: 150, rot: -8, y: 0, delay: 0 },
   { id: 'golden', device: 'android-phone', slide: 2, w: 162, rot: 6, y: -16, delay: 0.5 },
-  { id: 'reverb', device: 'ipad-11', slide: 4, w: 150, rot: -4, y: 10, delay: 1 },
-  { id: 'nightclub', device: 'android-tab-10', slide: 6, w: 142, rot: 8, y: -8, delay: 1.5 },
+  { id: 'royale', device: 'ipad-11', slide: 4, w: 150, rot: -4, y: 10, delay: 1 },
+  { id: 'magnolia', device: 'android-tab-10', slide: 6, w: 142, rot: 8, y: -8, delay: 1.5 },
 ];
 
 export default function HeroShowcase() {
