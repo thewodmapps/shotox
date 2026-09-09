@@ -47,12 +47,11 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
           <DropdownMenuItem onClick={() => onExport('current', 'jpeg')}>Current slide · JPEG</DropdownMenuItem>
           <DropdownMenuItem onClick={() => onExport('all', 'png')}>All slides · PNG</DropdownMenuItem>
           <DropdownMenuItem onClick={() => onExport('all', 'jpeg')}>All slides · JPEG</DropdownMenuItem>
-          <div className="my-1 h-px bg-white/10" />
-          <DropdownMenuItem onClick={onShare} className="gap-2 text-violet-300 focus:text-violet-200 focus:bg-violet-500/10">
-            <Share2 className="w-4 h-4" /> Share design
-          </DropdownMenuItem>
         </DropdownMenuContent>
         </DropdownMenu>
+        <button onClick={onShare} className="p-2 rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Share design" aria-label="Share design">
+          <Share2 className="w-4 h-4" />
+        </button>
         <button onClick={() => base44.auth.logout('/')} className="p-2 rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Sign out" aria-label="Sign out">
         <LogOut className="w-4 h-4" />
         </button>
