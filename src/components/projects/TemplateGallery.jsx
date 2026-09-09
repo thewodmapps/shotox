@@ -37,7 +37,7 @@ export default function TemplateGallery({ onCreate, creating }) {
           {list.map((tpl) => (
             <button key={tpl.id} disabled={!!creating} onClick={() => onCreate({ templateId: tpl.id, platform: 'ios' })} className="text-left rounded-2xl overflow-hidden border border-black/5 bg-white hover:shadow-[0_30px_60px_-30px_rgba(0,0,0,0.35)] hover:-translate-y-1 transition-all disabled:opacity-60">
               <div className="flex gap-1.5 p-2.5 bg-[#0B0B12]">
-                {tpl.slides.map((s) => (
+                {tpl.slides.slice(0, 4).map((s) => (
                   <div key={s.id} className="flex-1 aspect-[1290/2796] relative overflow-hidden rounded-lg"><ScaledSlide slide={s} /></div>
                 ))}
               </div>

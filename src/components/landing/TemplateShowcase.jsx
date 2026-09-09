@@ -37,7 +37,7 @@ export default function TemplateShowcase() {
               <motion.div key={s.id} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.5 }}>
                 <Link to="/projects" className="group block rounded-3xl overflow-hidden border border-white/10 bg-white/[0.03] hover:border-violet-400/50 hover:-translate-y-1.5 transition-all duration-300 shadow-[0_30px_80px_-40px_rgba(124,58,237,0.5)]">
                   <div className="flex gap-1.5 p-3 bg-gradient-to-b from-white/[0.06] to-transparent">
-                    {tpl.slides.map((sl) => (
+                    {tpl.slides.slice(0, 3).map((sl) => (
                       <div key={sl.id} className="flex-1 min-w-0 aspect-[1290/2796] relative overflow-hidden rounded-lg ring-1 ring-white/10">
                         <ScaledSlide slide={sl} device={device} />
                       </div>
