@@ -75,7 +75,7 @@ export default function ProjectCard({ project, onDelete }) {
           </div>
         </div>
       </div>
-      <ShareModal open={shareOpen} url={shareUrl} title={p.name} onClose={() => setShareOpen(false)} />
+      <ShareModal open={shareOpen} url={shareUrl} title={p.name} projectId={p.id} onClose={() => setShareOpen(false)} />
       <ConfirmDeleteModal open={deleteOpen} name={p.name} onConfirm={confirmDelete} onClose={() => setDeleteOpen(false)} />
     </>
   );

@@ -19,11 +19,11 @@ const SOCIAL = [
   { id: 'gm', label: 'Gmail', brand: '#EA4335', icon: Mail, share: (url, text) => `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(text)}&body=${encodeURIComponent(url)}` },
 ];
 
-export default function ShareModal({ open, url, title = 'My Shotox design', onClose }) {
+export default function ShareModal({ open, url, title = 'My Shotox design', projectId, onClose }) {
   const [copied, setCopied] = useState(false);
   if (!open) return null;
 
-  const brandUrl = `https://shotox.in/${slugify(title)}`;
+  const brandUrl = `https://shotox.in/${slugify(title)}${projectId ? `?p=${projectId}` : ''}`;
 
   const copy = async () => {
     try {
