@@ -4,6 +4,7 @@ import { ArrowLeft, Download, Check, Loader2, Cloud } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { resolveDevice } from '@/lib/templates';
+import { Brand } from '@/components/Logo';
 
 const STATUS = {
   saved: { icon: Check, label: 'Saved' },
@@ -19,10 +20,7 @@ export default function EditorTopbar({ project, status, onRename, onExport, expo
       <Link to="/projects" className="p-2 rounded-lg hover:bg-white/10 transition-colors" aria-label="Back to projects">
         <ArrowLeft className="w-4 h-4" />
       </Link>
-      <Link to="/" className="hidden sm:flex items-center gap-2 font-display font-semibold tracking-tight">
-        <span className="w-6 h-6 rounded-md bg-gradient-to-br from-violet-500 to-pink-500 grid place-items-center text-xs">Z</span>
-        Zubilo
-      </Link>
+      <Brand to="/" size={24} textClass="text-white" className="hidden sm:flex" />
       <div className="flex-1 flex justify-center">
         <input
           value={project.name}
