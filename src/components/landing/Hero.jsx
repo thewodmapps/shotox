@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Star, Zap } from 'lucide-react';
+import { ArrowRight, Sparkles, Smartphone, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Image } from '@/components/ui/image';
 
@@ -22,7 +22,7 @@ export default function Hero() {
 
       <div className="relative max-w-6xl mx-auto text-center">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-lime-300 text-[#0B0B12] text-xs font-semibold">
-          <Sparkles className="w-3.5 h-3.5" /> iPhone 17 & Google Play devices supported
+          <Sparkles className="w-3.5 h-3.5" /> iPhone, iPad & Android — store-ready sizes
         </motion.div>
         <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="font-display font-bold tracking-[-0.04em] leading-[0.95] text-6xl sm:text-7xl lg:text-8xl mt-7">
           App Screenshot<br /><span className="zubilo-gradient-text">Generator</span>
@@ -42,13 +42,13 @@ export default function Hero() {
             <Image src={HERO_IMG} alt="3D floating phones showing generated app screenshots" className="w-full aspect-[16/9]" />
           </motion.div>
           <Float className="-left-4 top-10 hidden sm:block" delay={0.5}>
-            <div className="glass-card"><Star className="w-4 h-4 text-yellow-300 fill-yellow-300" /> 4.9 rating on the App Store</div>
+            <div className="glass-card"><Smartphone className="w-4 h-4 text-violet-300" /> Store-ready sizes for every device</div>
           </Float>
           <Float className="-right-6 top-1/3 hidden sm:block" delay={1.2}>
-            <div className="glass-card"><Zap className="w-4 h-4 text-lime-300" /> Exported in 1290 × 2796</div>
+            <div className="glass-card"><Zap className="w-4 h-4 text-lime-300" /> Pixel-perfect PNG & JPEG export</div>
           </Float>
           <Float className="left-10 -bottom-6 hidden md:block" delay={2}>
-            <div className="glass-card"><Sparkles className="w-4 h-4 text-pink-300" /> 8 designer templates</div>
+            <div className="glass-card"><Sparkles className="w-4 h-4 text-pink-300" /> 20 designer templates</div>
           </Float>
         </motion.div>
       </div>
