@@ -8,8 +8,8 @@ import { useAuth } from '@/lib/AuthContext';
 const LINKS = [
   { href: '#templates', label: 'Templates' },
   { href: '#features', label: 'Features' },
-  { href: '#pricing', label: 'Pricing' },
   { href: '#faq', label: 'FAQ' },
+  { href: '#pricing', label: 'Pricing' },
 ];
 
 export default function Navbar() {
