@@ -50,7 +50,7 @@ export const GRADIENTS = [
 
 export const THEME_STYLES = ['swipe', 'spotlight', 'split', 'grid', 'brush', 'orbs', 'neon', 'minimal'];
 export const TEMPLATE_TAGS = ['All', '3D Devices', 'Dark', 'Colorful', 'Gradient', 'Minimal'];
-export const CATEGORIES = ['All', 'Productivity', 'Finance', 'Beauty', 'Food', 'Travel', 'Fitness', 'Education', 'Social', 'AI', 'Entertainment', 'Games', 'Health'];
+export const CATEGORIES = ['All', 'Productivity', 'Finance', 'Beauty', 'Food', 'Travel', 'Fitness', 'Education', 'Social', 'AI', 'Entertainment', 'Games', 'Health', 'Commerce'];
 
 export const MOCK_TYPES = ['hero', 'list', 'detail', 'stats', 'grid', 'chat', 'profile', 'success'];
 
@@ -150,6 +150,10 @@ const COPY = {
     h: ['Breathe easier', 'Sleep deeper', 'Feel your best', 'Pause and reset', 'Calm your mind', 'Sleep stories', 'Mindful moments', 'Rest, renewed', 'Find your balance', 'Wind down gently'],
     s: ['Guided sessions for every moment', 'Wind down with calming soundscapes', 'Track mood, rest and recovery', 'One-minute meditations anywhere', 'Science-backed stress relief', 'Drift off, gently', 'Tiny breaks, big difference', 'Wake up the best version of you'],
   },
+  Commerce: {
+    h: ['Discover sneaker culture', 'Verified products only', 'Streetwear starts here', 'Explore sneaker culture', 'Elevate your style', 'Find your pair', 'Cop the latest drops', 'Track every sale', 'Authentic, always', 'Your sneaker source'],
+    s: ['Thousands of verified listings', 'Every pair checked by experts', 'From grails to daily beaters', 'Curated drops, every week', 'Match your fit in seconds', 'Bid, buy and sell in one tap', 'Real-time market prices', 'A community of 520k sneakerheads'],
+  },
 };
 
 // Template descriptors: (style, palette, font, device) make each visually distinct.
@@ -220,6 +224,8 @@ const D = [
   { id: 'serene', name: 'Serene', cat: 'Health', style: 'orbs', font: 'Fraunces', dev: 'white', hc: '#14532D', sc: 'rgba(20,83,45,0.7)', colors: [solid('#DCFCE7'), grad('#BBF7D0', '#DCFCE7'), solid('#ECFDF5'), solid('#D1FAE5')] },
   { id: 'balance', name: 'Balance', cat: 'Health', style: 'spotlight', font: 'Inter', dev: 'white', hc: '#0F766E', sc: 'rgba(15,118,110,0.7)', colors: [grad('#99F6E4', '#5EEAD4'), solid('#CCFBF1'), grad('#A7F3D0', '#99F6E4'), solid('#D1FAE5')] },
   { id: 'bloomwell', name: 'Bloom Well', cat: 'Health', style: 'brush', font: 'Playfair Display', dev: 'white', hc: '#831843', sc: 'rgba(131,24,67,0.7)', colors: [solid('#FCE7F3'), grad('#FBCFE8', '#FCE7F3'), solid('#FDF2F8'), grad('#F9A8D4', '#FBCFE8')] },
+  // ── Commerce ──
+  { id: 'kicksy', name: 'Kicksy', cat: 'Commerce', style: 'brush', font: 'Playfair Display', dev: 'white', hc: '#14532D', sc: 'rgba(20,83,45,0.7)', colors: [solid('#b8e9b0'), grad('#BBF7D0', '#b8e9b0'), solid('#A7F3D0'), solid('#DCFCE7')] },
 ];
 
 const tagsFor = (d) => {
