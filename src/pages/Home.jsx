@@ -4,7 +4,6 @@ import Hero from '@/components/landing/Hero';
 import Features from '@/components/landing/Features';
 import TemplateShowcase from '@/components/landing/TemplateShowcase';
 import Pricing from '@/components/landing/Pricing';
-import FinalCta from '@/components/landing/FinalCta';
 import Footer from '@/components/landing/Footer';
 
 export default function Home() {
@@ -15,7 +14,6 @@ export default function Home() {
       <Features />
       <TemplateShowcase />
       <Pricing />
-      <FinalCta />
       <Footer />
     </div>
   );
