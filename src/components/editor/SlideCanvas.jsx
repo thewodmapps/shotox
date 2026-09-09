@@ -24,7 +24,12 @@ const LAND = [
 
 const bgStyle = (bg) => {
   if (bg.type === 'gradient') return { background: `linear-gradient(${bg.angle}deg, ${bg.from}, ${bg.to})` };
-  if (bg.type === 'image' && bg.image) return { backgroundColor: bg.color || '#0B0B12', backgroundImage: `url(${bg.image})`, backgroundSize: 'cover', backgroundPosition: 'center' };
+  if (bg.type === 'image' && bg.image) {
+    const fit = bg.imageFit === 'fit' ? 'contain' : 'cover';
+    const x = bg.imageX ?? 50;
+    const y = bg.imageY ?? 50;
+    return { backgroundColor: bg.color || '#0B0B12', backgroundImage: `url(${bg.image})`, backgroundSize: fit, backgroundPosition: `${x}% ${y}%`, backgroundRepeat: 'no-repeat' };
+  }
   return { background: bg.color };
 };
 

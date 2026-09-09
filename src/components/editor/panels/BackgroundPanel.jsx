@@ -97,8 +97,29 @@ export default function BackgroundPanel({ slide, updateSlide }) {
               <span className="text-xs">{uploading ? 'Uploading…' : 'Upload image'}</span>
             </button>
           )}
+          <div className="space-y-2">
+            <Label className="text-white/70 text-xs">Fit</Label>
+            <div className="grid grid-cols-2 gap-1 p-1 rounded-lg bg-white/5">
+              <button onClick={() => setBg({ imageFit: 'cover' })} className={`h-8 rounded-md text-xs transition-colors ${bg.imageFit !== 'fit' ? 'bg-white text-[#0B0B12]' : 'text-white/70 hover:bg-white/5'}`}>Cover (crop)</button>
+              <button onClick={() => setBg({ imageFit: 'fit' })} className={`h-8 rounded-md text-xs transition-colors ${bg.imageFit === 'fit' ? 'bg-white text-[#0B0B12]' : 'text-white/70 hover:bg-white/5'}`}>Fit (whole)</button>
+            </div>
+          </div>
+
+          {bg.imageFit !== 'fit' && (
+            <>
+              <div className="space-y-2">
+                <Label className="text-white/70 text-xs">Position · X {bg.imageX ?? 50}%</Label>
+                <Slider value={[bg.imageX ?? 50]} min={0} max={100} step={1} onValueChange={([imageX]) => setBg({ imageX })} />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-white/70 text-xs">Position · Y {bg.imageY ?? 50}%</Label>
+                <Slider value={[bg.imageY ?? 50]} min={0} max={100} step={1} onValueChange={([imageY]) => setBg({ imageY })} />
+              </div>
+            </>
+          )}
+
           <ColorField label="Fallback color" value={bg.color} onChange={(color) => setBg({ color })} />
-          <p className="text-[11px] text-white/40 leading-relaxed">Image fills the slide (cover crop). Pick a fallback color for behind the image and for text-contrast logic.</p>
+          <p className="text-[11px] text-white/40 leading-relaxed">Cover crops the image to fill the slide — use the position sliders to reframe. Fit shows the whole image with the fallback color around it.</p>
         </>
       )}
 
