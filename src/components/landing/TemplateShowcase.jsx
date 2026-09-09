@@ -25,7 +25,7 @@ export default function TemplateShowcase() {
           <div>
             <p className="text-sm font-medium text-pink-400 mb-3">Templates</p>
             <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight">Pick a look. Make it yours.</h2>
-            <p className="mt-3 text-white/55 max-w-md">50+ designer templates across iPhone, iPad and Android — every device, every category.</p>
+            <p className="mt-3 text-white/55 max-w-md">85 designer templates across iPhone, iPad and Android — every device, every category.</p>
           </div>
           <Link to={dest} className="inline-flex items-center gap-1.5 text-sm font-medium text-white hover:gap-3 transition-all whitespace-nowrap">
             Browse all templates <ArrowRight className="w-4 h-4" />
