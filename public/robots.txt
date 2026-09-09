@@ -1,0 +1,27 @@
+# robots.txt — Shotox
+User-agent: *
+Allow: /
+Allow: /logo-download
+
+# Private / app screens — keep out of index
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /projects
+Disallow: /editor
+
+# AI crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+Sitemap: https://shotox.in/sitemap.xml

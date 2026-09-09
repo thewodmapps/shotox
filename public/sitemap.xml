@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://shotox.in/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/b3e63b968_shotox.png</image:loc>
+      <image:title>Shotox app screenshot generator</image:title>
+      <image:caption>AI-powered app screenshots for App Store and Google Play</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://shotox.in/logo-download</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>
