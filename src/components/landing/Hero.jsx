@@ -30,7 +30,7 @@ export default function Hero() {
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-7 text-lg text-white/65 max-w-xl mx-auto">
           Create beautiful, customized app screenshots for your App Store & Google Play Store — in minutes, not days.
         </motion.p>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Button asChild size="lg" className="rounded-full h-12 px-7 bg-white text-[#0B0B12] hover:bg-white/90 text-base shadow-[0_20px_50px_-15px_rgba(255,255,255,0.4)]">
             <Link to="/projects">{isAuthenticated ? 'Go to Dashboard' : 'Get started for free'} <ArrowRight className="w-4 h-4 ml-2" /></Link>
           </Button>
@@ -45,7 +45,7 @@ export default function Hero() {
           <Float className="-right-4 top-1/4" delay={1.2}>
             <div className="glass-card"><Zap className="w-4 h-4 text-lime-300" /> Pixel-perfect PNG & JPEG export</div>
           </Float>
-          <Float className="left-12 -bottom-2" delay={2}>
+          <Float className="left-12 -bottom-10 sm:-bottom-2" delay={2}>
             <div className="glass-card"><Sparkles className="w-4 h-4 text-pink-300" /> 20 designer templates</div>
           </Float>
         </motion.div>
