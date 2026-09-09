@@ -100,18 +100,16 @@ const Decor = ({ style, accent }) => {
 const phonePos = (layout, pW, off, isTab, h) => {
   let top, rot = 0, x = 0;
   if (isTab) {
-    if (layout === 'phone-top') top = -h * 0.12;
-    else if (layout === 'tilted') { top = h * 0.38; rot = -6; x = 6; }
-    else top = h * 0.38;
+    top = h * 0.38;
   } else {
     if (layout === 'phone-top') top = -90;
     else if (layout === 'tilted') { top = 192; rot = -8; x = 8; }
     else top = 176;
   }
-  if (off) {
+  if (off && !isTab) {
     x += off.x;
     rot += off.rot;
-    if (!isTab && layout !== 'phone-top') top += off.topDelta;
+    if (layout !== 'phone-top') top += off.topDelta;
   }
   return { marginLeft: -pW / 2 + (x / 100) * BASE_W, top, transform: `rotate(${rot}deg)` };
 };
@@ -169,7 +167,7 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
               <div className="absolute inset-0 flex items-center">{renderText(true)}</div>
             ) : (
               <>
-                <div className={`absolute inset-x-0 z-10 ${slide.layout === 'phone-top' ? 'bottom-0 pb-7' : 'top-0'}`}>{renderText(true)}</div>
+                <div className={`absolute inset-x-0 z-10 ${!isTab && slide.layout === 'phone-top' ? 'bottom-0 pb-7' : 'top-0'}`}>{renderText(true)}</div>
                 <div className="absolute left-1/2 z-[1]" style={phonePos(slide.layout, pW, slide.pose, isTab, h)}>
                   <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={pW} form={form} platform={dev.platform} />
                 </div>
