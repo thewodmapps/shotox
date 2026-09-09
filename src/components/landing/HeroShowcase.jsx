@@ -62,7 +62,7 @@ export default function HeroShowcase() {
   }, []);
 
   return (
-    <div ref={wrapRef} className="relative w-full overflow-hidden" style={{ height: DESIGN_H * scale }}>
+    <div ref={wrapRef} className="relative w-full max-w-[720px] mx-auto overflow-hidden" style={{ height: DESIGN_H * scale }}>
       <div
         className="absolute top-0 left-0 origin-top-left"
         style={{ width: DESIGN_W, height: DESIGN_H, transform: `scale(${scale})` }}
