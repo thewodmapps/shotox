@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Trash2, FolderOpen } from 'lucide-react';
 import { format } from 'date-fns';
+import { resolveDevice } from '@/lib/templates';
 import ScaledSlide from '@/components/editor/ScaledSlide';
 
 export default function SavedDesigns({ projects, onDelete }) {
@@ -17,7 +18,7 @@ export default function SavedDesigns({ projects, onDelete }) {
               <Link to={`/editor?id=${p.id}`} className="block">
                 <div className="flex gap-1 p-2 bg-[#0B0B12]">
                   {(p.slides || []).slice(0, 3).map((s) => (
-                    <div key={s.id} className="flex-1 aspect-[1290/2796] relative overflow-hidden rounded-md"><ScaledSlide slide={s} deviceId={p.device} /></div>
+                    <div key={s.id} className="flex-1 aspect-[1290/2796] relative overflow-hidden rounded-md"><ScaledSlide slide={s} device={resolveDevice(p)} /></div>
                   ))}
                 </div>
                 <div className="px-4 py-3">

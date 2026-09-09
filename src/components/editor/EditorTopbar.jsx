@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, Download, Check, Loader2, Cloud } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { getDevice } from '@/lib/templates';
+import { resolveDevice } from '@/lib/templates';
 
 const STATUS = {
   saved: { icon: Check, label: 'Saved' },
@@ -13,7 +13,7 @@ const STATUS = {
 
 export default function EditorTopbar({ project, status, onRename, onExport, exporting }) {
   const S = STATUS[status] || STATUS.saved;
-  const device = getDevice(project.device);
+  const device = resolveDevice(project);
   return (
     <header className="h-14 shrink-0 flex items-center gap-3 px-3 sm:px-4 bg-[#0B0B12] border-b border-white/10 text-white">
       <Link to="/projects" className="p-2 rounded-lg hover:bg-white/10 transition-colors" aria-label="Back to projects">
@@ -34,7 +34,7 @@ export default function EditorTopbar({ project, status, onRename, onExport, expo
         <S.icon className={`w-3.5 h-3.5 ${status === 'saving' ? 'animate-spin' : ''}`} /> {S.label}
       </span>
       <span className="hidden lg:block text-xs text-white/50 px-2.5 py-1 rounded-full border border-white/10">
-        {device.w} × {device.h}
+        {device.name} · {device.w} × {device.h}
       </span>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

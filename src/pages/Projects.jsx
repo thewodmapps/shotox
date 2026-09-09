@@ -14,21 +14,28 @@ export default function Projects() {
 
   useEffect(() => { base44.entities.Project.list('-updated_date', 50).then(setProjects); }, []);
 
-  const create = async (templateId, platform, scratch = false) => {
+  const create = async ({ templateId, platform = 'ios', device, customW, customH, scratch = false }) => {
     setCreating(platform);
-    const tpl = getTemplate(templateId);
-    const slides = scratch
-      ? [makeSlide({ bg: solid('#0B0B12') }), makeSlide({ bg: solid('#0B0B12'), layout: 'phone-top' })]
-      : tpl.slides.map((s) => ({ ...s, id: makeId() }));
-    const p = await base44.entities.Project.create({
-      name: 'Untitled project',
-      platform,
-      device: platform === 'android' ? 'android-phone' : 'iphone-6.7',
-      template_id: scratch ? '' : tpl.id,
-      slides,
-      uploads: [],
-    });
-    navigate(`/editor?id=${p.id}`);
+    try {
+      const tpl = getTemplate(templateId);
+      const devId = device || (platform === 'android' ? 'android-phone' : 'iphone-6.7');
+      const slides = scratch
+        ? [makeSlide({ bg: solid('#0B0B12') }), makeSlide({ bg: solid('#0B0B12'), layout: 'phone-top' })]
+        : tpl.slides.map((s) => ({ ...s, id: makeId() }));
+      const p = await base44.entities.Project.create({
+        name: 'Untitled project',
+        platform: devId === 'feature-graphic' ? 'android' : platform,
+        device: devId,
+        template_id: scratch ? '' : tpl.id,
+        slides,
+        uploads: [],
+        custom_w: devId === 'custom' ? customW : undefined,
+        custom_h: devId === 'custom' ? customH : undefined,
+      });
+      navigate(`/editor?id=${p.id}`);
+    } finally {
+      setCreating(null);
+    }
   };
 
   const remove = async (id) => {

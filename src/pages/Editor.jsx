@@ -2,13 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
-import { makeId, getDevice } from '@/lib/templates';
+import { makeId, resolveDevice } from '@/lib/templates';
 import { exportSlide, wait } from '@/lib/exportSlides';
 import EditorTopbar from '@/components/editor/EditorTopbar';
 import EditorRail from '@/components/editor/EditorRail';
 import EditorPanel from '@/components/editor/EditorPanel';
 import EditorStage from '@/components/editor/EditorStage';
 import SlideCanvas from '@/components/editor/SlideCanvas';
+import UndoBar from '@/components/editor/UndoBar';
 
 export default function Editor() {
   const id = new URLSearchParams(window.location.search).get('id');
@@ -18,8 +19,10 @@ export default function Editor() {
   const [panel, setPanel] = useState('templates');
   const [status, setStatus] = useState('saved');
   const [exporting, setExporting] = useState(false);
+  const [undo, setUndo] = useState(null);
   const dirty = useRef(false);
   const exportRefs = useRef([]);
+  const undoTimer = useRef(null);
 
   useEffect(() => {
     if (!id) return setMissing(true);
@@ -31,8 +34,8 @@ export default function Editor() {
     setStatus('dirty');
     const tm = setTimeout(async () => {
       setStatus('saving');
-      const { name, platform, device, template_id, slides, uploads } = project;
-      await base44.entities.Project.update(project.id, { name, platform, device, template_id, slides, uploads });
+      const { name, platform, device, template_id, slides, uploads, custom_w, custom_h } = project;
+      await base44.entities.Project.update(project.id, { name, platform, device, template_id, slides, uploads, custom_w, custom_h });
       setStatus('saved');
     }, 1200);
     return () => clearTimeout(tm);
@@ -42,12 +45,32 @@ export default function Editor() {
   const updateSlide = (patch) => updateProject({ slides: project.slides.map((s, i) => (i === sel ? { ...s, ...patch } : s)) });
   const addSlide = () => { updateProject({ slides: [...project.slides, { ...project.slides[sel], id: makeId(), screenshotUrl: '' }] }); setSel(project.slides.length); };
   const duplicate = (i) => { const s = [...project.slides]; s.splice(i + 1, 0, { ...s[i], id: makeId() }); updateProject({ slides: s }); setSel(i + 1); };
-  const remove = (i) => { const s = project.slides.filter((_, k) => k !== i); updateProject({ slides: s }); setSel(Math.max(0, Math.min(sel, s.length - 1))); };
+
+  const remove = (i) => {
+    const removed = project.slides[i];
+    const s = project.slides.filter((_, k) => k !== i);
+    updateProject({ slides: s });
+    setSel(Math.max(0, Math.min(sel, s.length - 1)));
+    setUndo({ slide: removed, index: i });
+    clearTimeout(undoTimer.current);
+    undoTimer.current = setTimeout(() => setUndo(null), 6000);
+  };
+
+  const restoreSlide = () => {
+    if (!undo) return;
+    const s = [...project.slides];
+    s.splice(undo.index, 0, undo.slide);
+    updateProject({ slides: s });
+    setSel(undo.index);
+    setUndo(null);
+    clearTimeout(undoTimer.current);
+  };
+
   const move = (from, to) => { const s = [...project.slides]; const [m] = s.splice(from, 1); s.splice(to, 0, m); updateProject({ slides: s }); setSel(to); };
 
   const onExport = async (which, format) => {
     setExporting(true);
-    const device = getDevice(project.device);
+    const device = resolveDevice(project);
     const idx = which === 'all' ? project.slides.map((_, i) => i) : [sel];
     for (const i of idx) {
       await exportSlide(exportRefs.current[i], device, `${project.name.replace(/\s+/g, '-')}-${i + 1}`, format);
@@ -64,6 +87,7 @@ export default function Editor() {
   if (!project) return <div className="min-h-screen grid place-items-center bg-[#0B0B12]"><Loader2 className="w-6 h-6 text-white/60 animate-spin" /></div>;
 
   const slide = project.slides[sel] || project.slides[0];
+  const device = resolveDevice(project);
   const panelProps = { slide, updateSlide, project, updateProject };
   return (
     <div className="h-screen flex flex-col bg-[#08080d]">
@@ -73,9 +97,10 @@ export default function Editor() {
         <EditorPanel active={panel} {...panelProps} />
         <EditorStage project={project} selected={sel} onSelect={setSel} onAdd={addSlide} onDuplicate={duplicate} onDelete={remove} onMove={move} />
       </div>
+      <UndoBar undo={undo} onUndo={restoreSlide} />
       <div className="fixed -left-[5000px] top-0 pointer-events-none" aria-hidden>
         {project.slides.map((s, i) => (
-          <SlideCanvas key={s.id} slide={s} deviceId={project.device} ref={(el) => (exportRefs.current[i] = el)} />
+          <SlideCanvas key={s.id} slide={s} device={device} ref={(el) => (exportRefs.current[i] = el)} />
         ))}
       </div>
     </div>

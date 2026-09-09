@@ -1,19 +1,21 @@
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { resolveDevice } from '@/lib/templates';
 import SlideCanvas from './SlideCanvas';
 import SlideToolbar from './SlideToolbar';
 
 export default function EditorStage({ project, selected, onSelect, onAdd, onDuplicate, onDelete, onMove }) {
+  const device = resolveDevice(project);
   return (
     <main className="flex-1 min-w-0 overflow-auto bg-[#08080d] bg-grid">
-      <div className="min-h-full flex items-center px-6 sm:px-10 py-10">
+      <div className="min-h-full flex items-center px-6 sm:px-10 py-12">
         <div className="flex items-start gap-3 mx-auto">
           {project.slides.map((slide, i) => (
             <motion.div key={slide.id} layout className="relative group" onClick={() => onSelect(i)}>
               <SlideCanvas
                 slide={slide}
-                deviceId={project.device}
+                device={device}
                 width={260}
                 className={`rounded-xl overflow-hidden cursor-pointer transition-shadow ${
                   selected === i ? 'ring-2 ring-violet-400 shadow-[0_0_0_6px_rgba(139,92,246,0.15)]' : 'ring-1 ring-white/10 hover:ring-white/30'
@@ -27,7 +29,7 @@ export default function EditorStage({ project, selected, onSelect, onAdd, onDupl
           ))}
           <button
             onClick={onAdd}
-            className="w-24 shrink-0 self-stretch min-h-[300px] rounded-xl border border-dashed border-white/20 hover:border-violet-400 hover:bg-violet-500/10 text-white/50 hover:text-white flex flex-col items-center justify-center gap-2 transition-colors"
+            className="w-24 shrink-0 self-stretch min-h-[200px] rounded-xl border border-dashed border-white/20 hover:border-violet-400 hover:bg-violet-500/10 text-white/50 hover:text-white flex flex-col items-center justify-center gap-2 transition-colors"
           >
             <Plus className="w-6 h-6" />
             <span className="text-xs">Add slide</span>

@@ -19,6 +19,12 @@
       "default": "iphone-6.7",
       "description": "Device size id"
     },
+    "custom_w": {
+      "type": "number"
+    },
+    "custom_h": {
+      "type": "number"
+    },
     "template_id": {
       "type": "string"
     },
