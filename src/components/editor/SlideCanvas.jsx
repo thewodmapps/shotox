@@ -22,34 +22,28 @@ const LAND = [
   { text: 'left',  textW: 0.54, tAlign: 'left',   dev: 'right', devEdge: 6, rot: 12,  scale: 0.85 },
 ];
 
-const hexToRgb = (hex) => {
+const bgStyle = (bg) =>
+  bg.type === 'gradient'
+    ? { background: `linear-gradient(${bg.angle}deg, ${bg.from}, ${bg.to})` }
+    : { background: bg.color };
+
+const isLight = (hex) => {
   const h = (hex || '').replace('#', '');
-  const f = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
-  const n = /^[0-9a-fA-F]{6}$/.test(f) ? parseInt(f, 16) : NaN;
-  if (Number.isNaN(n)) return { r: 255, g: 255, b: 255 };
-  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
-};
-const luminance = (hex) => { const { r, g, b } = hexToRgb(hex); return (0.299 * r + 0.587 * g + 0.114 * b) / 255; };
-const isLight = (hex) => luminance(hex) > 0.62;
-const mixHex = (hex, target, amt) => {
-  const a = hexToRgb(hex), b = hexToRgb(target);
-  return `rgb(${Math.round(a.r + (b.r - a.r) * amt)},${Math.round(a.g + (b.g - a.g) * amt)},${Math.round(a.b + (b.b - a.b) * amt)})`;
-};
-const hexA = (hex, a) => {
-  const { r, g, b } = hexToRgb(hex);
-  return `rgba(${r},${g},${b},${a})`;
+  if (!h) return false;
+  const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+  const n = parseInt(full, 16);
+  if (Number.isNaN(n)) return false;
+  return (0.299 * ((n >> 16) & 255) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255 > 0.62;
 };
 
-// Neo-gradient mesh background: base gradient washed with soft radial highlights
-// so every backdrop feels volumetric instead of flat. Pure CSS gradients — exports
-// cleanly through html2canvas.
-const meshBg = (bg) => {
-  const c1 = bg.from || bg.color;
-  const c2 = bg.to || c1;
-  const base = bg.type === 'gradient' ? `linear-gradient(${bg.angle}deg, ${c1}, ${c2})` : c1;
-  return {
-    background: `radial-gradient(circle at 14% 16%, ${hexA(c2, 0.55)} 0%, transparent 42%), radial-gradient(circle at 86% 84%, ${hexA(c1, 0.5)} 0%, transparent 46%), radial-gradient(circle at 82% 10%, ${hexA(c2, 0.22)} 0%, transparent 38%), ${base}`,
-  };
+const hexA = (hex, a) => {
+  const h = (hex || '').replace('#', '');
+  if (/^[0-9a-fA-F]{6}$/.test(h) || /^[0-9a-fA-F]{3}$/.test(h)) {
+    const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+    const n = parseInt(full, 16);
+    return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
+  }
+  return `rgba(255,255,255,${a})`;
 };
 
 const Sparkle = ({ size, color, style }) => (
@@ -57,34 +51,6 @@ const Sparkle = ({ size, color, style }) => (
     <path d="M12 0c1.15 6.1 5.75 10.7 12 12-6.25 1.3-10.85 5.9-12 12-1.15-6.1-5.75-10.7-12-12C6.25 10.7 10.85 6.1 12 0z" />
   </svg>
 );
-
-// Soft volumetric color washes — the "3D blob" depth layer.
-const Blob = ({ color, style }) => (
-  <div className="absolute pointer-events-none" style={{ background: `radial-gradient(circle at 38% 38%, ${hexA(color, 0.4)} 0%, transparent 66%)`, ...style }} />
-);
-
-// Glossy 3D sphere with a neon halo — the Neo signature element.
-const Orb = ({ size, color, style }) => (
-  <div
-    className="absolute pointer-events-none"
-    style={{
-      width: size,
-      height: size,
-      borderRadius: '50%',
-      background: `radial-gradient(circle at 32% 28%, #ffffff 0%, ${color} 40%, ${mixHex(color, '#000000', 0.5)} 100%)`,
-      boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.28), inset -4px -6px 12px rgba(0,0,0,0.35), 0 0 ${size * 0.55}px ${size * 0.14}px ${hexA(color, 0.55)}, 0 18px 40px -12px rgba(0,0,0,0.5)`,
-      ...style,
-    }}
-  />
-);
-
-const orbColor = (slide) => {
-  const hc = slide.headingColor || '#C4B5FD';
-  const lum = luminance(hc);
-  const bgLight = isLight(slide.bg.from || slide.bg.color);
-  if (lum > 0.92 || lum < 0.1) return bgLight ? '#7C3AED' : '#C4B5FD';
-  return hc;
-};
 
 const Decor = ({ style, accent }) => {
   switch (style) {
@@ -106,7 +72,7 @@ const Decor = ({ style, accent }) => {
       return (
         <div
           className="absolute pointer-events-none inset-0"
-          style={{ backgroundImage: `radial-gradient(${hexA(accent, 0.4)} 1.4px, transparent 1.4px)`, backgroundSize: '22px 22px', opacity: 0.5 }}
+          style={{ backgroundImage: `radial-gradient(${hexA(accent, 0.4)} 1.4px, transparent 1.4px)`, backgroundSize: '22px 22px', opacity: 0.55 }}
         />
       );
     case 'brush':
@@ -160,14 +126,6 @@ const phonePos = (layout, pW, off, k) => {
   return { marginLeft: -pW / 2 + (x / 100) * BASE_W, top, transform: `rotate(${rot}deg)` };
 };
 
-// Where the floating 3D orb sits for a given portrait layout.
-const orbPosFor = (layout, size) => {
-  if (layout === 'phone-top') return { right: '5%', top: '6%' };
-  if (layout === 'tilted') return { left: '6%', top: '50%', transform: 'translateY(-50%)' };
-  if (layout === 'text-only') return { right: '9%', top: '40%' };
-  return { right: '4%', top: '49%' };
-};
-
 const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, width = BASE_W, className = '' }, ref) {
   const dev = device || getDevice(deviceId);
   const h = slideHeight(dev);
@@ -184,18 +142,16 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
   const theme = slide.style || 'swipe';
   const hFs = landscape ? 24 : 33 * k;
   const sFs = landscape ? 11.5 : 13.5 * k;
-  const lightBg = isLight(slide.bg.from || slide.bg.color);
-  const headShadow = lightBg ? '0 1px 2px rgba(0,0,0,0.06)' : '0 2px 22px rgba(0,0,0,0.4)';
 
   const renderText = (pos) => {
     const pad = pos === 'bottom' ? `0 26px ${28 * k}px` : pos === 'center' ? '0 26px' : `${34 * k}px 26px 0`;
     return (
       <div style={{ textAlign: slide.align, fontFamily: `'${slide.font}', sans-serif`, padding: pad }}>
-        <h2 style={{ color: slide.headingColor, fontSize: hFs, lineHeight: 1.02, fontWeight: 800, letterSpacing: -1, textShadow: headShadow }}>
+        <h2 style={{ color: slide.headingColor, fontSize: hFs, lineHeight: 1.02, fontWeight: 800, letterSpacing: -1 }}>
           {slide.heading}
         </h2>
         {slide.subheading && (
-          <p style={{ color: slide.subColor, fontSize: sFs, marginTop: 10 * k, lineHeight: 1.4, fontWeight: 500, maxWidth: landscape ? '100%' : '88%', textShadow: lightBg ? 'none' : '0 1px 12px rgba(0,0,0,0.3)' }}>
+          <p style={{ color: slide.subColor, fontSize: sFs, marginTop: 10 * k, lineHeight: 1.4, fontWeight: 500, maxWidth: landscape ? '100%' : '88%' }}>
             {slide.subheading}
           </p>
         )}
@@ -203,26 +159,13 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
     );
   };
 
-  const c1 = slide.bg.from || slide.bg.color;
-  const c2 = slide.bg.to || c1;
-  const oColor = orbColor(slide);
-  const orbSize = landscape ? h * 0.2 : Math.min(BASE_W * 0.26, h * 0.16);
-
   return (
     <div className={className} style={{ width, height: h * scale, flexShrink: 0 }}>
       <div
         ref={ref}
         className="relative overflow-hidden"
-        style={{ width: BASE_W, height: h, transform: `scale(${scale})`, transformOrigin: 'top left', ...meshBg(slide.bg) }}
+        style={{ width: BASE_W, height: h, transform: `scale(${scale})`, transformOrigin: 'top left', ...bgStyle(slide.bg) }}
       >
-        {/* 3D blob depth layer */}
-        {slide.layout !== 'text-only' && (
-          <>
-            <Blob color={c1} style={{ left: '-12%', top: '-10%', width: '52%', height: '36%' }} />
-            <Blob color={c2} style={{ right: '-14%', bottom: '-12%', width: '56%', height: '40%' }} />
-          </>
-        )}
-
         {slide.layout !== 'text-only' && <Decor style={theme} accent={accent} />}
 
         {landscape ? (() => {
@@ -234,12 +177,10 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
           const textLeft = L.text === 'left';
           return (
             <div className="relative w-full h-full">
-              <Blob color={c2} style={{ [L.dev === 'right' ? 'left' : 'right']: '-8%', top: '8%', width: '40%', height: '60%' }} />
-              <Orb size={orbSize * 0.8} color={oColor} style={L.dev === 'right' ? { right: '4%', bottom: '6%' } : { left: '4%', bottom: '6%' }} />
               <div className="absolute inset-y-0 flex items-center z-10" style={{ [L.text]: 0, width: `${L.textW * 100}%`, padding: textLeft ? '0 4% 0 8%' : '0 8% 0 4%' }}>
                 <div className="w-full" style={{ textAlign: L.tAlign, fontFamily: `'${slide.font}', sans-serif` }}>
-                  <h2 style={{ color: slide.headingColor, fontSize: 26 * lk, lineHeight: 1.02, fontWeight: 800, letterSpacing: -0.5 * lk, textShadow: headShadow }}>{slide.heading}</h2>
-                  {slide.subheading && <p style={{ color: slide.subColor, fontSize: 12 * lk, marginTop: 8 * lk, lineHeight: 1.35, fontWeight: 500, textShadow: lightBg ? 'none' : '0 1px 10px rgba(0,0,0,0.3)' }}>{slide.subheading}</p>}
+                  <h2 style={{ color: slide.headingColor, fontSize: 26 * lk, lineHeight: 1.02, fontWeight: 800, letterSpacing: -0.5 * lk }}>{slide.heading}</h2>
+                  {slide.subheading && <p style={{ color: slide.subColor, fontSize: 12 * lk, marginTop: 8 * lk, lineHeight: 1.35, fontWeight: 500 }}>{slide.subheading}</p>}
                 </div>
               </div>
               {slide.layout !== 'text-only' && (
@@ -252,14 +193,9 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
         })() : (
           <>
             {slide.layout === 'text-only' ? (
-              <>
-                <Blob color={c2} style={{ right: '-10%', top: '-8%', width: '46%', height: '32%' }} />
-                <Orb size={orbSize} color={oColor} style={orbPosFor('text-only', orbSize)} />
-                <div className="absolute inset-0 flex items-center">{renderText('center')}</div>
-              </>
+              <div className="absolute inset-0 flex items-center">{renderText('center')}</div>
             ) : (
               <>
-                <Orb size={orbSize} color={oColor} style={orbPosFor(slide.layout, orbSize)} />
                 <div className={`absolute inset-x-0 z-10 ${slide.layout === 'phone-top' ? 'bottom-0' : 'top-0'}`}>
                   {renderText(slide.layout === 'phone-top' ? 'bottom' : 'top')}
                 </div>
