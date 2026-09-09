@@ -1,9 +1,9 @@
 import { secrets } from "base44:runtime";
 
 const PRICES = {
-  monthly: { id: "price_1UDhXFGViU3LxfspRTkkVR5p", mode: "subscription" },
-  yearly: { id: "price_1UDhXFGViU3LxfspA0yBBYPq", mode: "subscription" },
-  lifetime: { id: "price_1UDhXFGViU3LxfspVgDVbKqk", mode: "payment" },
+  monthly: { id: "price_1UDhgRGViU3LxfspePdA6476", mode: "subscription" },
+  yearly: { id: "price_1UDhgRGViU3LxfspeGcBf4Eb", mode: "subscription" },
+  lifetime: { id: "price_1UDhgRGViU3LxfspQpWG4Tef", mode: "payment" },
 };
 
 const STRIPE_VERSION = "2025-10-29.clover";

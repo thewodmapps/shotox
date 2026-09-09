@@ -16,7 +16,7 @@ const PLANS = [
   },
   {
     name: 'Pro Monthly',
-    price: '$12',
+    price: '$9',
     period: '/ month',
     featured: true,
     features: ['All devices — iPhone, iPad, Android, Feature Graphic, custom', 'All 20+ designer templates', 'Unlimited projects & slides', 'No watermark', 'PNG + JPEG export', 'AI copy generator', 'Commercial use license', 'Email support', 'Cancel anytime'],
@@ -24,15 +24,15 @@ const PLANS = [
   },
   {
     name: 'Pro Yearly',
-    price: '$99',
+    price: '$69',
     period: '/ year',
-    badge: 'Save 31%',
-    features: ['Everything in Pro Monthly', 'New templates 2 weeks early', 'Early access to AI features', 'Priority email support', '≈ $8.25 / month'],
+    badge: 'Save 36%',
+    features: ['Everything in Pro Monthly', 'New templates 2 weeks early', 'Early access to AI features', 'Priority email support', '≈ $5.75 / month'],
     cta: 'Go yearly',
   },
   {
     name: 'Lifetime',
-    price: '$199',
+    price: '$149',
     period: 'one-time',
     features: ['Everything in Pro Yearly, forever', 'Lifetime updates — all future templates & devices', 'All future AI features included', 'One payment, no subscription', 'Dedicated support'],
     cta: 'Buy once',
