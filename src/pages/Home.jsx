@@ -4,7 +4,6 @@ import Hero from '@/components/landing/Hero';
 import Features from '@/components/landing/Features';
 import TemplateShowcase from '@/components/landing/TemplateShowcase';
 import Pricing from '@/components/landing/Pricing';
-import BlogSection from '@/components/landing/BlogSection';
 import FaqSection from '@/components/landing/FaqSection';
 import Footer from '@/components/landing/Footer';
 
@@ -16,7 +15,6 @@ export default function Home() {
       <Features />
       <TemplateShowcase />
       <Pricing />
-      <BlogSection />
       <FaqSection />
       <Footer />
     </div>
