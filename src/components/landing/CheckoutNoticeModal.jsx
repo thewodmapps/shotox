@@ -23,7 +23,7 @@ export default function CheckoutNoticeModal({ open, onClose }) {
           </p>
           <button
             onClick={() => {
-              const url = "https://zubilo-visual-flow.base44.app/#pricing";
+              const url = "https://shotox.in/#pricing";
               try {
                 window.top.location.href = url;
               } catch (e) {

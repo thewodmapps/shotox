@@ -14,7 +14,6 @@ export default async function (req: Request): Promise<Response> {
     const plan = PRICES[body.plan as keyof typeof PRICES];
     if (!plan) return Response.json({ error: "Invalid plan" }, { status: 400 });
 
-    const origin = (body.origin as string) || "https://shotox.base44.app";
     const userId = (body.user_id as string) || "";
     const email = (body.email as string) || "";
 
@@ -27,8 +26,8 @@ export default async function (req: Request): Promise<Response> {
     params.set("line_items[0][quantity]", "1");
     if (userId) params.set("client_reference_id", userId);
     if (email) params.set("customer_email", email);
-    params.set("success_url", `${origin}/projects?upgraded=1`);
-    params.set("cancel_url", `${origin}/#pricing`);
+    params.set("success_url", "https://shotox.in/projects?upgraded=1");
+    params.set("cancel_url", "https://shotox.in/#pricing");
     params.set("metadata[base44_app_id]", appId);
     if (userId) params.set("metadata[user_id]", userId);
     if (plan.mode === "subscription") {
