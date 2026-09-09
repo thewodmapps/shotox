@@ -19,7 +19,7 @@ export default function EditorRail({ active, mobileOpen, onChange }) {
           <button
             key={p.id}
             onClick={() => onChange(p.id)}
-            className={`flex-1 md:flex-none flex flex-col items-center justify-center gap-0.5 text-[10px] sm:text-[11px] transition-colors ${
+            className={`flex-1 md:flex-none flex flex-col items-center justify-center gap-1 md:py-3.5 text-[10px] sm:text-[11px] transition-colors ${
               isActive && mobileOpen ? 'text-white bg-white/10' : isActive ? 'text-white' : 'hover:text-white hover:bg-white/5'
             }`}
           >
