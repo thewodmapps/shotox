@@ -7,12 +7,12 @@ import SlideCanvas from '@/components/editor/SlideCanvas';
 // Each item is positioned absolutely to create a free-form scattered layout
 // rather than a rigid row.
 const ITEMS = [
-  { id: 'magnolia', device: 'android-phone', slide: 0, w: 132, x: '6%',  y: '52%', rot: -10, z: 10, delay: 0,   float: 10 },
-  { id: 'aura',     device: 'iphone-6.7',    slide: 1, w: 140, x: '24%', y: '18%', rot: -5,  z: 20, delay: 0.4, float: 14 },
-  { id: 'golden',   device: 'android-phone', slide: 2, w: 150, x: '42%', y: '44%', rot: 3,   z: 30, delay: 0.8, float: 12 },
-  { id: 'halo',     device: 'iphone-6.7',    slide: 0, w: 146, x: '60%', y: '14%', rot: 7,   z: 25, delay: 1.2, float: 16 },
-  { id: 'drift',    device: 'android-phone', slide: 3, w: 138, x: '74%', y: '48%', rot: 11,  z: 15, delay: 1.6, float: 11 },
-  { id: 'sprint',   device: 'android-phone', slide: 1, w: 124, x: '88%', y: '22%', rot: -7,  z: 8,  delay: 2.0, float: 13 },
+  { id: 'magnolia', device: 'android-phone', slide: 0, w: 128, x: '2%',  y: '56%', rot: -10, z: 10, delay: 0,   float: 10 },
+  { id: 'aura',     device: 'iphone-6.7',    slide: 1, w: 138, x: '18%', y: '14%', rot: -5,  z: 20, delay: 0.4, float: 14 },
+  { id: 'royale',   device: 'ipad-11',      slide: 2, w: 170, x: '32%', y: '52%', rot: 4,   z: 30, delay: 0.8, float: 12 },
+  { id: 'halo',     device: 'iphone-6.7',    slide: 0, w: 144, x: '52%', y: '10%', rot: 7,   z: 25, delay: 1.2, float: 16 },
+  { id: 'drift',    device: 'android-tab-10', slide: 3, w: 162, x: '64%', y: '50%', rot: 11,  z: 15, delay: 1.6, float: 11 },
+  { id: 'sprint',   device: 'android-phone', slide: 1, w: 122, x: '84%', y: '20%', rot: -7,  z: 8,  delay: 2.0, float: 13 },
 ];
 
 // Scattered confetti shapes — small translucent squares/rects in light tones.

@@ -39,13 +39,13 @@ export default function Hero() {
 
         <motion.div initial={{ opacity: 0, y: 60, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }} className="relative mt-14 max-w-5xl mx-auto">
           <HeroShowcase />
-          <Float className="-left-2 top-8" delay={0.5}>
+          <Float className="-left-2 top-8 z-50" delay={0.5}>
             <div className="glass-card"><Smartphone className="w-4 h-4 text-violet-300" /> Store-ready sizes for every device</div>
           </Float>
-          <Float className="-right-4 top-1/4" delay={1.2}>
+          <Float className="-right-4 top-1/4 z-50" delay={1.2}>
             <div className="glass-card"><Zap className="w-4 h-4 text-lime-300" /> Pixel-perfect PNG & JPEG export</div>
           </Float>
-          <Float className="left-12 -bottom-10 sm:-bottom-2" delay={2}>
+          <Float className="left-12 -bottom-10 sm:-bottom-2 z-50" delay={2}>
             <div className="glass-card"><Sparkles className="w-4 h-4 text-pink-300" /> 100 designer templates</div>
           </Float>
         </motion.div>
