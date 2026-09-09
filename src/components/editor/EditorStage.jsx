@@ -9,7 +9,7 @@ export default function EditorStage({ project, selected, onSelect, onAdd, onDupl
   const device = resolveDevice(project);
   return (
     <main className="flex-1 min-w-0 overflow-auto bg-[#08080d] bg-grid">
-      <div className="min-h-full flex items-center px-6 sm:px-10 py-12">
+      <div className="min-h-full flex items-center px-4 sm:px-10 py-6 md:py-12">
         <div className="flex items-start gap-3 mx-auto">
           {project.slides.map((slide, i) => (
             <motion.div key={slide.id} layout className="relative group" onClick={() => onSelect(i)}>

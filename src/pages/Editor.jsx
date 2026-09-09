@@ -24,6 +24,7 @@ export default function Editor() {
   const [missing, setMissing] = useState(false);
   const [sel, setSel] = useState(0);
   const [panel, setPanel] = useState('templates');
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [status, setStatus] = useState('saved');
   const [exporting, setExporting] = useState(false);
   const [exportPct, setExportPct] = useState(0);
@@ -135,9 +136,16 @@ export default function Editor() {
   return (
     <div className="h-screen flex flex-col bg-[#08080d]">
       <EditorTopbar project={project} status={status} exporting={exporting} onRename={(name) => updateProject({ name })} onExport={onExport} />
-      <div className="flex-1 min-h-0 flex flex-col md:flex-row">
-        <EditorRail active={panel} onChange={setPanel} />
-        <EditorPanel active={panel} {...panelProps} />
+      <div className="flex-1 min-h-0 flex flex-col md:flex-row relative">
+        <EditorRail
+          active={panel}
+          mobileOpen={mobileOpen}
+          onChange={(id) => {
+            if (id === panel && mobileOpen) setMobileOpen(false);
+            else { setPanel(id); setMobileOpen(true); }
+          }}
+        />
+        <EditorPanel active={panel} mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} {...panelProps} />
         <EditorStage project={project} selected={sel} onSelect={setSel} onAdd={addSlide} onDuplicate={duplicate} onDelete={remove} onMove={move} />
       </div>
       <UndoBar undo={undo} onUndo={restoreSlide} />
