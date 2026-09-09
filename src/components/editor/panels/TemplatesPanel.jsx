@@ -2,6 +2,20 @@ import React from 'react';
 import { TEMPLATES, makeId } from '@/lib/templates';
 import SlideCanvas from '@/components/editor/SlideCanvas';
 
+const hexToRgb = (hex) => {
+  const h = hex.replace('#', '');
+  const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+  const n = parseInt(full, 16);
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+};
+const luminance = (hex) => {
+  const { r, g, b } = hexToRgb(hex);
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+};
+const textColorFor = (hex) => (luminance(hex) > 0.62 ? '#0B0B12' : '#FFFFFF');
+
+const bgOf = (slide) => (slide.bg && slide.bg.color) || (slide.bg && slide.bg.from) || '#7C3AED';
+
 export default function TemplatesPanel({ project, updateProject }) {
   const apply = (tpl) => {
     const slides = tpl.slides.map((s, i) => ({
@@ -11,25 +25,55 @@ export default function TemplatesPanel({ project, updateProject }) {
     }));
     updateProject({ slides, template_id: tpl.id });
   };
+
   return (
     <div className="space-y-3">
       <p className="text-xs text-white/50">Applying a template keeps your uploaded screenshots.</p>
-      {TEMPLATES.map((tpl) => (
-        <button
-          key={tpl.id}
-          onClick={() => apply(tpl)}
-          className={`w-full text-left rounded-xl overflow-hidden border transition-all hover:scale-[1.02] ${
-            project.template_id === tpl.id ? 'border-violet-400 ring-2 ring-violet-400/40' : 'border-white/10 hover:border-white/30'
-          }`}
-        >
-          <div className="flex gap-1 p-1.5 bg-black/40">
-            {tpl.slides.map((s) => (
-              <SlideCanvas key={s.id} slide={s} deviceId="iphone-6.7" width={78} className="rounded-md overflow-hidden" />
-            ))}
-          </div>
-          <div className="px-3 py-2 text-xs font-medium text-white/80 bg-white/5">{tpl.name}</div>
-        </button>
-      ))}
+      {TEMPLATES.map((tpl) => {
+        const bg = bgOf(tpl.slides[0]);
+        const fg = textColorFor(bg);
+        const sub = `${fg === '#FFFFFF' ? 'rgba(255,255,255,0.78)' : 'rgba(11,11,18,0.65)'}`;
+        const active = project.template_id === tpl.id;
+        return (
+          <button
+            key={tpl.id}
+            onClick={() => apply(tpl)}
+            style={{ background: bg, color: fg }}
+            className={`group block w-full text-left rounded-2xl overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-2xl ${
+              active ? 'ring-2 ring-white/70 ring-offset-2 ring-offset-[#111118]' : 'ring-1 ring-black/5'
+            }`}
+          >
+            <div className="p-4">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <h3 className="font-display font-bold text-lg leading-tight tracking-tight truncate">{tpl.name}</h3>
+                  <p className="text-[11px] mt-0.5 truncate" style={{ color: sub }}>
+                    {tpl.slides[0].subheading}
+                  </p>
+                </div>
+                <span
+                  className="shrink-0 text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full"
+                  style={{ background: fg === '#FFFFFF' ? 'rgba(255,255,255,0.18)' : 'rgba(11,11,18,0.12)' }}
+                >
+                  {tpl.category}
+                </span>
+              </div>
+
+              <div className="flex gap-1.5 mt-3 overflow-x-auto pb-1 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {tpl.slides.map((s) => (
+                  <SlideCanvas
+                    key={s.id}
+                    slide={s}
+                    deviceId="iphone-6.7"
+                    width={56}
+                    className="rounded-md overflow-hidden shrink-0 shadow-lg shadow-black/20"
+                  />
+                ))}
+              </div>
+            </div>
+          </button>
+        );
+      })}
     </div>
   );
 }
