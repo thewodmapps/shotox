@@ -1,5 +1,5 @@
 import React from 'react';
-import { TEMPLATES, makeId } from '@/lib/templates';
+import { TEMPLATES, makeId, resolveDevice } from '@/lib/templates';
 import SlideCanvas from '@/components/editor/SlideCanvas';
 
 const hexToRgb = (hex) => {
@@ -26,6 +26,7 @@ export default function TemplatesPanel({ project, updateProject }) {
     updateProject({ slides, template_id: tpl.id });
   };
 
+  const device = resolveDevice(project);
   return (
     <div className="space-y-3">
       <p className="text-xs text-white/50">Applying a template keeps your uploaded screenshots.</p>
@@ -64,7 +65,7 @@ export default function TemplatesPanel({ project, updateProject }) {
                   <SlideCanvas
                     key={s.id}
                     slide={s}
-                    deviceId="iphone-6.7"
+                    device={device}
                     width={56}
                     className="rounded-md overflow-hidden shrink-0 shadow-lg shadow-black/20"
                   />
