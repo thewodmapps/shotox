@@ -12,14 +12,14 @@ const RATIO = { phone: 2.1, tablet: 1.36 };
 // Per-template landscape (feature graphic) compositions. Each pose index maps to
 // a distinct mockup position/scale/tilt so feature graphics vary by template.
 const LAND = [
-  { text: 'left',  textW: 0.56, tAlign: 'left',   dev: 'right', devEdge: -6,  rot: 6,   scale: 1.0,  bleed: 1.15 },
-  { text: 'right', textW: 0.56, tAlign: 'right',  dev: 'left',  devEdge: -6,  rot: -6,  scale: 1.0,  bleed: 1.15 },
-  { text: 'left',  textW: 0.50, tAlign: 'left',   dev: 'right', devEdge: -10, rot: 12,  scale: 1.1,  bleed: 1.25 },
-  { text: 'left',  textW: 0.62, tAlign: 'left',   dev: 'right', devEdge: 2,   rot: -8,  scale: 0.9,  bleed: 1.1 },
-  { text: 'left',  textW: 0.52, tAlign: 'center', dev: 'right', devEdge: -8,  rot: 8,   scale: 1.15, bleed: 1.3 },
-  { text: 'right', textW: 0.52, tAlign: 'right',  dev: 'left',  devEdge: -10, rot: -12, scale: 1.1,  bleed: 1.25 },
-  { text: 'left',  textW: 0.58, tAlign: 'left',   dev: 'right', devEdge: -4,  rot: 0,   scale: 1.05, bleed: 1.2 },
-  { text: 'left',  textW: 0.54, tAlign: 'left',   dev: 'right', devEdge: -8,  rot: 14,  scale: 1.0,  bleed: 1.2 },
+  { text: 'left',  textW: 0.56, tAlign: 'left',   dev: 'right', devEdge: 4, rot: 6,   scale: 0.9 },
+  { text: 'right', textW: 0.56, tAlign: 'right',  dev: 'left',  devEdge: 4, rot: -6,  scale: 0.9 },
+  { text: 'left',  textW: 0.50, tAlign: 'left',   dev: 'right', devEdge: 6, rot: 10,  scale: 0.86 },
+  { text: 'left',  textW: 0.62, tAlign: 'left',   dev: 'right', devEdge: 8, rot: -6,  scale: 0.82 },
+  { text: 'left',  textW: 0.52, tAlign: 'center', dev: 'right', devEdge: 4, rot: 8,   scale: 0.9 },
+  { text: 'right', textW: 0.52, tAlign: 'right',  dev: 'left',  devEdge: 6, rot: -10, scale: 0.86 },
+  { text: 'left',  textW: 0.58, tAlign: 'left',   dev: 'right', devEdge: 6, rot: 0,   scale: 0.92 },
+  { text: 'left',  textW: 0.54, tAlign: 'left',   dev: 'right', devEdge: 6, rot: 12,  scale: 0.85 },
 ];
 
 const bgStyle = (bg) =>
@@ -172,7 +172,7 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
           const pi = Math.max(0, MOCK_TYPES.indexOf(slide.mock));
           const L = LAND[pi % LAND.length];
           const lk = h / 146;
-          const devH = h * L.scale * L.bleed;
+          const devH = h * L.scale;
           const devW = devH / 2.1;
           const textLeft = L.text === 'left';
           return (
