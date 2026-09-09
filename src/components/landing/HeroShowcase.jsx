@@ -8,16 +8,16 @@ import SlideCanvas from '@/components/editor/SlideCanvas';
 // uniformly via CSS transform so it renders identically on every viewport —
 // phone, tablet, and desktop — with no reflow or collision.
 const DESIGN_W = 1024;
-const DESIGN_H = 420;
+const DESIGN_H = 580;
 
 // Organic, overlapping stack of phone mockups across brand-aligned templates.
 const ITEMS = [
-  { id: 'magnolia', device: 'android-phone', slide: 0, w: 128, x: '2%',  y: '56%', rot: -10, z: 10, delay: 0,   float: 10 },
-  { id: 'aura',     device: 'iphone-6.7',    slide: 1, w: 138, x: '18%', y: '14%', rot: -5,  z: 20, delay: 0.4, float: 14 },
-  { id: 'royale',   device: 'ipad-11',      slide: 2, w: 170, x: '32%', y: '52%', rot: 4,   z: 30, delay: 0.8, float: 12 },
-  { id: 'halo',     device: 'iphone-6.7',    slide: 0, w: 144, x: '52%', y: '10%', rot: 7,   z: 25, delay: 1.2, float: 16 },
-  { id: 'drift',    device: 'android-tab-10', slide: 3, w: 162, x: '64%', y: '50%', rot: 11,  z: 15, delay: 1.6, float: 11 },
-  { id: 'sprint',   device: 'android-phone', slide: 1, w: 122, x: '84%', y: '20%', rot: -7,  z: 8,  delay: 2.0, float: 13 },
+  { id: 'magnolia', device: 'android-phone', slide: 0, w: 180, x: '2%',  y: '54%', rot: -10, z: 10, delay: 0,   float: 12 },
+  { id: 'aura',     device: 'iphone-6.7',    slide: 1, w: 196, x: '17%', y: '12%', rot: -5,  z: 20, delay: 0.4, float: 16 },
+  { id: 'royale',   device: 'ipad-11',      slide: 2, w: 240, x: '31%', y: '50%', rot: 4,   z: 30, delay: 0.8, float: 14 },
+  { id: 'halo',     device: 'iphone-6.7',    slide: 0, w: 204, x: '51%', y: '8%',  rot: 7,   z: 25, delay: 1.2, float: 18 },
+  { id: 'drift',    device: 'android-tab-10', slide: 3, w: 228, x: '63%', y: '48%', rot: 11,  z: 15, delay: 1.6, float: 13 },
+  { id: 'sprint',   device: 'android-phone', slide: 1, w: 172, x: '83%', y: '18%', rot: -7,  z: 8,  delay: 2.0, float: 15 },
 ];
 
 // Scattered confetti shapes — small translucent squares/rects in light tones.
@@ -37,9 +37,9 @@ const CONFETTI = [
 // Floating glass callout bubbles — positioned at fixed design coordinates so
 // they scale uniformly with the mockups across every viewport.
 const BUBBLES = [
-  { left: 6,   top: 28,  delay: 0.5, icon: 'phone',    text: 'Store-ready sizes for every device', tint: 'text-violet-300' },
-  { left: 742, top: 96,  delay: 1.2, icon: 'zap',      text: 'Pixel-perfect PNG & JPEG export',    tint: 'text-lime-300' },
-  { left: 44,  top: 366, delay: 2.0, icon: 'sparkles', text: '100 designer templates',              tint: 'text-pink-300' },
+  { left: 6,   top: 34,  delay: 0.5, icon: 'phone',    text: 'Store-ready sizes for every device', tint: 'text-violet-300' },
+  { left: 742, top: 132, delay: 1.2, icon: 'zap',      text: 'Pixel-perfect PNG & JPEG export',    tint: 'text-lime-300' },
+  { left: 44,  top: 520, delay: 2.0, icon: 'sparkles', text: '100 designer templates',              tint: 'text-pink-300' },
 ];
 
 const BubbleIcon = ({ icon, tint }) => {
