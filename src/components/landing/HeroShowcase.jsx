@@ -7,12 +7,13 @@ import SlideCanvas from '@/components/editor/SlideCanvas';
 // Each item is positioned absolutely to create a free-form scattered layout
 // rather than a rigid row.
 const ITEMS = [
-  { id: 'magnolia', device: 'android-phone', slide: 0, w: 128, x: '2%',  y: '56%', rot: -10, z: 10, delay: 0,   float: 10 },
-  { id: 'aura',     device: 'iphone-6.7',    slide: 1, w: 138, x: '18%', y: '14%', rot: -5,  z: 20, delay: 0.4, float: 14 },
-  { id: 'royale',   device: 'ipad-11',      slide: 2, w: 170, x: '32%', y: '52%', rot: 4,   z: 30, delay: 0.8, float: 12 },
-  { id: 'halo',     device: 'iphone-6.7',    slide: 0, w: 144, x: '52%', y: '10%', rot: 7,   z: 25, delay: 1.2, float: 16 },
-  { id: 'drift',    device: 'android-tab-10', slide: 3, w: 162, x: '64%', y: '50%', rot: 11,  z: 15, delay: 1.6, float: 11 },
-  { id: 'sprint',   device: 'android-phone', slide: 1, w: 122, x: '84%', y: '20%', rot: -7,  z: 8,  delay: 2.0, float: 13 },
+  // Hand-picked vibrant gradient slides — no flat solids, each a signature brand tone.
+  { id: 'magnolia', device: 'android-phone',  slide: 1, w: 130, x: '1%',  y: '54%', rot: -11, z: 10, delay: 0,   float: 10, glow: 'from-pink-500/40 to-fuchsia-500/25' },
+  { id: 'aura',     device: 'iphone-6.7',     slide: 0, w: 150, x: '15%', y: '10%', rot: -5,  z: 30, delay: 0.4, float: 15, glow: 'from-violet-500/45 to-pink-500/30' },
+  { id: 'royale',   device: 'ipad-11',        slide: 1, w: 178, x: '30%', y: '50%', rot: 4,   z: 25, delay: 0.8, float: 12, glow: 'from-indigo-600/40 to-violet-600/25' },
+  { id: 'golden',   device: 'iphone-6.7',     slide: 0, w: 152, x: '50%', y: '6%',  rot: 7,   z: 20, delay: 1.2, float: 17, glow: 'from-orange-500/45 to-pink-500/25' },
+  { id: 'drift',    device: 'android-tab-10', slide: 0, w: 166, x: '64%', y: '48%', rot: 11,  z: 15, delay: 1.6, float: 11, glow: 'from-cyan-500/35 to-blue-500/20' },
+  { id: 'sprint',   device: 'android-phone',  slide: 3, w: 126, x: '84%', y: '22%', rot: -7,  z: 8,  delay: 2.0, float: 13, glow: 'from-orange-500/40 to-rose-500/25' },
 ];
 
 // Scattered confetti shapes — small translucent squares/rects in light tones.
@@ -56,7 +57,7 @@ export default function HeroShowcase() {
               animate={{ y: [0, -it.float, 0] }}
               transition={{ duration: 6, delay: it.delay, repeat: Infinity, ease: 'easeInOut' }}
             >
-              <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-b from-violet-500/25 to-pink-500/15 blur-xl" />
+              <div className={`absolute -inset-5 rounded-[2.5rem] bg-gradient-to-b ${it.glow} blur-2xl`} />
               <div className="relative rounded-2xl overflow-hidden shadow-[0_30px_60px_-20px_rgba(0,0,0,0.7)]">
                 <SlideCanvas slide={slide} device={device} width={it.w} />
               </div>
