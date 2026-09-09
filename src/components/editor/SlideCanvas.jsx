@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { BASE_W, slideHeight, getDevice } from '@/lib/templates';
+import { BASE_W, slideHeight, getDevice, POSES } from '@/lib/templates';
 import DeviceFrame from './DeviceFrame';
 
 // Reference canvas height the pose constants were tuned against. Every layout
@@ -8,6 +8,19 @@ import DeviceFrame from './DeviceFrame';
 const H_REF = 650;
 const DEVICE_FILL = 0.81;
 const RATIO = { phone: 2.1, tablet: 1.36 };
+
+// Per-template landscape (feature graphic) compositions. Each pose index maps to
+// a distinct mockup position/scale/tilt so feature graphics vary by template.
+const LAND = [
+  { text: 'left',  textW: 0.56, tAlign: 'left',   dev: 'right', devEdge: -6,  rot: 6,   scale: 1.0,  bleed: 1.15 },
+  { text: 'right', textW: 0.56, tAlign: 'right',  dev: 'left',  devEdge: -6,  rot: -6,  scale: 1.0,  bleed: 1.15 },
+  { text: 'left',  textW: 0.50, tAlign: 'left',   dev: 'right', devEdge: -10, rot: 12,  scale: 1.1,  bleed: 1.25 },
+  { text: 'left',  textW: 0.62, tAlign: 'left',   dev: 'right', devEdge: 2,   rot: -8,  scale: 0.9,  bleed: 1.1 },
+  { text: 'left',  textW: 0.52, tAlign: 'center', dev: 'right', devEdge: -8,  rot: 8,   scale: 1.15, bleed: 1.3 },
+  { text: 'right', textW: 0.52, tAlign: 'right',  dev: 'left',  devEdge: -10, rot: -12, scale: 1.1,  bleed: 1.25 },
+  { text: 'left',  textW: 0.58, tAlign: 'left',   dev: 'right', devEdge: -4,  rot: 0,   scale: 1.05, bleed: 1.2 },
+  { text: 'left',  textW: 0.54, tAlign: 'left',   dev: 'right', devEdge: -8,  rot: 14,  scale: 1.0,  bleed: 1.2 },
+];
 
 const bgStyle = (bg) =>
   bg.type === 'gradient'
@@ -155,16 +168,29 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
       >
         {slide.layout !== 'text-only' && <Decor style={theme} accent={accent} />}
 
-        {landscape ? (
-          <div className="flex h-full relative">
-            <div className="flex flex-col justify-center relative z-10" style={{ width: '58%', paddingLeft: '8%', paddingRight: '4%' }}>
-              {renderText('center')}
+        {landscape ? (() => {
+          const pi = slide.pose ? Math.max(0, POSES.findIndex((p) => p.x === slide.pose.x && p.rot === slide.pose.rot && p.scale === slide.pose.scale && p.topDelta === slide.pose.topDelta)) : 0;
+          const L = LAND[pi % LAND.length];
+          const lk = h / 146;
+          const devH = h * L.scale * L.bleed;
+          const devW = devH / 2.1;
+          const textLeft = L.text === 'left';
+          return (
+            <div className="relative w-full h-full">
+              <div className="absolute inset-y-0 flex items-center z-10" style={{ [L.text]: 0, width: `${L.textW * 100}%`, padding: textLeft ? '0 4% 0 8%' : '0 8% 0 4%' }}>
+                <div className="w-full" style={{ textAlign: L.tAlign, fontFamily: `'${slide.font}', sans-serif` }}>
+                  <h2 style={{ color: slide.headingColor, fontSize: 26 * lk, lineHeight: 1.02, fontWeight: 800, letterSpacing: -0.5 * lk }}>{slide.heading}</h2>
+                  {slide.subheading && <p style={{ color: slide.subColor, fontSize: 12 * lk, marginTop: 8 * lk, lineHeight: 1.35, fontWeight: 500 }}>{slide.subheading}</p>}
+                </div>
+              </div>
+              {slide.layout !== 'text-only' && (
+                <div className="absolute z-[1]" style={{ [L.dev]: `${L.devEdge}%`, top: '50%', width: devW, transform: `translateY(-50%) rotate(${L.rot}deg)` }}>
+                  <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={devW} form="phone" platform={dev.platform} />
+                </div>
+              )}
             </div>
-            <div className="relative flex items-center justify-center z-[1]" style={{ width: '42%' }}>
-              {slide.layout !== 'text-only' && <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={phoneW} form="phone" platform={dev.platform} />}
-            </div>
-          </div>
-        ) : (
+          );
+        })() : (
           <>
             {slide.layout === 'text-only' ? (
               <div className="absolute inset-0 flex items-center">{renderText('center')}</div>
