@@ -1,28 +1,33 @@
 import React, { useState } from 'react';
-import { X, Link2, Check, Twitter, Facebook, Linkedin, MessageCircle, Send } from 'lucide-react';
+import { X, Link2, Check, Twitter, Facebook, Linkedin, MessageCircle, Send, Mail } from 'lucide-react';
+
+const slugify = (s) =>
+  (s || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'design';
 
 const SOCIAL = [
-  { id: 'x', label: 'X', color: 'hover:bg-black hover:text-white', icon: Twitter, share: (url, text) => `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}` },
-  { id: 'fb', label: 'Facebook', color: 'hover:bg-[#1877F2] hover:text-white', icon: Facebook, share: (url) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}` },
-  { id: 'li', label: 'LinkedIn', color: 'hover:bg-[#0A66C2] hover:text-white', icon: Linkedin, share: (url) => `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}` },
-  { id: 'wa', label: 'WhatsApp', color: 'hover:bg-[#25D366] hover:text-white', icon: MessageCircle, share: (url, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}` },
-  { id: 'tg', label: 'Telegram', color: 'hover:bg-[#229ED9] hover:text-white', icon: Send, share: (url, text) => `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}` },
+  { id: 'x', label: 'X', brand: '#000000', icon: Twitter, share: (url, text) => `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}` },
+  { id: 'fb', label: 'Facebook', brand: '#1877F2', icon: Facebook, share: (url) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}` },
+  { id: 'li', label: 'LinkedIn', brand: '#0A66C2', icon: Linkedin, share: (url) => `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}` },
+  { id: 'wa', label: 'WhatsApp', brand: '#25D366', icon: MessageCircle, share: (url, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}` },
+  { id: 'tg', label: 'Telegram', brand: '#229ED9', icon: Send, share: (url, text) => `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}` },
+  { id: 'gm', label: 'Gmail', brand: '#EA4335', icon: Mail, share: (url, text) => `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(text)}&body=${encodeURIComponent(url)}` },
 ];
 
 export default function ShareModal({ open, url, title = 'My Shotox design', onClose }) {
   const [copied, setCopied] = useState(false);
-
   if (!open) return null;
+
+  const brandUrl = `https://shotox.in/${slugify(title)}`;
 
   const copy = async () => {
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(brandUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     } catch { /* clipboard unavailable */ }
   };
 
-  const openShare = (fn) => window.open(fn(url, title), '_blank', 'noopener,noreferrer,width=620,height=540');
+  const openShare = (fn) => window.open(fn(brandUrl, title), '_blank', 'noopener,noreferrer,width=620,height=540');
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center p-4 bg-black/70 backdrop-blur-sm" onClick={onClose}>
@@ -37,17 +42,24 @@ export default function ShareModal({ open, url, title = 'My Shotox design', onCl
           </button>
         </div>
 
-        <div className="grid grid-cols-5 gap-2.5 mb-5">
-          {SOCIAL.map(({ id, label, color, icon: Icon, share }) => (
+        <div className="grid grid-cols-3 gap-3 mb-5">
+          {SOCIAL.map(({ id, label, brand, icon: Icon, share }) => (
             <button
               key={id}
               onClick={() => openShare(share)}
-              className={`flex flex-col items-center gap-1.5 group ${color}`}
+              className="flex flex-col items-center gap-1.5 group"
             >
-              <span className="w-11 h-11 rounded-2xl grid place-items-center bg-white/5 border border-white/10 text-white/80 transition-all">
-                <Icon className="w-5 h-5" />
+              <span
+                className="w-12 h-12 rounded-2xl grid place-items-center bg-white/5 border border-white/10 text-white/80 transition-all duration-200 group-hover:scale-105 group-hover:text-white group-hover:border-transparent"
+                style={{ '--brand': brand }}
+              >
+                <span
+                  className="w-full h-full rounded-2xl grid place-items-center transition-colors duration-200 group-hover:bg-[var(--brand)]"
+                >
+                  <Icon className="w-5 h-5" />
+                </span>
               </span>
-              <span className="text-[10px] text-white/60 group-hover:text-white">{label}</span>
+              <span className="text-[11px] text-white/60 group-hover:text-white transition-colors">{label}</span>
             </button>
           ))}
         </div>
@@ -56,7 +68,7 @@ export default function ShareModal({ open, url, title = 'My Shotox design', onCl
           <Link2 className="w-4 h-4 text-white/40 shrink-0" />
           <input
             readOnly
-            value={url}
+            value={brandUrl}
             onFocus={(e) => e.target.select()}
             className="flex-1 min-w-0 bg-transparent text-sm text-white/70 outline-none"
           />
