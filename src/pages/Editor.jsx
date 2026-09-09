@@ -7,6 +7,7 @@ import { exportSlide, exportAllSlides, wait } from '@/lib/exportSlides';
 import { useAuth } from '@/lib/AuthContext';
 import { isPro, FREE_MAX_DOWNLOADS } from '@/lib/entitlements';
 import ExportOverlay from '@/components/editor/ExportOverlay';
+import UpgradeModal from '@/components/editor/UpgradeModal';
 import EditorTopbar from '@/components/editor/EditorTopbar';
 import EditorRail from '@/components/editor/EditorRail';
 import EditorPanel from '@/components/editor/EditorPanel';
@@ -26,6 +27,7 @@ export default function Editor() {
   const [status, setStatus] = useState('saved');
   const [exporting, setExporting] = useState(false);
   const [exportPct, setExportPct] = useState(0);
+  const [showUpgrade, setShowUpgrade] = useState(false);
   const [undo, setUndo] = useState(null);
   const dirty = useRef(false);
   const exportRefs = useRef([]);
@@ -93,8 +95,7 @@ export default function Editor() {
 
   const onExport = async (which, format) => {
     if (!pro && (user?.free_downloads || 0) >= FREE_MAX_DOWNLOADS) {
-      alert('Free plan includes 1 download. Upgrade to Pro for unlimited exports.');
-      navigate('/#pricing');
+      setShowUpgrade(true);
       return;
     }
     exportTarget.current = 0;
@@ -146,6 +147,7 @@ export default function Editor() {
         ))}
       </div>
       {exporting && <ExportOverlay pct={exportPct} />}
+      <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} onUpgrade={() => navigate('/#pricing')} />
     </div>
   );
 }
