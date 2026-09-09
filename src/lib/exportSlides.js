@@ -45,26 +45,33 @@ const canvasToBlob = (canvas, mime) =>
     canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), mime, 0.95);
   });
 
-export async function exportSlide(el, device, filename, format = 'png') {
+export async function exportSlide(el, device, filename, format = 'png', onProgress) {
   if (!el) return;
   const mime = format === 'jpeg' ? 'image/jpeg' : 'image/png';
+  onProgress?.(5);
   const canvas = await renderCanvas(el, device);
+  onProgress?.(85);
   const blob = await canvasToBlob(canvas, mime);
+  onProgress?.(95);
   triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`);
+  onProgress?.(100);
 }
 
-export async function exportAllSlides(els, device, baseName, format = 'png') {
+export async function exportAllSlides(els, device, baseName, format = 'png', onProgress) {
   const ext = format === 'jpeg' ? 'jpg' : 'png';
   const mime = format === 'jpeg' ? 'image/jpeg' : 'image/png';
   const zip = new JSZip();
-  for (let i = 0; i < els.length; i++) {
+  const total = els.length;
+  for (let i = 0; i < total; i++) {
     const el = els[i];
     if (!el) continue;
+    onProgress?.((i / total) * 100);
     const canvas = await renderCanvas(el, device);
     const blob = await canvasToBlob(canvas, mime);
-    const idx = String(i + 1).padStart(2, '0');
-    zip.file(`${baseName}-${idx}.${ext}`, blob);
+    zip.file(`${i + 1}.${ext}`, blob);
   }
+  onProgress?.(95);
   const blob = await zip.generateAsync({ type: 'blob' });
   triggerDownload(blob, `${baseName}-screenshots.zip`);
+  onProgress?.(100);
 }

@@ -3,9 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { makeId, resolveDevice } from '@/lib/templates';
-import { exportSlide, exportAllSlides } from '@/lib/exportSlides';
+import { exportSlide, exportAllSlides, wait } from '@/lib/exportSlides';
 import { useAuth } from '@/lib/AuthContext';
 import { isPro, FREE_MAX_DOWNLOADS } from '@/lib/entitlements';
+import ExportOverlay from '@/components/editor/ExportOverlay';
 import EditorTopbar from '@/components/editor/EditorTopbar';
 import EditorRail from '@/components/editor/EditorRail';
 import EditorPanel from '@/components/editor/EditorPanel';
@@ -24,9 +25,11 @@ export default function Editor() {
   const [panel, setPanel] = useState('templates');
   const [status, setStatus] = useState('saved');
   const [exporting, setExporting] = useState(false);
+  const [exportPct, setExportPct] = useState(0);
   const [undo, setUndo] = useState(null);
   const dirty = useRef(false);
   const exportRefs = useRef([]);
+  const exportTarget = useRef(0);
   const undoTimer = useRef(null);
 
   useEffect(() => {
@@ -45,6 +48,19 @@ export default function Editor() {
     }, 1200);
     return () => clearTimeout(tm);
   }, [project]);
+
+  useEffect(() => {
+    if (!exporting) return;
+    const id = setInterval(() => {
+      setExportPct((cur) => {
+        const t = exportTarget.current;
+        if (cur >= t) return cur;
+        const step = Math.max(1, (t - cur) * 0.18);
+        return Math.min(cur + step, t);
+      });
+    }, 50);
+    return () => clearInterval(id);
+  }, [exporting]);
 
   const updateProject = (patch) => { dirty.current = true; setProject((p) => ({ ...p, ...patch })); };
   const updateSlide = (patch) => updateProject({ slides: project.slides.map((s, i) => (i === sel ? { ...s, ...patch } : s)) });
@@ -81,20 +97,25 @@ export default function Editor() {
       navigate('/#pricing');
       return;
     }
+    exportTarget.current = 0;
+    setExportPct(0);
     setExporting(true);
+    const onProgress = (p) => { exportTarget.current = p; };
     const device = resolveDevice(project);
     const base = project.name.replace(/\s+/g, '-');
     try {
       if (which === 'all') {
         const els = project.slides.map((_, i) => exportRefs.current[i]).filter(Boolean);
-        await exportAllSlides(els, device, base, format);
+        await exportAllSlides(els, device, base, format, onProgress);
       } else {
-        await exportSlide(exportRefs.current[sel], device, `${base}-${sel + 1}`, format);
+        await exportSlide(exportRefs.current[sel], device, String(sel + 1), format, onProgress);
       }
       if (!pro) {
         await base44.auth.updateMe({ free_downloads: (user?.free_downloads || 0) + 1 });
         checkUserAuth();
       }
+      exportTarget.current = 100;
+      await wait(400);
     } finally {
       setExporting(false);
     }
@@ -124,6 +145,7 @@ export default function Editor() {
           <SlideCanvas key={s.id} slide={s} device={device} ref={(el) => (exportRefs.current[i] = el)} />
         ))}
       </div>
+      {exporting && <ExportOverlay pct={exportPct} />}
     </div>
   );
 }
