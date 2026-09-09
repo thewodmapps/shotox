@@ -21,7 +21,7 @@ const PLANS = [
     price: '$9',
     period: '/ month',
     featured: true,
-    features: ['All devices — iPhone, iPad, Android, Feature Graphic, custom', 'All 20+ designer templates', 'Unlimited projects & slides', 'No watermark', 'PNG + JPEG export', 'AI copy generator', 'Commercial use license', 'Email support', 'Cancel anytime'],
+    features: ['All devices — iPhone, iPad, Android, Feature Graphic, custom', 'All 20+ designer templates', 'Unlimited projects & slides', 'No watermark', 'PNG + JPEG export', 'AI copy generator', 'Commercial use license', 'Email support'],
     cta: 'Go monthly',
   },
   {
