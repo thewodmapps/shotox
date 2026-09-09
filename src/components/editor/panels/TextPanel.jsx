@@ -40,11 +40,11 @@ export default function TextPanel({ slide, updateSlide, updateTextStyle }) {
       </div>
       <div className="space-y-2">
         <Label className="text-white/70 text-xs">Headline size · {Math.round((slide.headingScale ?? 1) * 100)}%</Label>
-        <Slider value={[Math.round((slide.headingScale ?? 1) * 100)]} min={50} max={200} step={5} onValueChange={([v]) => updateTextStyle({ headingScale: v / 100 })} />
+        <Slider value={[Math.round((slide.headingScale ?? 1) * 100)]} min={50} max={200} step={5} onValueChange={([v]) => updateSlide({ headingScale: v / 100 })} />
       </div>
       <div className="space-y-2">
         <Label className="text-white/70 text-xs">Subheadline size · {Math.round((slide.subScale ?? 1) * 100)}%</Label>
-        <Slider value={[Math.round((slide.subScale ?? 1) * 100)]} min={50} max={200} step={5} onValueChange={([v]) => updateTextStyle({ subScale: v / 100 })} />
+        <Slider value={[Math.round((slide.subScale ?? 1) * 100)]} min={50} max={200} step={5} onValueChange={([v]) => updateSlide({ subScale: v / 100 })} />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <ColorField label="Headline color" value={slide.headingColor} onChange={(headingColor) => updateTextStyle({ headingColor })} />
