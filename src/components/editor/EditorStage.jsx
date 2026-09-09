@@ -24,7 +24,7 @@ export default function EditorStage({ project, selected, onSelect, onAdd, onDupl
   const slide = project.slides[selected];
   // Slide width that fits the available mobile height (room for toolbar + counter).
   const fitByH = (box.h - 96) * (BASE_W / sH);
-  const mobileW = Math.max(160, Math.min(box.w - 56, fitByH));
+  const mobileW = Math.max(50, Math.min(box.w - 40, fitByH));
 
   return (
     <main className="flex-1 min-w-0 bg-[#08080d] bg-grid flex flex-col overflow-hidden md:overflow-auto">

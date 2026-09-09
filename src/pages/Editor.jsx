@@ -24,7 +24,7 @@ export default function Editor() {
   const [missing, setMissing] = useState(false);
   const [sel, setSel] = useState(0);
   const [panel, setPanel] = useState('templates');
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(true);
   const [status, setStatus] = useState('saved');
   const [exporting, setExporting] = useState(false);
   const [exportPct, setExportPct] = useState(0);
