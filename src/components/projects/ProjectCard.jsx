@@ -1,19 +1,43 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Trash2, Check } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Trash2, Share2, Pencil, Check } from 'lucide-react';
 import { format } from 'date-fns';
 import { resolveDevice } from '@/lib/templates';
 import ScaledSlide from '@/components/editor/ScaledSlide';
 
+const ICON = 'w-4 h-4';
+const BTN_BASE = 'grid place-items-center w-8 h-8 rounded-lg backdrop-blur transition-all text-white/60 opacity-70 hover:opacity-100 hover:text-white hover:bg-white/10';
+
 export default function ProjectCard({ project, onDelete }) {
   const p = project;
+  const navigate = useNavigate();
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [copied, setCopied] = useState(false);
   const timer = useRef(null);
+  const copyTimer = useRef(null);
 
-  useEffect(() => () => clearTimeout(timer.current), []);
+  useEffect(() => () => { clearTimeout(timer.current); clearTimeout(copyTimer.current); }, []);
 
-  const onClick = (e) => {
+  const edit = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/editor?id=${p.id}`);
+  };
+
+  const share = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const url = `${window.location.origin}/editor?id=${p.id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      clearTimeout(copyTimer.current);
+      copyTimer.current = setTimeout(() => setCopied(false), 1800);
+    } catch { /* clipboard unavailable */ }
+  };
+
+  const onTrash = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (busy) return;
@@ -37,23 +61,31 @@ export default function ProjectCard({ project, onDelete }) {
             </div>
           ))}
         </div>
-        <div className="px-4 py-3.5">
+      </Link>
+      <div className="px-4 py-3.5 flex items-end justify-between gap-3">
+        <Link to={`/editor?id=${p.id}`} className="min-w-0">
           <div className="font-semibold text-sm text-white truncate">{p.name}</div>
           <div className="text-xs text-white/40 mt-0.5">{(p.slides || []).length} slides · {format(new Date(p.updated_date), 'MMM d, yyyy')}</div>
+        </Link>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <button onClick={edit} aria-label="Edit design" className={BTN_BASE}>
+            <Pencil className={ICON} />
+          </button>
+          <button onClick={share} aria-label="Share design" className={`${BTN_BASE} ${copied ? '!text-green-300 !bg-green-500/20 !opacity-100' : ''}`}>
+            {copied ? <Check className={ICON} /> : <Share2 className={ICON} />}
+          </button>
+          <button
+            onClick={onTrash}
+            disabled={busy}
+            aria-label={confirming ? 'Confirm delete' : 'Delete design'}
+            className={`grid place-items-center w-8 h-8 rounded-lg backdrop-blur transition-all ${
+              confirming ? 'bg-red-500 text-white opacity-100 scale-110' : BTN_BASE + ' hover:!bg-red-500/25 hover:!text-red-300'
+            }`}
+          >
+            {confirming ? <Check className={ICON} /> : <Trash2 className={ICON} />}
+          </button>
         </div>
-      </Link>
-      <button
-        onClick={onClick}
-        disabled={busy}
-        aria-label={confirming ? 'Confirm delete' : 'Delete design'}
-        className={`absolute top-3 right-3 grid place-items-center w-9 h-9 rounded-lg backdrop-blur transition-all ${
-          confirming
-            ? 'bg-red-500 text-white opacity-100 scale-110'
-            : 'bg-black/50 text-white/60 opacity-70 hover:opacity-100 hover:bg-red-500/25 hover:text-red-300'
-        }`}
-      >
-        {confirming ? <Check className="w-4 h-4" /> : <Trash2 className="w-4 h-4" />}
-      </button>
+      </div>
     </div>
   );
 }
