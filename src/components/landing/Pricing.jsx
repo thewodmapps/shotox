@@ -4,6 +4,7 @@ import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
+import CheckoutNoticeModal from '@/components/landing/CheckoutNoticeModal';
 
 const PLAN_KEY = { 'Pro Monthly': 'monthly', 'Pro Yearly': 'yearly', 'Lifetime': 'lifetime' };
 
@@ -42,12 +43,13 @@ const PLANS = [
 
 export default function Pricing() {
   const [loadingPlan, setLoadingPlan] = useState(null);
+  const [showNotice, setShowNotice] = useState(false);
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
   async function handleCheckout(name) {
     if (window.self !== window.top) {
-      alert('Checkout works only from the published app. Open Shotox in a new tab to upgrade.');
+      setShowNotice(true);
       return;
     }
     if (!isAuthenticated) {
@@ -101,6 +103,7 @@ export default function Pricing() {
           ))}
         </div>
       </div>
+      <CheckoutNoticeModal open={showNotice} onClose={() => setShowNotice(false)} />
     </section>
   );
 }
