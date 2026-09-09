@@ -1,8 +1,9 @@
 import React from 'react';
-import { LayoutTemplate, Type, Palette, ImagePlus, Smartphone } from 'lucide-react';
+import { LayoutTemplate, Type, Palette, ImagePlus, Smartphone, Sparkles } from 'lucide-react';
 
 export const PANELS = [
   { id: 'templates', label: 'Templates', icon: LayoutTemplate },
+  { id: 'ai', label: 'AI', icon: Sparkles },
   { id: 'text', label: 'Text', icon: Type },
   { id: 'background', label: 'Background', icon: Palette },
   { id: 'uploads', label: 'Uploads', icon: ImagePlus },

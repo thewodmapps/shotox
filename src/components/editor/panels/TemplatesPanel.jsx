@@ -1,6 +1,7 @@
-import React from 'react';
-import { TEMPLATES, makeId, resolveDevice } from '@/lib/templates';
+import React, { useState } from 'react';
+import { TEMPLATES, makeId, resolveDevice, CATEGORIES } from '@/lib/templates';
 import SlideCanvas from '@/components/editor/SlideCanvas';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const hexToRgb = (hex) => {
   const h = hex.replace('#', '');
@@ -27,10 +28,22 @@ export default function TemplatesPanel({ project, updateProject }) {
   };
 
   const device = resolveDevice(project);
+  const [cat, setCat] = useState('All');
+  const list = cat === 'All' ? TEMPLATES : TEMPLATES.filter((t) => t.category === cat);
   return (
     <div className="space-y-3">
       <p className="text-xs text-white/50">Applying a template keeps your uploaded screenshots.</p>
-      {TEMPLATES.map((tpl) => {
+      <Select value={cat} onValueChange={setCat}>
+        <SelectTrigger className="bg-white/5 border-white/10 text-white h-9">
+          <SelectValue placeholder="All categories" />
+        </SelectTrigger>
+        <SelectContent>
+          {CATEGORIES.map((c) => (
+            <SelectItem key={c} value={c}>{c === 'All' ? 'All categories' : c}</SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {list.map((tpl) => {
         const bg = bgOf(tpl.slides[0]);
         const fg = textColorFor(bg);
         const sub = `${fg === '#FFFFFF' ? 'rgba(255,255,255,0.78)' : 'rgba(11,11,18,0.65)'}`;

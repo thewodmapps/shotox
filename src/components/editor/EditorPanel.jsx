@@ -1,12 +1,13 @@
 import React from 'react';
 import { PANELS } from './EditorRail';
 import TemplatesPanel from './panels/TemplatesPanel';
+import AIPanel from './panels/AIPanel';
 import TextPanel from './panels/TextPanel';
 import BackgroundPanel from './panels/BackgroundPanel';
 import UploadsPanel from './panels/UploadsPanel';
 import DevicePanel from './panels/DevicePanel';
 
-const MAP = { templates: TemplatesPanel, text: TextPanel, background: BackgroundPanel, uploads: UploadsPanel, device: DevicePanel };
+const MAP = { templates: TemplatesPanel, ai: AIPanel, text: TextPanel, background: BackgroundPanel, uploads: UploadsPanel, device: DevicePanel };
 
 export default function EditorPanel({ active, ...props }) {
   const Panel = MAP[active] || TemplatesPanel;
