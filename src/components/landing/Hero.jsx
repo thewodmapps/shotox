@@ -46,7 +46,7 @@ export default function Hero() {
             <div className="glass-card"><Zap className="w-4 h-4 text-lime-300" /> Pixel-perfect PNG & JPEG export</div>
           </Float>
           <Float className="left-12 -bottom-10 sm:-bottom-2" delay={2}>
-            <div className="glass-card"><Sparkles className="w-4 h-4 text-pink-300" /> 85 designer templates</div>
+            <div className="glass-card"><Sparkles className="w-4 h-4 text-pink-300" /> 100 designer templates</div>
           </Float>
         </motion.div>
       </div>
