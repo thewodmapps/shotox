@@ -15,6 +15,9 @@ import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
 import ResetPassword from '@/pages/ResetPassword';
 import LogoDownload from '@/pages/LogoDownload';
+import BlogPost from '@/pages/BlogPost';
+import Privacy from '@/pages/Privacy';
+import Terms from '@/pages/Terms';
 import SharedDesign from '@/pages/SharedDesign';
 
 const AuthenticatedApp = () => {
@@ -49,6 +52,9 @@ const AuthenticatedApp = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/logo-download" element={<LogoDownload />} />
+      <Route path="/blog/:slug" element={<BlogPost />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
       <Route path="/:slug" element={<SharedDesign />} />
       <Route element={<ProtectedRoute />}>
         <Route path="/projects" element={<Projects />} />

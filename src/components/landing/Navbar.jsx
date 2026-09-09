@@ -9,6 +9,8 @@ const LINKS = [
   { href: '#templates', label: 'Templates' },
   { href: '#features', label: 'Features' },
   { href: '#pricing', label: 'Pricing' },
+  { href: '#blog', label: 'Blog' },
+  { href: '#faq', label: 'FAQ' },
 ];
 
 export default function Navbar() {
