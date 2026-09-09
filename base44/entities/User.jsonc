@@ -16,6 +16,11 @@
     },
     "stripe_customer_id": {
       "type": "string"
+    },
+    "free_downloads": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of exports used by free-tier users; gated against FREE_MAX_DOWNLOADS"
     }
   },
   "required": []

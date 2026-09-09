@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
-import { isPro, FREE_MAX_PROJECTS } from '@/lib/entitlements';
+import { isPro } from '@/lib/entitlements';
 import { getTemplate, makeId, makeSlide, solid } from '@/lib/templates';
 import ProjectsHeader from '@/components/projects/ProjectsHeader';
 import CreateCards from '@/components/projects/CreateCards';
@@ -19,11 +19,6 @@ export default function Projects() {
   useEffect(() => { base44.entities.Project.list('-updated_date', 50).then(setProjects); }, []);
 
   const create = async ({ templateId, platform = 'ios', device, customW, customH, scratch = false }) => {
-    if (!pro && projects.length >= FREE_MAX_PROJECTS) {
-      alert(`Free plan is limited to ${FREE_MAX_PROJECTS} projects. Upgrade to Pro for unlimited projects and all devices.`);
-      navigate('/#pricing');
-      return;
-    }
     setCreating(platform);
     try {
       const tpl = getTemplate(templateId);

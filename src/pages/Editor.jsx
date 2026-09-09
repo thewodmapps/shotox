@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { makeId, resolveDevice } from '@/lib/templates';
 import { exportSlide, exportAllSlides } from '@/lib/exportSlides';
+import { useAuth } from '@/lib/AuthContext';
+import { isPro, FREE_MAX_DOWNLOADS } from '@/lib/entitlements';
 import EditorTopbar from '@/components/editor/EditorTopbar';
 import EditorRail from '@/components/editor/EditorRail';
 import EditorPanel from '@/components/editor/EditorPanel';
@@ -13,6 +15,9 @@ import UndoBar from '@/components/editor/UndoBar';
 
 export default function Editor() {
   const id = new URLSearchParams(window.location.search).get('id');
+  const navigate = useNavigate();
+  const { user, checkUserAuth } = useAuth();
+  const pro = isPro(user);
   const [project, setProject] = useState(null);
   const [missing, setMissing] = useState(false);
   const [sel, setSel] = useState(0);
@@ -71,16 +76,28 @@ export default function Editor() {
   const move = (from, to) => { const s = [...project.slides]; const [m] = s.splice(from, 1); s.splice(to, 0, m); updateProject({ slides: s }); setSel(to); };
 
   const onExport = async (which, format) => {
+    if (!pro && (user?.free_downloads || 0) >= FREE_MAX_DOWNLOADS) {
+      alert('Free plan includes 1 download. Upgrade to Pro for unlimited exports.');
+      navigate('/#pricing');
+      return;
+    }
     setExporting(true);
     const device = resolveDevice(project);
     const base = project.name.replace(/\s+/g, '-');
-    if (which === 'all') {
-      const els = project.slides.map((_, i) => exportRefs.current[i]).filter(Boolean);
-      await exportAllSlides(els, device, base, format);
-    } else {
-      await exportSlide(exportRefs.current[sel], device, `${base}-${sel + 1}`, format);
+    try {
+      if (which === 'all') {
+        const els = project.slides.map((_, i) => exportRefs.current[i]).filter(Boolean);
+        await exportAllSlides(els, device, base, format);
+      } else {
+        await exportSlide(exportRefs.current[sel], device, `${base}-${sel + 1}`, format);
+      }
+      if (!pro) {
+        await base44.auth.updateMe({ free_downloads: (user?.free_downloads || 0) + 1 });
+        checkUserAuth();
+      }
+    } finally {
+      setExporting(false);
     }
-    setExporting(false);
   };
 
   if (missing) return (

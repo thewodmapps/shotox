@@ -3,6 +3,7 @@ export const FREE_DEVICE_IDS = ['iphone-6.7'];
 export const FREE_TEMPLATE_IDS = ['aurora', 'editorial', 'coral'];
 export const FREE_MAX_PROJECTS = 3;
 export const FREE_MAX_SLIDES = 5;
+export const FREE_MAX_DOWNLOADS = 1;
 
 export const isPro = (user) => user?.plan === 'pro';
 

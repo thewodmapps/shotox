@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Smartphone, Tablet, ImagePlus, Settings, ArrowRight, Loader2, Lock } from 'lucide-react';
+import { Smartphone, Tablet, ImagePlus, Settings, ArrowRight, Loader2 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -26,9 +26,7 @@ export default function CreateCards({ onCreate, creating, isPro }) {
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {OPTIONS.map((o) => {
-          const locked = !isPro && (o.key === 'feature' || o.key === 'custom');
           const handle = () => {
-            if (locked) { window.location.href = '/#pricing'; return; }
             o.form === 'custom' ? setCustomOpen((v) => !v) : onCreate({ templateId: o.tpl, platform: o.platform, device: o.device });
           };
           return (
@@ -42,13 +40,8 @@ export default function CreateCards({ onCreate, creating, isPro }) {
           >
             <div className="h-44 grid place-items-center bg-gradient-to-br from-[#16161e] to-[#0b0b10] relative overflow-hidden">
               <div className="absolute w-48 h-48 rounded-full" style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.22) 0%, transparent 70%)' }} />
-              <div className={`relative z-10 ${locked ? 'opacity-40' : ''}`}><FormPreview form={o.form} platform={o.platform} /></div>
+              <div className="relative z-10"><FormPreview form={o.form} platform={o.platform} /></div>
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-violet-500/15 via-transparent to-pink-500/15" />
-              {locked && (
-                <div className="absolute top-2.5 right-2.5 z-10 w-7 h-7 rounded-full bg-black/60 border border-white/20 grid place-items-center">
-                  <Lock className="w-3.5 h-3.5 text-white" />
-                </div>
-              )}
               {creating === o.platform && <Loader2 className="w-4 h-4 animate-spin text-white absolute top-2.5 right-2.5 z-10" />}
             </div>
             <div className="p-4 flex items-center gap-3">
@@ -59,7 +52,6 @@ export default function CreateCards({ onCreate, creating, isPro }) {
                 <div className="font-semibold text-white text-sm truncate">{o.title}</div>
                 <div className="text-[11px] text-white/45 truncate">{o.sub}</div>
               </div>
-              {locked && <span className="text-[10px] font-medium text-violet-300 shrink-0">Pro</span>}
             </div>
           </button>
           );
