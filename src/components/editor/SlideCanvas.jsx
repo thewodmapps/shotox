@@ -190,7 +190,9 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
               </div>
               {slide.layout !== 'text-only' && (
                 <div className="absolute z-[1]" style={{ [L.dev]: `${L.devEdge}%`, top: '50%', width: devW, transform: `translateY(-50%) rotate(${L.rot}deg)` }}>
-                  <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={devW} form="phone" platform={dev.platform} />
+                  <div style={{ transform: `translate(${(slide.phoneX || 0) / 100 * BASE_W}px, ${(slide.phoneY || 0) / 100 * h}px)` }}>
+                    <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={devW} form="phone" platform={dev.platform} />
+                  </div>
                 </div>
               )}
             </div>
@@ -205,7 +207,9 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
                   {renderText(slide.layout === 'phone-top' ? 'bottom' : 'top')}
                 </div>
                 <div className="absolute left-1/2 z-[1]" style={phonePos(slide.layout, pW, slide.pose, k)}>
-                  <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={pW} form={form} platform={dev.platform} />
+                  <div style={{ display: 'inline-block', transform: `translate(${(slide.phoneX || 0) / 100 * BASE_W}px, ${(slide.phoneY || 0) / 100 * h}px)` }}>
+                    <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={pW} form={form} platform={dev.platform} />
+                  </div>
                 </div>
               </>
             )}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Slider } from '@/components/ui/slider';
 import { DEVICES, LAYOUTS, DEVICE_STYLES } from '@/lib/templates';
 
 const Option = ({ active, onClick, children }) => (
@@ -63,6 +64,18 @@ export default function DevicePanel({ slide, updateSlide, project, updateProject
           {DEVICE_STYLES.map((s) => <Option key={s.id} active={slide.deviceStyle === s.id} onClick={() => updateSlide({ deviceStyle: s.id })}>{s.name}</Option>)}
         </div>
       </div>
+      {slide.layout !== 'text-only' && (
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label className="text-white/70 text-xs">Phone position · left ↔ right · {slide.phoneX ?? 0}</Label>
+            <Slider value={[slide.phoneX ?? 0]} min={-30} max={30} step={1} onValueChange={([v]) => updateSlide({ phoneX: v })} />
+          </div>
+          <div className="space-y-2">
+            <Label className="text-white/70 text-xs">Phone position · up ↕ down · {slide.phoneY ?? 0}</Label>
+            <Slider value={[slide.phoneY ?? 0]} min={-30} max={30} step={1} onValueChange={([v]) => updateSlide({ phoneY: v })} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
