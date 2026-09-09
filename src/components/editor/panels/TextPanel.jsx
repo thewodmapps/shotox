@@ -29,10 +29,20 @@ export default function TextPanel({ slide, updateSlide, updateTextStyle }) {
         </Select>
       </div>
       <div className="space-y-1.5">
-        <Label className="text-white/70 text-xs">Alignment</Label>
+        <Label className="text-white/70 text-xs">Headline alignment</Label>
         <div className="grid grid-cols-2 gap-2">
           {[['left', AlignLeft], ['center', AlignCenter]].map(([a, Icon]) => (
-            <button key={a} onClick={() => updateSlide({ align: a })} className={`flex items-center justify-center gap-2 h-9 rounded-lg text-xs border transition-colors ${slide.align === a ? 'bg-white text-[#0B0B12] border-white' : 'border-white/10 text-white/70 hover:bg-white/5'}`}>
+            <button key={a} onClick={() => updateSlide({ headingAlign: a })} className={`flex items-center justify-center gap-2 h-9 rounded-lg text-xs border transition-colors ${(slide.headingAlign || slide.align) === a ? 'bg-white text-[#0B0B12] border-white' : 'border-white/10 text-white/70 hover:bg-white/5'}`}>
+              <Icon className="w-4 h-4" /> {a === 'left' ? 'Left' : 'Center'}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="space-y-1.5">
+        <Label className="text-white/70 text-xs">Subheadline alignment</Label>
+        <div className="grid grid-cols-2 gap-2">
+          {[['left', AlignLeft], ['center', AlignCenter]].map(([a, Icon]) => (
+            <button key={a} onClick={() => updateSlide({ subAlign: a })} className={`flex items-center justify-center gap-2 h-9 rounded-lg text-xs border transition-colors ${(slide.subAlign || slide.align) === a ? 'bg-white text-[#0B0B12] border-white' : 'border-white/10 text-white/70 hover:bg-white/5'}`}>
               <Icon className="w-4 h-4" /> {a === 'left' ? 'Left' : 'Center'}
             </button>
           ))}
