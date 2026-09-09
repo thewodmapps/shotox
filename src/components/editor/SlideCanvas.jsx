@@ -100,7 +100,7 @@ const Decor = ({ style, accent }) => {
 const phonePos = (layout, pW, off, isTab, h) => {
   let top, rot = 0, x = 0;
   if (isTab) {
-    top = h * 0.38;
+    top = h * 0.30;
   } else {
     if (layout === 'phone-top') top = -90;
     else if (layout === 'tilted') { top = 192; rot = -8; x = 8; }
@@ -123,15 +123,15 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
   const isTab = form === 'tablet';
   const phoneW = landscape ? (h * 0.82) / 2.1 : PHONE_W[form] || 252;
   const pScale = slide.pose?.scale ?? 1;
-  const pW = isTab ? (h * 0.72) / 1.36 : phoneW * pScale;
+  const pW = isTab ? (h * 0.82) / 1.36 : phoneW * pScale;
 
   const accent = slide.headingColor && slide.headingColor.startsWith('#') ? slide.headingColor : (isLight(slide.bg.from || slide.bg.color) ? '#0B0B12' : '#FFFFFF');
   const theme = slide.style || 'swipe';
-  const hFs = landscape ? 24 : isTab ? 23 : 33;
-  const sFs = landscape ? 11.5 : isTab ? 12 : 13.5;
+  const hFs = landscape ? 24 : isTab ? 21 : 33;
+  const sFs = landscape ? 11.5 : isTab ? 11 : 13.5;
 
   const renderText = (pad) => (
-    <div style={{ textAlign: slide.align, fontFamily: `'${slide.font}', sans-serif`, padding: pad ? `${isTab ? 28 : 34}px 26px 0` : 0 }}>
+    <div style={{ textAlign: slide.align, fontFamily: `'${slide.font}', sans-serif`, padding: pad ? `${isTab ? 26 : 34}px 26px 0` : 0 }}>
       <h2 style={{ color: slide.headingColor, fontSize: hFs, lineHeight: 1.02, fontWeight: 800, letterSpacing: -1 }}>
         {slide.heading}
       </h2>
