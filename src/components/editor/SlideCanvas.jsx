@@ -22,16 +22,10 @@ const LAND = [
   { text: 'left',  textW: 0.54, tAlign: 'left',   dev: 'right', devEdge: 6, rot: 12,  scale: 0.85 },
 ];
 
-const bgStyle = (bg) => {
-  if (bg.type === 'gradient') return { background: `linear-gradient(${bg.angle}deg, ${bg.from}, ${bg.to})` };
-  if (bg.type === 'image' && bg.image) {
-    const fit = bg.imageFit === 'fit' ? 'contain' : 'cover';
-    const x = bg.imageX ?? 50;
-    const y = bg.imageY ?? 50;
-    return { backgroundColor: bg.color || '#0B0B12', backgroundImage: `url(${bg.image})`, backgroundSize: fit, backgroundPosition: `${x}% ${y}%`, backgroundRepeat: 'no-repeat' };
-  }
-  return { background: bg.color };
-};
+const bgStyle = (bg) =>
+  bg.type === 'gradient'
+    ? { background: `linear-gradient(${bg.angle}deg, ${bg.from}, ${bg.to})` }
+    : { background: bg.color };
 
 const isLight = (hex) => {
   const h = (hex || '').replace('#', '');
