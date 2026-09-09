@@ -44,12 +44,19 @@ export default function Projects() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F8] font-body">
-      <ProjectsHeader />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-12">
-        <CreateCards onCreate={create} creating={creating} />
-        <SavedDesigns projects={projects} onDelete={remove} />
-        <TemplateGallery onCreate={create} creating={creating} />
+    <div className="min-h-screen bg-[#08080d] font-body text-white relative">
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="absolute -top-40 -left-24 w-[520px] h-[520px] rounded-full bg-violet-600/20 blur-[130px]" />
+        <div className="absolute top-40 -right-24 w-[460px] h-[460px] rounded-full bg-pink-500/15 blur-[130px]" />
+        <div className="absolute bottom-0 left-1/3 w-[380px] h-[380px] rounded-full bg-orange-500/10 blur-[130px]" />
+      </div>
+      <div className="relative z-10">
+        <ProjectsHeader />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 space-y-16">
+          <CreateCards onCreate={create} creating={creating} />
+          <SavedDesigns projects={projects} onDelete={remove} />
+          <TemplateGallery onCreate={create} creating={creating} />
+        </div>
       </div>
     </div>
   );

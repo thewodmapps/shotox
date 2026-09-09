@@ -19,29 +19,33 @@ export default function CreateCards({ onCreate, creating }) {
   const [custom, setCustom] = useState({ w: 1080, h: 1920 });
 
   return (
-    <section className="rounded-3xl p-6 sm:p-10 bg-gradient-to-r from-violet-200 via-pink-200 to-orange-100">
-      <h2 className="font-display text-2xl font-bold text-[#0B0B12] mb-5">Create a design</h2>
+    <section>
+      <div className="mb-6">
+        <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">Create a design</h2>
+        <p className="text-sm text-white/50 mt-1.5">Choose a canvas and start crafting store-ready screenshots.</p>
+      </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {OPTIONS.map((o) => (
           <button
             key={o.key}
             disabled={!!creating && creating !== o.platform}
             onClick={() => (o.form === 'custom' ? setCustomOpen((v) => !v) : onCreate({ templateId: o.tpl, platform: o.platform, device: o.device }))}
-            className={`group text-left rounded-2xl bg-white/80 backdrop-blur border shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all overflow-hidden disabled:opacity-60 ${
-              o.form === 'custom' && customOpen ? 'border-violet-400 ring-2 ring-violet-300' : 'border-white'
+            className={`group relative text-left rounded-2xl bg-white/[0.04] border backdrop-blur-sm hover:bg-white/[0.07] hover:-translate-y-1 hover:shadow-2xl hover:shadow-violet-500/10 transition-all overflow-hidden disabled:opacity-60 disabled:hover:translate-y-0 ${
+              o.form === 'custom' && customOpen ? 'border-violet-400/60 ring-2 ring-violet-500/30' : 'border-white/10 hover:border-white/20'
             }`}
           >
-            <div className="h-24 grid place-items-center bg-[#0B0B12] relative">
+            <div className="h-28 grid place-items-center bg-gradient-to-br from-[#15151c] to-[#0c0c12] relative overflow-hidden">
               <FormPreview form={o.form} />
-              {creating === o.platform && <Loader2 className="w-4 h-4 animate-spin text-white absolute top-2 right-2" />}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-violet-500/15 via-transparent to-pink-500/15" />
+              {creating === o.platform && <Loader2 className="w-4 h-4 animate-spin text-white absolute top-2.5 right-2.5 z-10" />}
             </div>
-            <div className="p-3.5 flex items-center gap-2.5">
-              <span className="w-8 h-8 rounded-lg bg-[#0B0B12] text-white grid place-items-center shrink-0">
+            <div className="p-4 flex items-center gap-3">
+              <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500/25 to-pink-500/25 border border-white/10 text-white grid place-items-center shrink-0">
                 <o.icon className="w-4 h-4" />
               </span>
               <div className="min-w-0">
-                <div className="font-semibold text-[#0B0B12] text-sm truncate">{o.title}</div>
-                <div className="text-[11px] text-[#0B0B12]/55 truncate">{o.sub}</div>
+                <div className="font-semibold text-white text-sm truncate">{o.title}</div>
+                <div className="text-[11px] text-white/45 truncate">{o.sub}</div>
               </div>
             </div>
           </button>
@@ -49,19 +53,19 @@ export default function CreateCards({ onCreate, creating }) {
       </div>
 
       {customOpen && (
-        <div className="mt-4 rounded-2xl bg-white/80 backdrop-blur border border-white p-4 flex flex-wrap items-end gap-3">
-          <span className="text-sm font-medium text-[#0B0B12] mr-2">Custom size</span>
+        <div className="mt-4 rounded-2xl bg-white/[0.04] backdrop-blur border border-white/10 p-5 flex flex-wrap items-end gap-3">
+          <span className="text-sm font-medium text-white mr-2">Custom size</span>
           <div className="space-y-1">
-            <Label className="text-xs text-[#0B0B12]/60">Width (px)</Label>
-            <Input type="number" value={custom.w} onChange={(e) => setCustom((c) => ({ ...c, w: parseInt(e.target.value) || 1080 }))} className="w-28 bg-white border-black/10" />
+            <Label className="text-xs text-white/50">Width (px)</Label>
+            <Input type="number" value={custom.w} onChange={(e) => setCustom((c) => ({ ...c, w: parseInt(e.target.value) || 1080 }))} className="w-28 bg-white/5 border-white/10 text-white" />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs text-[#0B0B12]/60">Height (px)</Label>
-            <Input type="number" value={custom.h} onChange={(e) => setCustom((c) => ({ ...c, h: parseInt(e.target.value) || 1920 }))} className="w-28 bg-white border-black/10" />
+            <Label className="text-xs text-white/50">Height (px)</Label>
+            <Input type="number" value={custom.h} onChange={(e) => setCustom((c) => ({ ...c, h: parseInt(e.target.value) || 1920 }))} className="w-28 bg-white/5 border-white/10 text-white" />
           </div>
           <Button
             onClick={() => onCreate({ templateId: 'aurora', platform: custom.w > custom.h ? 'android' : 'ios', device: 'custom', customW: custom.w, customH: custom.h })}
-            className="bg-[#0B0B12] hover:bg-[#0B0B12]/85 text-white rounded-xl"
+            className="bg-gradient-to-r from-violet-500 to-pink-500 hover:opacity-90 text-white rounded-xl border-0"
           >
             Create <ArrowRight className="w-4 h-4 ml-1.5" />
           </Button>
