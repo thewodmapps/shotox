@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { makeId, resolveDevice } from '@/lib/templates';
-import { exportSlide, wait } from '@/lib/exportSlides';
+import { exportSlide, exportAllSlides } from '@/lib/exportSlides';
 import EditorTopbar from '@/components/editor/EditorTopbar';
 import EditorRail from '@/components/editor/EditorRail';
 import EditorPanel from '@/components/editor/EditorPanel';
@@ -73,10 +73,12 @@ export default function Editor() {
   const onExport = async (which, format) => {
     setExporting(true);
     const device = resolveDevice(project);
-    const idx = which === 'all' ? project.slides.map((_, i) => i) : [sel];
-    for (const i of idx) {
-      await exportSlide(exportRefs.current[i], device, `${project.name.replace(/\s+/g, '-')}-${i + 1}`, format);
-      if (idx.length > 1) await wait(400);
+    const base = project.name.replace(/\s+/g, '-');
+    if (which === 'all') {
+      const els = project.slides.map((_, i) => exportRefs.current[i]).filter(Boolean);
+      await exportAllSlides(els, device, base, format);
+    } else {
+      await exportSlide(exportRefs.current[sel], device, `${base}-${sel + 1}`, format);
     }
     setExporting(false);
   };
