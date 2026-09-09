@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { base44 } from '@/api/base44Client';
+
+const PLAN_KEY = { 'Pro Monthly': 'monthly', 'Pro Yearly': 'yearly', 'Lifetime': 'lifetime' };
 
 const PLANS = [
   {
@@ -37,6 +40,25 @@ const PLANS = [
 ];
 
 export default function Pricing() {
+  const [loadingPlan, setLoadingPlan] = useState(null);
+
+  async function handleCheckout(name) {
+    if (window.self !== window.top) {
+      alert('Checkout works only from the published app. Open Shotox in a new tab to upgrade.');
+      return;
+    }
+    try {
+      setLoadingPlan(name);
+      const res = await base44.functions.invoke('createCheckoutSession', { plan: PLAN_KEY[name], origin: window.location.origin });
+      if (res.data?.url) window.location.href = res.data.url;
+      else throw new Error(res.data?.error || 'No checkout URL returned');
+    } catch (e) {
+      alert(e.message || 'Checkout failed. Please try again.');
+    } finally {
+      setLoadingPlan(null);
+    }
+  }
+
   return (
     <section id="pricing" className="py-24 px-6 bg-[#0B0B12] text-white relative overflow-hidden">
       <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full bg-violet-600/30 blur-[140px] pointer-events-none" />
@@ -55,9 +77,19 @@ export default function Pricing() {
               <ul className="mt-6 space-y-2.5 text-sm flex-1">
                 {p.features.map((f) => <li key={f} className="flex items-start gap-2.5"><Check className="w-4 h-4 shrink-0 mt-0.5" /> <span>{f}</span></li>)}
               </ul>
-              <Button asChild className={`mt-7 rounded-xl h-11 ${p.featured ? 'bg-white text-[#0B0B12] hover:bg-white/90' : 'bg-white/10 hover:bg-white/20 text-white'}`}>
-                <Link to="/projects">{p.cta}</Link>
-              </Button>
+              {p.name === 'Free' ? (
+                <Button asChild className={`mt-7 rounded-xl h-11 ${p.featured ? 'bg-white text-[#0B0B12] hover:bg-white/90' : 'bg-white/10 hover:bg-white/20 text-white'}`}>
+                  <Link to="/projects">{p.cta}</Link>
+                </Button>
+              ) : (
+                <Button
+                  disabled={loadingPlan === p.name}
+                  onClick={() => handleCheckout(p.name)}
+                  className={`mt-7 rounded-xl h-11 ${p.featured ? 'bg-white text-[#0B0B12] hover:bg-white/90' : 'bg-white/10 hover:bg-white/20 text-white'}`}
+                >
+                  {loadingPlan === p.name ? 'Redirecting…' : p.cta}
+                </Button>
+              )}
             </div>
           ))}
         </div>
