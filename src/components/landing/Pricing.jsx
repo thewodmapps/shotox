@@ -45,7 +45,7 @@ export default function Pricing() {
   const [loadingPlan, setLoadingPlan] = useState(null);
   const [showNotice, setShowNotice] = useState(false);
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   async function handleCheckout(name) {
     if (window.self !== window.top) {
@@ -58,7 +58,12 @@ export default function Pricing() {
     }
     try {
       setLoadingPlan(name);
-      const res = await base44.functions.invoke('createCheckoutSession', { plan: PLAN_KEY[name], origin: window.location.origin });
+      const res = await base44.functions.invoke('createCheckoutSession', {
+        plan: PLAN_KEY[name],
+        origin: window.location.origin,
+        user_id: user?.id,
+        email: user?.email,
+      });
       if (res.data?.url) window.location.href = res.data.url;
       else throw new Error(res.data?.error || 'No checkout URL returned');
     } catch (e) {
