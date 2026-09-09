@@ -34,8 +34,9 @@ export default function CreateCards({ onCreate, creating }) {
               o.form === 'custom' && customOpen ? 'border-violet-400/60 ring-2 ring-violet-500/30' : 'border-white/10 hover:border-white/20'
             }`}
           >
-            <div className="h-28 grid place-items-center bg-gradient-to-br from-[#15151c] to-[#0c0c12] relative overflow-hidden">
-              <FormPreview form={o.form} />
+            <div className="h-44 grid place-items-center bg-gradient-to-br from-[#16161e] to-[#0b0b10] relative overflow-hidden">
+              <div className="absolute w-48 h-48 rounded-full" style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.22) 0%, transparent 70%)' }} />
+              <div className="relative z-10"><FormPreview form={o.form} /></div>
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-violet-500/15 via-transparent to-pink-500/15" />
               {creating === o.platform && <Loader2 className="w-4 h-4 animate-spin text-white absolute top-2.5 right-2.5 z-10" />}
             </div>
