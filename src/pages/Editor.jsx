@@ -43,6 +43,8 @@ export default function Editor() {
 
   const updateProject = (patch) => { dirty.current = true; setProject((p) => ({ ...p, ...patch })); };
   const updateSlide = (patch) => updateProject({ slides: project.slides.map((s, i) => (i === sel ? { ...s, ...patch } : s)) });
+  // Typography (font, alignment, text colors) is project-wide so every slide stays consistent.
+  const updateTextStyle = (patch) => updateProject({ slides: project.slides.map((s) => ({ ...s, ...patch })) });
   const addSlide = () => { updateProject({ slides: [...project.slides, { ...project.slides[sel], id: makeId(), screenshotUrl: '' }] }); setSel(project.slides.length); };
   const duplicate = (i) => { const s = [...project.slides]; s.splice(i + 1, 0, { ...s[i], id: makeId() }); updateProject({ slides: s }); setSel(i + 1); };
 
@@ -88,7 +90,7 @@ export default function Editor() {
 
   const slide = project.slides[sel] || project.slides[0];
   const device = resolveDevice(project);
-  const panelProps = { slide, updateSlide, project, updateProject };
+  const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject };
   return (
     <div className="h-screen flex flex-col bg-[#08080d]">
       <EditorTopbar project={project} status={status} exporting={exporting} onRename={(name) => updateProject({ name })} onExport={onExport} />
