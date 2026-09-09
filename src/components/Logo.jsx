@@ -21,15 +21,16 @@ export function Logo({ size = 30, className = '', rounded = 11 }) {
         </linearGradient>
       </defs>
       <rect width="40" height="40" rx={rounded} fill={`url(#zg-${id})`} />
-      {/* layered Z — top bar + diagonal + bottom bar, with an offset ghost suggesting stacked screenshots */}
+      {/* layered S — two curves with an offset ghost suggesting stacked screenshots */}
       <path
-        d="M13.5 12.5 H28"
+        d="M29 12 C 29 9.5, 13 9.5, 13 15 C 13 19, 29 19, 29 23 C 29 28.5, 13 28.5, 13 26"
         stroke="rgba(255,255,255,0.45)"
         strokeWidth="3.2"
         strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
-        d="M12 13.5 H27 L13 26.5 H28"
+        d="M28 13 C 28 10.5, 12 10.5, 12 16 C 12 20, 28 20, 28 24 C 28 29.5, 12 29.5, 12 27"
         stroke="white"
         strokeWidth="3.6"
         strokeLinecap="round"
@@ -43,7 +44,7 @@ export function Brand({ to = '/', size = 30, withText = true, textClass = 'text-
   return (
     <Link to={to} className={`flex items-center gap-2 font-display font-bold tracking-tight ${className}`}>
       <Logo size={size} />
-      {withText && <span className={textClass}>Zubilo</span>}
+      {withText && <span className={textClass}>Shotox</span>}
     </Link>
   );
 }

@@ -23,7 +23,7 @@ export default function Hero() {
           <Sparkles className="w-3.5 h-3.5" /> iPhone, iPad, Tablet & Android — store-ready sizes
         </motion.div>
         <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="font-display font-bold tracking-[-0.04em] leading-[0.95] text-6xl sm:text-7xl lg:text-8xl mt-7">
-          App Screenshot<br /><span className="zubilo-gradient-text">Generator</span>
+          App Screenshot<br /><span className="shotox-gradient-text">Generator</span>
         </motion.h1>
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-7 text-lg text-white/65 max-w-xl mx-auto">
           Create beautiful, customized app screenshots for your App Store & Google Play Store — in minutes, not days.

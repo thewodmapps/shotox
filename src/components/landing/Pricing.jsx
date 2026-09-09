@@ -8,7 +8,7 @@ const PLANS = [
     name: 'Free',
     price: '$0',
     period: 'forever',
-    features: ['1 device of your choice', '3 starter templates', 'Up to 3 projects', 'PNG export', 'Zubilo watermark'],
+    features: ['1 device of your choice', '3 starter templates', 'Up to 3 projects', 'PNG export', 'Shotox watermark'],
     cta: 'Start free',
   },
   {

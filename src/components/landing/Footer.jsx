@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
         <Brand to="/" size={24} textClass="text-white" />
         <p>App screenshot generator for App Store & Google Play.</p>
-        <p>© {new Date().getFullYear()} Zubilo</p>
+        <p>© {new Date().getFullYear()} Shotox</p>
       </div>
     </footer>
   );
