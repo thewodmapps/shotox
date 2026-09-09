@@ -25,7 +25,12 @@ export const resolveDevice = (project) =>
 
 export const slideHeight = (device) => (BASE_W * device.h) / device.w;
 
-export const FONTS = ['Sora', 'Inter', 'Space Grotesk', 'Playfair Display', 'Fraunces'];
+export const FONTS = [
+  'Sora', 'Inter', 'Space Grotesk', 'Poppins', 'Montserrat', 'DM Sans',
+  'Plus Jakarta Sans', 'Outfit', 'Manrope', 'Bricolage Grotesque', 'Archivo',
+  'Lexend', 'Nunito', 'Oswald', 'Bebas Neue', 'Playfair Display', 'Fraunces',
+  'Lora', 'Instrument Serif',
+];
 export const LAYOUTS = [
   { id: 'phone-bottom', name: 'Phone below' },
   { id: 'phone-top', name: 'Phone above' },

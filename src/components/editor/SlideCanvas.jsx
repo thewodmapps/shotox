@@ -140,8 +140,10 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
 
   const accent = slide.headingColor && slide.headingColor.startsWith('#') ? slide.headingColor : (isLight(slide.bg.from || slide.bg.color) ? '#0B0B12' : '#FFFFFF');
   const theme = slide.style || 'swipe';
-  const hFs = landscape ? 24 : 33 * k;
-  const sFs = landscape ? 11.5 : 13.5 * k;
+  const hScale = slide.headingScale ?? 1;
+  const sScale = slide.subScale ?? 1;
+  const hFs = landscape ? 24 * hScale : 33 * k * hScale;
+  const sFs = landscape ? 11.5 * sScale : 13.5 * k * sScale;
 
   const renderText = (pos) => {
     const pad = pos === 'bottom' ? `0 26px ${28 * k}px` : pos === 'center' ? '0 26px' : `${34 * k}px 26px 0`;
@@ -179,8 +181,8 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
             <div className="relative w-full h-full">
               <div className="absolute inset-y-0 flex items-center z-10" style={{ [L.text]: 0, width: `${L.textW * 100}%`, padding: textLeft ? '0 4% 0 8%' : '0 8% 0 4%' }}>
                 <div className="w-full" style={{ textAlign: L.tAlign, fontFamily: `'${slide.font}', sans-serif` }}>
-                  <h2 style={{ color: slide.headingColor, fontSize: 26 * lk, lineHeight: 1.02, fontWeight: 800, letterSpacing: -0.5 * lk }}>{slide.heading}</h2>
-                  {slide.subheading && <p style={{ color: slide.subColor, fontSize: 12 * lk, marginTop: 8 * lk, lineHeight: 1.35, fontWeight: 500 }}>{slide.subheading}</p>}
+                  <h2 style={{ color: slide.headingColor, fontSize: 26 * lk * hScale, lineHeight: 1.02, fontWeight: 800, letterSpacing: -0.5 * lk }}>{slide.heading}</h2>
+                  {slide.subheading && <p style={{ color: slide.subColor, fontSize: 12 * lk * sScale, marginTop: 8 * lk, lineHeight: 1.35, fontWeight: 500 }}>{slide.subheading}</p>}
                 </div>
               </div>
               {slide.layout !== 'text-only' && (
