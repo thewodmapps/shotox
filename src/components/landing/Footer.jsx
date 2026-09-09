@@ -17,8 +17,8 @@ export default function Footer() {
               <li><a href="/#templates" className="hover:text-white transition-colors">Templates</a></li>
               <li><a href="/#features" className="hover:text-white transition-colors">Features</a></li>
               <li><a href="/#pricing" className="hover:text-white transition-colors">Pricing</a></li>
-              <li><Link to="/#faq" className="hover:text-white transition-colors">FAQ</Link></li>
               <li><Link to="/#blog" className="hover:text-white transition-colors">Blog</Link></li>
+              <li><Link to="/#faq" className="hover:text-white transition-colors">FAQ</Link></li>
             </ul>
           </div>
           <div>
