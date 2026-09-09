@@ -35,7 +35,7 @@ export default function Terms() {
           <p>We may update these Terms from time to time. Material changes will be communicated through the app or by email.</p>
 
           <h2>Contact</h2>
-          <p>For questions about these Terms, contact us using the support address provided in the app.</p>
+          <p>For questions about these Terms, contact us at <a href="mailto:thewodmapps@gmail.com">thewodmapps@gmail.com</a>.</p>
         </div>
       </div>
       <Footer />

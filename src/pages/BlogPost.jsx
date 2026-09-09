@@ -2,6 +2,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, Clock } from 'lucide-react';
+import { Image } from '@/components/ui/image';
 import Navbar from '@/components/landing/Navbar';
 import Footer from '@/components/landing/Footer';
 import { getPost, POSTS } from '@/lib/blogPosts';
@@ -41,7 +42,9 @@ export default function BlogPost() {
           <span>Updated {new Date(post.updated).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
         </div>
 
-        <div className={`mt-8 h-56 rounded-3xl bg-gradient-to-br ${post.accent}`} />
+        <div className="mt-8 h-56 sm:h-72 rounded-3xl overflow-hidden relative">
+          <Image src={post.image} alt={post.title} className="w-full h-full" fittingType="fill" />
+        </div>
 
         <div className="article-body max-w-none mt-10">
           <ReactMarkdown>{post.body}</ReactMarkdown>
@@ -52,7 +55,9 @@ export default function BlogPost() {
           <div className="grid sm:grid-cols-3 gap-4">
             {related.map((r) => (
               <Link key={r.slug} to={`/blog/${r.slug}`} className="group rounded-2xl border border-black/5 overflow-hidden hover:-translate-y-1 transition-transform duration-300">
-                <div className={`h-24 bg-gradient-to-br ${r.accent}`} />
+                <div className="h-24 overflow-hidden relative">
+                  <Image src={r.image} alt={r.title} className="w-full h-full" fittingType="fill" />
+                </div>
                 <div className="p-4">
                   <p className="font-display font-semibold text-sm text-[#0B0B12] leading-snug group-hover:text-violet-600 transition-colors">{r.title}</p>
                   <p className="mt-2 text-[11px] text-[#0B0B12]/45">{r.read} read</p>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Clock } from 'lucide-react';
+import { Image } from '@/components/ui/image';
 import { POSTS as CARDS } from '@/lib/blogPosts';
 
 export default function BlogSection() {
@@ -23,7 +24,9 @@ export default function BlogSection() {
               transition={{ delay: i * 0.06, duration: 0.5 }}
             >
               <Link to={`/blog/${p.slug}`} className="group flex flex-col h-full rounded-3xl bg-white border border-black/5 overflow-hidden hover:shadow-[0_20px_60px_-20px_rgba(124,58,237,0.25)] hover:-translate-y-1 transition-all duration-300">
-                <div className={`h-40 bg-gradient-to-br ${p.accent} relative`}>
+                <div className="h-40 relative overflow-hidden">
+                  <Image src={p.image} alt={p.title} className="w-full h-full" fittingType="fill" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                   <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-white/90 text-[11px] font-semibold text-[#0B0B12]">{p.tag}</span>
                 </div>
                 <div className="p-6 flex flex-col flex-1">

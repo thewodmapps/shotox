@@ -35,7 +35,7 @@ export default function Privacy() {
           <p>You can access, export, or delete your personal data at any time. To exercise these rights, contact us using the details below.</p>
 
           <h2>Contact</h2>
-          <p>For privacy questions, contact us at the support address provided in the app.</p>
+          <p>For privacy questions, contact us at <a href="mailto:thewodmapps@gmail.com">thewodmapps@gmail.com</a>.</p>
         </div>
       </div>
       <Footer />
