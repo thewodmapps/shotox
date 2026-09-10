@@ -40,19 +40,19 @@ export default function ProjectsHeader() {
         <Brand to="/" size={28} textClass="text-[#0B0B12]" />
       <div className="flex items-center gap-1.5 sm:gap-2">
         {badge ? (
-          <button onClick={goPricing} title="View plans" className={`inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full ${badge.className} hover:opacity-90 transition-opacity`}>
-            <badge.icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${badge.iconClass}`} /> <span className="hidden sm:inline">{badge.label}</span>
+          <button onClick={goPricing} title={badge.label} aria-label={badge.label} className={`inline-flex items-center justify-center w-9 h-9 rounded-full ${badge.className} hover:opacity-90 transition-opacity`}>
+            <badge.icon className={`w-4 h-4 ${badge.iconClass}`} />
           </button>
         ) : (
-          <Link to="/#pricing" className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 hover:opacity-90 transition-opacity shadow-lg shadow-pink-500/20">
-            <Crown className="w-3.5 h-3.5 text-yellow-200" /> <span className="hidden sm:inline">Upgrade</span>
+          <Link to="/#pricing" title="Upgrade" aria-label="Upgrade" className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 hover:opacity-90 transition-opacity shadow-lg shadow-pink-500/20">
+            <Crown className="w-4 h-4 text-yellow-200" />
           </Link>
         )}
-        <button onClick={() => setAccountOpen(true)} className="inline-flex items-center justify-center w-9 h-9 sm:w-auto sm:h-auto sm:gap-1.5 text-sm font-medium px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full bg-black/5 border border-black/10 text-[#0B0B12]/80 hover:bg-black/10 hover:text-[#0B0B12] transition-colors" title="Account" aria-label="Account">
-          <UserCircle2 className="w-4 h-4 shrink-0" /> <span className="hidden sm:inline">Account</span>
+        <button onClick={() => setAccountOpen(true)} className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-black/5 border border-black/10 text-[#0B0B12]/80 hover:bg-black/10 hover:text-[#0B0B12] transition-colors" title="Account" aria-label="Account">
+          <UserCircle2 className="w-4 h-4 shrink-0" />
         </button>
-        <button onClick={() => base44.auth.logout('/')} className="inline-flex items-center justify-center w-9 h-9 sm:w-auto sm:h-auto sm:gap-1.5 text-sm font-medium px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full bg-black/5 border border-black/10 text-[#0B0B12]/80 hover:bg-black/10 hover:text-[#0B0B12] transition-colors" title="Sign out" aria-label="Sign out">
-          <LogOut className="w-4 h-4 shrink-0" /> <span className="hidden sm:inline">Sign out</span>
+        <button onClick={() => base44.auth.logout('/')} className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-black/5 border border-black/10 text-[#0B0B12]/80 hover:bg-black/10 hover:text-[#0B0B12] transition-colors" title="Sign out" aria-label="Sign out">
+          <LogOut className="w-4 h-4 shrink-0" />
         </button>
       </div>
       </nav>
