@@ -29,7 +29,21 @@ const renderCanvas = async (el, device) => {
   }
 };
 
-const triggerDownload = (blob, filename) => {
+const triggerDownload = async (blob, filename) => {
+  // In native app WebViews (and mobile browsers), an <a download> of a blob URL
+  // silently fails to save. Prefer the Web Share API so the OS share/save sheet
+  // handles the file (user can save to device / Files). Desktop browsers fall
+  // through to the direct anchor download.
+  const file = new File([blob], filename, { type: blob.type || 'application/octet-stream' });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], title: filename, text: filename });
+      return;
+    } catch (e) {
+      if (e && (e.name === 'AbortError' || e.code === 20)) return; // user cancelled the sheet
+      // otherwise fall through to the anchor download
+    }
+  }
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -53,7 +67,7 @@ export async function exportSlide(el, device, filename, format = 'png', onProgre
   onProgress?.(85);
   const blob = await canvasToBlob(canvas, mime);
   onProgress?.(95);
-  triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`);
+  await triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`);
   onProgress?.(100);
 }
 
@@ -72,6 +86,6 @@ export async function exportAllSlides(els, device, baseName, format = 'png', onP
   }
   onProgress?.(95);
   const blob = await zip.generateAsync({ type: 'blob' });
-  triggerDownload(blob, `${baseName}-screenshots.zip`);
+  await triggerDownload(blob, `${baseName}-screenshots.zip`);
   onProgress?.(100);
 }

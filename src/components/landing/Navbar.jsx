@@ -227,13 +227,6 @@ export default function Navbar({
                 <Link to="/projects" onClick={() => setOpen(false)}>{isAuthenticated ? 'Dashboard' : 'Get started free'}</Link>
               </Button>
             )}
-            {isAuthenticated && (
-              <div className="flex items-center gap-2 mt-3 pt-3 border-t border-black/10">
-                {renderPlan(true)}
-                {renderAccount(true)}
-                {renderSignOut(true)}
-              </div>
-            )}
           </div>
         </div>
       )}
