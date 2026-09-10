@@ -219,8 +219,8 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
         )}
         {watermark && (
           <div style={{ position: 'absolute', left: (BASE_W - 104) / 2, bottom: 14, width: 104, height: 30, borderRadius: 9999, background: 'rgba(0,0,0,0.42)', border: '1px solid rgba(255,255,255,0.12)', zIndex: 30, pointerEvents: 'none' }}>
-            <img src={WATERMARK_LOGO} alt="" crossOrigin="anonymous" style={{ position: 'absolute', left: 6, top: 5.5, width: 19, height: 19, borderRadius: 6, objectFit: 'cover', display: 'block' }} />
-            <span style={{ position: 'absolute', left: 31, top: 0, height: 30, lineHeight: '30px', fontSize: 13, fontWeight: 700, color: '#ffffff', letterSpacing: '0.02em', fontFamily: 'Sora, Inter, sans-serif', whiteSpace: 'nowrap' }}>Shotox</span>
+            <img src={WATERMARK_LOGO} alt="" crossOrigin="anonymous" style={{ position: 'absolute', left: 16, top: 5.5, width: 19, height: 19, borderRadius: 6, objectFit: 'cover', display: 'block' }} />
+            <span style={{ position: 'absolute', left: 41, top: 0, width: 47, height: 30, lineHeight: '30px', textAlign: 'center', fontSize: 13, fontWeight: 700, color: '#ffffff', letterSpacing: '0.02em', fontFamily: 'Sora, Inter, sans-serif', whiteSpace: 'nowrap' }}>Shotox</span>
           </div>
         )}
       </div>
