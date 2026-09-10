@@ -36,7 +36,7 @@ export default function TemplatesPanel({ project, updateProject, isPro, onLocked
     <div className="space-y-3">
       <p className="text-sm text-white/60">Applying a template keeps your uploaded screenshots.</p>
       <Select value={cat} onValueChange={setCat}>
-        <SelectTrigger className="bg-white/5 border-white/10 text-white h-9">
+        <SelectTrigger className="bg-white/5 border-white/10 text-white h-11">
           <SelectValue placeholder="All categories" />
         </SelectTrigger>
         <SelectContent>

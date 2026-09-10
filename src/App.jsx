@@ -10,6 +10,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
+import BottomTabBar from '@/components/mobile/BottomTabBar';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -82,6 +83,7 @@ const AuthenticatedApp = () => {
           </Routes>
         </motion.div>
       </AnimatePresence>
+      {(location.pathname === '/projects' || location.pathname === '/editor') && <BottomTabBar />}
     </Suspense>
   );
 };

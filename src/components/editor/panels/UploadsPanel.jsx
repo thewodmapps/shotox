@@ -29,18 +29,18 @@ export default function UploadsPanel({ slide, updateSlide, project, updateProjec
         className="w-full rounded-xl border border-dashed border-white/20 hover:border-violet-400 hover:bg-violet-500/10 transition-colors p-6 flex flex-col items-center gap-2 text-white/70"
       >
         {busy ? <Loader2 className="w-6 h-6 animate-spin" /> : <Upload className="w-6 h-6" />}
-        <span className="text-xs font-medium">{busy ? 'Uploading…' : 'Upload screenshots'}</span>
-        <span className="text-[11px] text-white/40">PNG or JPG · multiple allowed</span>
+        <span className="text-sm font-medium">{busy ? 'Uploading…' : 'Upload screenshots'}</span>
+        <span className="text-sm text-white/40">PNG or JPG · multiple allowed</span>
       </button>
       <input ref={inputRef} type="file" accept="image/*" multiple hidden onChange={(e) => onFiles(e.target.files)} />
       {slide.screenshotUrl && (
-        <button onClick={() => updateSlide({ screenshotUrl: '' })} className="w-full flex items-center justify-center gap-1.5 h-8 rounded-lg text-xs text-white/70 border border-white/10 hover:bg-white/5">
+        <button onClick={() => updateSlide({ screenshotUrl: '' })} className="w-full flex items-center justify-center gap-1.5 h-8 rounded-lg text-sm text-white/70 border border-white/10 hover:bg-white/5">
           <X className="w-3.5 h-3.5" /> Remove from this slide
         </button>
       )}
       {uploads.length > 0 && (
         <div>
-          <p className="text-xs text-white/50 mb-2">Click an image to place it on the selected slide</p>
+          <p className="text-sm text-white/50 mb-2">Click an image to place it on the selected slide</p>
           <div className="grid grid-cols-3 gap-2">
             {uploads.map((url) => (
               <button key={url} onClick={() => updateSlide({ screenshotUrl: url })} className={`aspect-[9/19] rounded-lg overflow-hidden border transition-transform hover:scale-105 ${slide.screenshotUrl === url ? 'ring-2 ring-violet-400 border-transparent' : 'border-white/10'}`}>

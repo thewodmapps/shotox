@@ -45,9 +45,9 @@ export default function AIPanel({ project, updateProject }) {
 
   return (
     <div className="space-y-4">
-      <p className="text-xs text-white/50">Describe your app and AI will write a headline and subheading for every screenshot.</p>
+      <p className="text-sm text-white/50">Describe your app and AI will write a headline and subheading for every screenshot.</p>
       <div className="space-y-1.5">
-        <Label className="text-white/70 text-xs">App description</Label>
+        <Label className="text-white/70 text-sm">App description</Label>
         <Textarea
           rows={5}
           value={description}
@@ -57,9 +57,9 @@ export default function AIPanel({ project, updateProject }) {
         />
       </div>
       <div className="space-y-1.5">
-        <Label className="text-white/70 text-xs">Category (optional)</Label>
+        <Label className="text-white/70 text-sm">Category (optional)</Label>
         <Select value={category || undefined} onValueChange={setCategory}>
-          <SelectTrigger className="bg-white/5 border-white/10 text-white h-9">
+          <SelectTrigger className="bg-white/5 border-white/10 text-white h-11">
             <SelectValue placeholder="Auto-detect" />
           </SelectTrigger>
           <SelectContent>

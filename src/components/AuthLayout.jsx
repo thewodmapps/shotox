@@ -6,7 +6,7 @@ import { Brand } from "@/components/Logo";
 
 export default function AuthLayout({ icon: Icon, title, subtitle, footer, children }) {
   return (
-    <div className="relative min-h-screen flex bg-white">
+    <div className="relative min-h-screen flex bg-background">
       {/* Left — branded collage (hidden on mobile) */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[#0B0B12] bg-grid">
         <motion.div
@@ -85,7 +85,7 @@ export default function AuthLayout({ icon: Icon, title, subtitle, footer, childr
             <ArrowLeft className="w-4 h-4" /> Back to home
           </Link>
           <div className="lg:hidden">
-            <Brand to="/" size={28} textClass="text-[#0B0B12]" />
+            <Brand to="/" size={28} textClass="text-foreground" />
           </div>
         </div>
 
@@ -103,7 +103,7 @@ export default function AuthLayout({ icon: Icon, title, subtitle, footer, childr
                   />
                 )}
               </div>
-              <h1 className="text-3xl sm:text-4xl font-display font-bold tracking-tight text-[#0B0B12]">{title}</h1>
+              <h1 className="text-3xl sm:text-4xl font-display font-bold tracking-tight text-foreground">{title}</h1>
               {subtitle && <p className="text-muted-foreground mt-2.5 text-base">{subtitle}</p>}
             </div>
 

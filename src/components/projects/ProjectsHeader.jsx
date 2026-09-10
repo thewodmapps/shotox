@@ -58,10 +58,10 @@ export default function ProjectsHeader() {
             <Crown className="w-3.5 h-3.5 text-yellow-200" /> <span className="hidden sm:inline">Upgrade</span>
           </button>
         )}
-        <button onClick={() => setAccountOpen(true)} className="inline-flex items-center justify-center w-9 h-9 sm:w-auto sm:h-auto sm:gap-1.5 text-sm font-medium px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full bg-white/5 border border-white/10 text-white/80 hover:bg-white/10 hover:text-white transition-colors" title="Account" aria-label="Account">
+        <button onClick={() => setAccountOpen(true)} className="inline-flex items-center justify-center w-11 h-11 sm:w-auto sm:h-auto sm:gap-1.5 text-sm font-medium px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full bg-white/5 border border-white/10 text-white/80 hover:bg-white/10 hover:text-white transition-colors" title="Account" aria-label="Account">
           <UserCircle2 className="w-4 h-4 shrink-0" /> <span className="hidden sm:inline">Account</span>
         </button>
-        <button onClick={() => base44.auth.logout('/')} className="inline-flex items-center justify-center w-9 h-9 sm:w-auto sm:h-auto sm:gap-1.5 text-sm font-medium px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full bg-white/5 border border-white/10 text-white/80 hover:bg-white/10 hover:text-white transition-colors" title="Sign out" aria-label="Sign out">
+        <button onClick={() => base44.auth.logout('/')} className="inline-flex items-center justify-center w-11 h-11 sm:w-auto sm:h-auto sm:gap-1.5 text-sm font-medium px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full bg-white/5 border border-white/10 text-white/80 hover:bg-white/10 hover:text-white transition-colors" title="Sign out" aria-label="Sign out">
           <LogOut className="w-4 h-4 shrink-0" /> <span className="hidden sm:inline">Sign out</span>
         </button>
       </div>
