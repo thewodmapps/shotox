@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Crown, Check, Sparkles, Infinity as InfinityIcon, LogOut, UserCircle2 } from 'lucide-react';
 import { Brand } from '@/components/Logo';
 import { useAuth } from '@/lib/AuthContext';
@@ -32,7 +32,18 @@ export default function ProjectsHeader() {
   const badge = PLAN_BADGE[user?.plan];
   const [accountOpen, setAccountOpen] = useState(false);
   const navigate = useNavigate();
-  const goPricing = () => navigate('/#pricing');
+  const location = useLocation();
+  const goPricing = () => {
+    const scroll = () => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+    if (location.pathname === '/') { scroll(); return; }
+    navigate('/');
+    let attempts = 0;
+    const poll = () => {
+      if (document.getElementById('pricing')) { scroll(); return; }
+      if (attempts++ < 60) setTimeout(poll, 30);
+    };
+    setTimeout(poll, 50);
+  };
 
   return (
     <header className="sticky top-0 z-30 min-h-16 safe-top bg-[#08080d]/70 backdrop-blur-xl text-white flex items-center justify-between px-4 sm:px-6 border-b border-white/10 no-callout">
@@ -43,9 +54,9 @@ export default function ProjectsHeader() {
             <badge.icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${badge.iconClass}`} /> <span className="hidden sm:inline">{badge.label}</span>
           </button>
         ) : (
-          <Link to="/#pricing" className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 hover:opacity-90 transition-opacity shadow-lg shadow-pink-500/20">
+          <button onClick={goPricing} className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 hover:opacity-90 transition-opacity shadow-lg shadow-pink-500/20">
             <Crown className="w-3.5 h-3.5 text-yellow-200" /> <span className="hidden sm:inline">Upgrade</span>
-          </Link>
+          </button>
         )}
         <button onClick={() => setAccountOpen(true)} className="inline-flex items-center justify-center w-9 h-9 sm:w-auto sm:h-auto sm:gap-1.5 text-sm font-medium px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full bg-white/5 border border-white/10 text-white/80 hover:bg-white/10 hover:text-white transition-colors" title="Account" aria-label="Account">
           <UserCircle2 className="w-4 h-4 shrink-0" /> <span className="hidden sm:inline">Account</span>
