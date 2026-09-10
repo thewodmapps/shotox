@@ -3,8 +3,10 @@ import {
   MessageSquare, CheckCircle, Compass, Layers, PenTool, Download, Settings,
 } from 'lucide-react';
 import { EXTRA_POSTS } from './blogPostsExtra';
+import { MORE_POSTS } from './blogPostsMore';
+import { MORE_POSTS_2 } from './blogPostsMore2';
 
-// Base set of SEO-optimized blog posts. 35 more live in blogPostsExtra.js (50 total).
+// Base set of SEO-optimized blog posts. 35 more live in blogPostsExtra.js and 50 more across blogPostsMore.js / blogPostsMore2.js (100 total).
 const BASE_POSTS = [
   {
     slug: 'best-mobbin-alternatives-2026',
@@ -780,7 +782,7 @@ If your domestic growth has flattened, your next wave of users is waiting in ano
   },
 ];
 
-export const BLOG_POSTS = [...BASE_POSTS, ...EXTRA_POSTS];
+export const BLOG_POSTS = [...BASE_POSTS, ...EXTRA_POSTS, ...MORE_POSTS, ...MORE_POSTS_2];
 
 export function getPostBySlug(slug) {
   return BLOG_POSTS.find((p) => p.slug === slug);
