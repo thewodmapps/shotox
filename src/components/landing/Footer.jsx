@@ -66,7 +66,7 @@ export default function Footer() {
         </div>
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
           <p>© {new Date().getFullYear()} Shotox. All rights reserved.</p>
-          <p className="text-white/30">App screenshot generator for App Store & Google Play.</p>
+          <p className="text-white/30">AI app screenshot generator for App Store & Google Play.</p>
         </div>
       </div>
     </footer>

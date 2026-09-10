@@ -40,7 +40,7 @@ export default function AuthLayout({ icon: Icon, title, subtitle, footer, childr
                 App screenshots that <span className="shotox-gradient-text">sell your app.</span>
               </h2>
               <p className="mt-5 text-white/60 text-lg leading-relaxed">
-                Design stunning, store-ready screenshots for iPhone, iPad &amp; Android in minutes — no design skills needed.
+                Design stunning, store-ready screenshots for iPhone, iPad, Android &amp; tablets in minutes — no design skills needed.
               </p>
             </motion.div>
 
