@@ -12,6 +12,17 @@ export default async function(req) {
     if (!project) {
       return Response.json({ error: 'Project not found' }, { status: 404 });
     }
+    // Shared previews keep the watermark when the original owner is on the free
+    // plan — matching the watermark applied to their own exports.
+    let watermark = true;
+    try {
+      if (project.created_by_id) {
+        const owner = await base44.asServiceRole.entities.User.get(project.created_by_id);
+        watermark = !owner?.plan || owner.plan === 'free';
+      }
+    } catch {
+      watermark = true;
+    }
     // Public-safe projection: only the data needed to render a read-only preview.
     return Response.json({
       name: project.name,
@@ -20,6 +31,7 @@ export default async function(req) {
       custom_w: project.custom_w,
       custom_h: project.custom_h,
       slides: project.slides || [],
+      watermark,
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

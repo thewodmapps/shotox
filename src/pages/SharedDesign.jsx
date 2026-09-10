@@ -62,7 +62,7 @@ export default function SharedDesign() {
           {(project.slides || []).map((s) => (
             <div key={s.id} className="rounded-2xl overflow-hidden border border-white/10 bg-white/[0.03] shadow-xl">
               <div className="aspect-[1290/2796] relative">
-                <ScaledSlide slide={s} device={device} />
+                <ScaledSlide slide={s} device={device} watermark={project.watermark} />
               </div>
             </div>
           ))}
