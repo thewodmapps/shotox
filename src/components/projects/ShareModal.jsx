@@ -25,17 +25,7 @@ export default function ShareModal({ open, url, title = 'My Shotox design', proj
 
   const brandUrl = `https://shotox.in/${slugify(title)}${projectId ? `?p=${projectId}` : ''}`;
 
-  const handleShare = async (share) => {
-    // Inside the Base44 app shell, the native share sheet is the only path that
-    // opens the app WITHOUT the "Open External Link?" browser prompt.
-    if (navigator.share) {
-      try {
-        await navigator.share({ title, text: title, url: brandUrl });
-        return;
-      } catch (e) {
-        if (e?.name === 'AbortError') return; // user dismissed the sheet
-      }
-    }
+  const handleShare = (share) => {
     window.open(share(brandUrl, title), '_blank', 'noopener,noreferrer');
   };
 
