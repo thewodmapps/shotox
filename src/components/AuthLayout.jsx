@@ -46,7 +46,7 @@ export default function AuthLayout({ icon: Icon, title, subtitle, footer, childr
 
             <div className="mt-10 grid grid-cols-3 gap-4">
               {[
-                { k: "20+", v: "Templates" },
+                { k: "100+", v: "Templates" },
                 { k: "All", v: "Devices" },
                 { k: "1‑click", v: "Export" },
               ].map((s, i) => (
