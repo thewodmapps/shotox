@@ -25,6 +25,21 @@ export default function ShareModal({ open, url, title = 'My Shotox design', proj
 
   const brandUrl = `https://shotox.in/${slugify(title)}${projectId ? `?p=${projectId}` : ''}`;
 
+  const handleShare = async (share) => {
+    // On mobile (incl. the native app shell), the Web Share API opens the OS
+    // share sheet directly — no "Open External Link?" browser prompt.
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text: title, url: brandUrl });
+        return;
+      } catch (e) {
+        if (e?.name === 'AbortError') return; // user dismissed the sheet
+      }
+    }
+    // Desktop fallback: open the platform-specific sharer in a new tab.
+    window.open(share(brandUrl, title), '_blank', 'noopener,noreferrer');
+  };
+
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(brandUrl);
@@ -48,9 +63,10 @@ export default function ShareModal({ open, url, title = 'My Shotox design', proj
 
         <div className="grid grid-cols-3 gap-3 mb-5">
           {SOCIAL.map(({ id, label, brand, icon: Icon, share }) => (
-            <a
+            <button
               key={id}
-              href={share(brandUrl, title)}
+              type="button"
+              onClick={() => handleShare(share)}
               className="flex flex-col items-center gap-1.5 group"
             >
               <span
@@ -64,7 +80,7 @@ export default function ShareModal({ open, url, title = 'My Shotox design', proj
                 </span>
               </span>
               <span className="text-[11px] text-white/60 group-hover:text-white transition-colors">{label}</span>
-            </a>
+            </button>
           ))}
         </div>
 
