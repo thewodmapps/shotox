@@ -60,23 +60,13 @@ const canvasToBlob = (canvas, mime) =>
     canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), mime, 0.95);
   });
 
-// Render a slide element straight to an image blob — used by the editor to
-// pre-render the current slide in the background so the download/save sheet
-// opens instantly when the user taps download.
-export const renderSlideBlob = async (el, device, mime) => {
-  const canvas = await renderCanvas(el, device);
-  return canvasToBlob(canvas, mime);
-};
-
-// Save an already-rendered blob (pre-rendered cache path) — opens the native
-// save/share sheet with no rendering delay.
-export const downloadBlob = (blob, filename, mime) => saveBlob(blob, filename, mime);
-
 export async function exportSlide(el, device, filename, format = 'png', onProgress) {
   if (!el) return;
   const mime = format === 'jpeg' ? 'image/jpeg' : 'image/png';
   onProgress?.(5);
-  const blob = await renderSlideBlob(el, device, mime);
+  const canvas = await renderCanvas(el, device);
+  onProgress?.(85);
+  const blob = await canvasToBlob(canvas, mime);
   onProgress?.(95);
   await saveBlob(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`, mime);
   onProgress?.(100);
