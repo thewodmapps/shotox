@@ -209,30 +209,24 @@ export default function Navbar({
       </nav>
 
       {open && !isEditor && !appBar && (
-        <div className="md:hidden fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)}>
-          <div
-            className="absolute top-3 inset-x-3 rounded-3xl bg-white border border-black/5 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.35)] p-5"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-5">
-              <div onClick={() => setOpen(false)}>
-                <Brand to="/" size={28} textClass="text-[#0B0B12]" />
-              </div>
-              <button onClick={() => setOpen(false)} aria-label="Close menu" className="w-9 h-9 grid place-items-center rounded-lg text-[#0B0B12]/70 hover:bg-black/5 transition-colors">
-                <X className="w-5 h-5" />
+        <div className="md:hidden absolute top-16 inset-x-3 rounded-2xl bg-white border border-black/5 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.35)] p-6">
+          <div className="flex flex-col gap-3">
+            {!isEditor && LINKS.map((l) => {
+              const isSection = l.href.startsWith('#');
+              const cls = 'px-3 py-4 rounded-xl text-sm text-[#0B0B12]/80 hover:bg-black/5 transition-colors';
+              if (!isSection) return <Link key={l.href} to={l.href} onClick={() => setOpen(false)} className={cls}>{l.label}</Link>;
+              return <a key={l.href} href={l.href} onClick={(e) => handleSection(e, l.href)} className={cls}>{l.label}</a>;
+            })}
+            {isEditor && (
+              <button onClick={() => { onShare?.(); setOpen(false); }} className="px-3 py-3 rounded-xl text-sm text-left text-[#0B0B12]/80 hover:bg-black/5 transition-colors inline-flex items-center gap-2">
+                <Share2 className="w-4 h-4" /> Share design
               </button>
-            </div>
-            <div className="flex flex-col gap-1">
-              {LINKS.map((l) => {
-                const isSection = l.href.startsWith('#');
-                const cls = 'px-3 py-3.5 rounded-xl text-sm text-[#0B0B12]/80 hover:bg-black/5 transition-colors';
-                if (!isSection) return <Link key={l.href} to={l.href} onClick={() => setOpen(false)} className={cls}>{l.label}</Link>;
-                return <a key={l.href} href={l.href} onClick={(e) => handleSection(e, l.href)} className={cls}>{l.label}</a>;
-              })}
-            </div>
-            <Button asChild className="mt-5 w-full rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white">
-              <Link to="/projects" onClick={() => setOpen(false)}>{isAuthenticated ? 'Dashboard' : 'Get started free'}</Link>
-            </Button>
+            )}
+            {!isEditor && (
+              <Button asChild className="mt-4 rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white">
+                <Link to="/projects" onClick={() => setOpen(false)}>{isAuthenticated ? 'Dashboard' : 'Get started free'}</Link>
+              </Button>
+            )}
           </div>
         </div>
       )}
