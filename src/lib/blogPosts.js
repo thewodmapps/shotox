@@ -2,9 +2,10 @@ import {
   Smartphone, Layout, Search, Star, Rocket, Globe, BarChart3, Image as ImageIcon,
   MessageSquare, CheckCircle, Compass, Layers, PenTool, Download, Settings,
 } from 'lucide-react';
+import { EXTRA_POSTS } from './blogPostsExtra';
 
-// 15 SEO-optimized blog posts. Content is markdown rendered on the post page.
-export const BLOG_POSTS = [
+// Base set of SEO-optimized blog posts. 35 more live in blogPostsExtra.js (50 total).
+const BASE_POSTS = [
   {
     slug: 'best-mobbin-alternatives-2026',
     title: 'Best Mobbin Alternatives to Try in 2026',
@@ -778,6 +779,8 @@ Every market you localize is a new channel that runs forever. The screenshot set
 If your domestic growth has flattened, your next wave of users is waiting in another language.`,
   },
 ];
+
+export const BLOG_POSTS = [...BASE_POSTS, ...EXTRA_POSTS];
 
 export function getPostBySlug(slug) {
   return BLOG_POSTS.find((p) => p.slug === slug);

@@ -2,64 +2,77 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 /**
- * AppLaunchpad-style cover graphic: solid color background,
- * white grid pattern overlay, floating rounded "app icon" tiles.
+ * AppLaunchpad-style cover graphic: solid color background, white grid overlay,
+ * a cluster of floating rounded "app icon" tiles, the post title overlaid in
+ * white, and a small brand mark.
  */
-const ICONS = ['A', 'PS', 'F', '✦', 'Ui', '<>', 'ASO', '★', '⚙', '◎'];
+const TILES = ['A', 'F', 'PS', 'Ui', '<>', 'ASO', '★', '⚙', '◎', '✦'];
 
 export default function BlogCover({ color = '#7C3AED', icon: Icon, title, className = '' }) {
+  const gridId = `grid-${color.replace('#', '')}`;
   return (
-    <div
-      className={`relative w-full aspect-[16/9] overflow-hidden ${className}`}
-      style={{ background: color }}
-    >
+    <div className={`relative w-full aspect-[16/9] overflow-hidden ${className}`} style={{ background: color }}>
       {/* grid overlay */}
-      <svg className="absolute inset-0 w-full h-full opacity-[0.12]" aria-hidden="true">
+      <svg className="absolute inset-0 w-full h-full opacity-[0.13]" aria-hidden="true">
         <defs>
-          <pattern id={`grid-${color.replace('#', '')}`} width="28" height="28" patternUnits="userSpaceOnUse">
-            <path d="M28 0H0V28" fill="none" stroke="white" strokeWidth="1" />
+          <pattern id={gridId} width="26" height="26" patternUnits="userSpaceOnUse">
+            <path d="M26 0H0V26" fill="none" stroke="white" strokeWidth="1" />
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill={`url(#grid-${color.replace('#', '')})`} />
+        <rect width="100%" height="100%" fill={`url(#${gridId})`} />
       </svg>
 
-      {/* floating tiles */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-[58%] aspect-square max-w-[170px]">
-          {[0, 1, 2, 3, 4, 5].map((i) => {
-            const positions = [
-              'top-0 left-1/2 -translate-x-1/2',
-              'top-1/4 right-0 -translate-y-1/2',
-              'bottom-1/4 right-0 translate-y-1/2',
-              'bottom-0 left-1/2 -translate-x-1/2',
-              'bottom-1/4 left-0 translate-y-1/2',
-              'top-1/4 left-0 -translate-y-1/2',
-            ];
-            return (
-              <motion.div
-                key={i}
-                className={`absolute ${positions[i]} w-[34%] aspect-square rounded-xl bg-white/95 shadow-lg flex items-center justify-center text-[10px] font-bold`}
-                style={{ color }}
-                animate={{ y: [0, i % 2 ? 5 : -5, 0] }}
-                transition={{ duration: 3 + i * 0.4, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                {ICONS[i % ICONS.length]}
-              </motion.div>
-            );
-          })}
-          {/* center icon */}
+      {/* soft radial sheen */}
+      <div className="absolute inset-0" style={{ background: 'radial-gradient(120% 90% at 80% 0%, rgba(255,255,255,0.22), transparent 55%)' }} />
+
+      {/* brand mark */}
+      <div className="absolute top-3 left-3 flex items-center gap-1.5">
+        <div className="w-6 h-6 rounded-md bg-white/95 flex items-center justify-center text-[11px] font-extrabold" style={{ color }}>S</div>
+      </div>
+
+      {/* floating tile cluster */}
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden sm:block">
+        <div className="relative w-[150px] h-[150px]">
+          {[
+            'top-0 right-6',
+            'top-3 right-0',
+            'top-1/2 -translate-y-1/2 right-[44%]',
+            'bottom-3 right-0',
+            'bottom-0 right-6',
+            'bottom-2 right-[44%]',
+          ].map((pos, i) => (
+            <motion.div
+              key={i}
+              className={`absolute ${pos} w-9 h-9 rounded-xl bg-white/95 shadow-lg flex items-center justify-center text-[10px] font-extrabold`}
+              style={{ color }}
+              animate={{ y: [0, i % 2 ? 5 : -5, 0] }}
+              transition={{ duration: 3 + i * 0.4, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              {TILES[i % TILES.length]}
+            </motion.div>
+          ))}
           {Icon && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-[42%] aspect-square rounded-2xl bg-white/95 shadow-xl flex items-center justify-center">
-                <Icon className="w-1/2 h-1/2" style={{ color }} />
-              </div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-2xl bg-white/95 shadow-xl flex items-center justify-center">
+              <Icon className="w-7 h-7" style={{ color }} />
             </div>
           )}
         </div>
       </div>
 
-      {/* soft top sheen */}
-      <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-white/15 to-transparent" />
+      {/* mobile: compact center icon */}
+      {Icon && (
+        <div className="absolute right-3 top-3 sm:hidden w-11 h-11 rounded-xl bg-white/95 shadow-lg flex items-center justify-center">
+          <Icon className="w-6 h-6" style={{ color }} />
+        </div>
+      )}
+
+      {/* title scrim + overlay */}
+      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/35 via-black/10 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 p-5 sm:pr-[150px]">
+        <h3 className="text-white font-display font-bold leading-tight text-lg sm:text-xl line-clamp-3 drop-shadow-sm">
+          {title}
+        </h3>
+      </div>
     </div>
   );
 }
