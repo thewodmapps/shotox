@@ -20,12 +20,12 @@ export default function Blog() {
   }, []);
 
   return (
-    <div className="font-body bg-white dark:bg-[#0B0B12]">
+    <div className="font-body bg-white">
       <Navbar />
       <section className="pt-32 pb-12 px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="font-display font-bold tracking-[-0.03em] text-[#111827] dark:text-white text-4xl sm:text-5xl">Shotox Blog</h1>
-          <p className="mt-5 text-[#6b7280] dark:text-white/60 text-lg leading-relaxed">
+          <h1 className="font-display font-bold tracking-[-0.03em] text-[#111827] text-4xl sm:text-5xl">Shotox Blog</h1>
+          <p className="mt-5 text-[#6b7280] text-lg leading-relaxed">
             Explore the Shotox blog for app marketing tips, App Store & Google Play screenshot strategies, ASO insights, UI inspiration, and growth guides.
           </p>
         </div>
