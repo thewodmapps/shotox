@@ -18,10 +18,19 @@ export default function ScrollToTop() {
   useEffect(() => {
     if (hash) {
       const id = getHashId(hash);
-      const timer = window.setTimeout(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-      }, 50);
-      return () => window.clearTimeout(timer);
+      let cancelled = false;
+      let attempts = 0;
+      const tryScroll = () => {
+        if (cancelled) return;
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+          return;
+        }
+        if (attempts++ < 40) window.setTimeout(tryScroll, 30);
+      };
+      tryScroll();
+      return () => { cancelled = true; };
     }
 
     if (navigationType === "POP") return;
