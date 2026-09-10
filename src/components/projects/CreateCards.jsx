@@ -58,7 +58,7 @@ export default function CreateCards({ onCreate, creating, isPro, onLocked }) {
               </span>
               <div className="min-w-0 flex-1">
                 <div className="font-semibold text-white text-sm truncate">{o.title}</div>
-                <div className="text-[11px] text-white/45 truncate">{o.sub}</div>
+                <div className="text-sm md:text-[11px] text-white/45 truncate">{o.sub}</div>
               </div>
             </div>
           </button>
@@ -70,11 +70,11 @@ export default function CreateCards({ onCreate, creating, isPro, onLocked }) {
         <div className="mt-4 rounded-2xl bg-white/[0.04] backdrop-blur border border-white/10 p-5 flex flex-wrap items-end gap-3">
           <span className="text-sm font-medium text-white mr-2">Custom size</span>
           <div className="space-y-1">
-            <Label className="text-xs text-white/50">Width (px)</Label>
+            <Label className="text-sm md:text-xs text-white/50">Width (px)</Label>
             <Input type="number" value={custom.w} onChange={(e) => setCustom((c) => ({ ...c, w: parseInt(e.target.value) || 1080 }))} className="w-28 bg-white/5 border-white/10 text-white" />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs text-white/50">Height (px)</Label>
+            <Label className="text-sm md:text-xs text-white/50">Height (px)</Label>
             <Input type="number" value={custom.h} onChange={(e) => setCustom((c) => ({ ...c, h: parseInt(e.target.value) || 1920 }))} className="w-28 bg-white/5 border-white/10 text-white" />
           </div>
           <Button

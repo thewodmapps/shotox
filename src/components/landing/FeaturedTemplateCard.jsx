@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
@@ -9,17 +9,31 @@ import ScaledSlide from '@/components/editor/ScaledSlide';
 // the card in 3D and reveals a "Use this template" prompt.
 export default function FeaturedTemplateCard({ template, device, label, Icon, category, glow, to, index = 0, interval = 2800 }) {
   const [i, setI] = useState(0);
+  const [visible, setVisible] = useState(true);
+  const ref = useRef(null);
   const total = template.slides.length;
 
+  // Pause the slide-cycling interval while the card is off-screen so it only
+  // runs when actually visible (saves work, resumes as soon as it's back).
   useEffect(() => {
+    const el = ref.current;
+    if (!el || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.05 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!visible) return;
     const t = setInterval(() => setI((p) => (p + 1) % total), interval);
     return () => clearInterval(t);
-  }, [total, interval]);
+  }, [total, interval, visible]);
 
   const slide = template.slides[i];
 
   return (
     <motion.div
+      ref={ref}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
@@ -68,11 +82,11 @@ export default function FeaturedTemplateCard({ template, device, label, Icon, ca
           <div className="px-4 py-4 flex items-center justify-between">
             <div className="min-w-0">
               <span className="font-display font-semibold text-white block truncate">{template.name}</span>
-              <span className="inline-flex items-center gap-1.5 text-[11px] text-white/50 mt-0.5 whitespace-nowrap">
+              <span className="inline-flex items-center gap-1.5 text-sm md:text-[11px] text-white/50 mt-0.5 whitespace-nowrap">
                 <Icon className="w-3 h-3 shrink-0" /> {label}
               </span>
             </div>
-            <span className="text-[10px] font-medium px-2 py-1 rounded-full bg-violet-500/20 text-violet-300 border border-violet-400/30 whitespace-nowrap">{category}</span>
+            <span className="text-sm md:text-[10px] font-medium px-2 py-1 rounded-full bg-violet-500/20 text-violet-300 border border-violet-400/30 whitespace-nowrap">{category}</span>
           </div>
         </Link>
       </motion.div>

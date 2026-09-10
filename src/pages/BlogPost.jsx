@@ -50,10 +50,10 @@ export default function BlogPost() {
 
   if (notFound) {
     return (
-      <div className="font-body bg-white min-h-screen">
+      <div className="font-body bg-background text-foreground min-h-screen">
         <Navbar />
         <div className="pt-40 pb-24 text-center px-6">
-          <h1 className="text-3xl font-bold text-[#111827]">Post not found</h1>
+          <h1 className="text-3xl font-bold text-foreground">Post not found</h1>
           <Button asChild className="mt-6 rounded-xl bg-[#7C3AED] hover:bg-[#7C3AED]/90 text-white">
             <Link to="/blog">Back to blog</Link>
           </Button>
@@ -67,15 +67,15 @@ export default function BlogPost() {
   const related = getRelatedPosts(slug, 3);
 
   return (
-    <div className="font-body bg-white">
+    <div className="font-body bg-background text-foreground">
       <Navbar />
       <article className="pt-28 pb-16 px-6">
         <div className="max-w-3xl mx-auto">
-          <button onClick={() => navigate('/blog')} className="inline-flex items-center gap-1.5 text-sm text-[#6b7280] hover:text-[#7C3AED] transition-colors mb-6 selectable-text">
+          <button onClick={() => navigate('/blog')} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-[#7C3AED] transition-colors mb-6 selectable-text">
             <ArrowLeft className="w-4 h-4" /> All posts
           </button>
 
-          <div className="flex items-center gap-3 text-xs text-[#6b7280] mb-3">
+          <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
             <span className="font-medium text-[#7C3AED]">{post.category}</span>
             <span>·</span>
             <time>{post.date}</time>
@@ -83,10 +83,10 @@ export default function BlogPost() {
             <span className="inline-flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {post.readTime}</span>
           </div>
 
-          <h1 className="font-display font-bold tracking-[-0.03em] text-[#111827] text-3xl sm:text-5xl leading-tight">{post.title}</h1>
-          <p className="mt-4 text-lg text-[#6b7280] leading-relaxed">{post.excerpt}</p>
+          <h1 className="font-display font-bold tracking-[-0.03em] text-foreground text-3xl sm:text-5xl leading-tight">{post.title}</h1>
+          <p className="mt-4 text-lg text-muted-foreground leading-relaxed">{post.excerpt}</p>
 
-          <div className="mt-8 rounded-2xl overflow-hidden border border-[#e5e7eb]">
+          <div className="mt-8 rounded-2xl overflow-hidden border border-border">
             <BlogCover color={post.color} icon={post.icon} title={post.title} />
           </div>
 
@@ -94,11 +94,11 @@ export default function BlogPost() {
             <ReactMarkdown>{post.content}</ReactMarkdown>
           </div>
 
-          <div className="mt-12 pt-8 border-t border-[#e5e7eb] flex items-center justify-between">
+          <div className="mt-12 pt-8 border-t border-border flex items-center justify-between">
             <Button asChild className="rounded-xl bg-[#7C3AED] hover:bg-[#7C3AED]/90 text-white">
               <Link to="/projects">Try Shotox free <ArrowRight className="w-4 h-4 ml-1" /></Link>
             </Button>
-            <Link to="/blog" className="text-sm text-[#6b7280] hover:text-[#7C3AED] transition-colors">More articles →</Link>
+            <Link to="/blog" className="text-sm text-muted-foreground hover:text-[#7C3AED] transition-colors">More articles →</Link>
           </div>
         </div>
       </article>
@@ -106,7 +106,7 @@ export default function BlogPost() {
       {related.length > 0 && (
         <section className="px-6 pb-24">
           <div className="max-w-6xl mx-auto">
-            <h2 className="font-display font-bold text-[#111827] text-2xl mb-6">Keep reading</h2>
+            <h2 className="font-display font-bold text-foreground text-2xl mb-6">Keep reading</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map((p, i) => (
                 <BlogCard key={p.slug} post={p} index={i} />

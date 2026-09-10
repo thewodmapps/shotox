@@ -88,6 +88,7 @@
 
   html {
     scroll-behavior: smooth;
+    overscroll-behavior-y: contain;
   }
 
   section[id] {
@@ -96,6 +97,15 @@
 
   body {
     @apply bg-background text-foreground font-body;
+    overscroll-behavior-y: contain;
+  }
+
+  /* Native-style: suppress iOS callout/text-selection on controls, keep content selectable. */
+  button,
+  [role="button"] {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 }
 
@@ -138,16 +148,16 @@
   font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: -0.01em;
-  color: #0B0B12;
+  color: hsl(var(--foreground));
   margin: 2rem 0 0.5rem;
 }
 .article-body p {
-  color: rgba(11, 11, 18, 0.7);
+  color: hsl(var(--muted-foreground));
   line-height: 1.7;
   margin: 0 0 1rem;
 }
 .article-body strong {
-  color: #0B0B12;
+  color: hsl(var(--foreground));
   font-weight: 600;
 }
 .article-body a {
@@ -158,7 +168,7 @@
   list-style: disc;
   padding-left: 1.4rem;
   margin: 0 0 1rem;
-  color: rgba(11, 11, 18, 0.7);
+  color: hsl(var(--muted-foreground));
 }
 .article-body li {
   margin: 0.25rem 0;
