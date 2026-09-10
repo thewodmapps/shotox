@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '@/components/landing/Navbar';
 import Hero from '@/components/landing/Hero';
+import HowItWorks from '@/components/landing/HowItWorks';
 import Features from '@/components/landing/Features';
 import TemplateShowcase from '@/components/landing/TemplateShowcase';
 import BlogSection from '@/components/landing/BlogSection';
@@ -13,6 +14,7 @@ export default function Home() {
     <div className="font-body">
       <Navbar />
       <Hero />
+      <HowItWorks />
       <Features />
       <TemplateShowcase />
       <BlogSection />
