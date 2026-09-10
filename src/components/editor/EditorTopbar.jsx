@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Download, Check, Loader2, Cloud, LogOut, Share2, AlertTriangle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -17,6 +17,17 @@ const STATUS = {
 export default function EditorTopbar({ project, status, onRename, onExport, onShare, exporting, onRetry }) {
   const S = STATUS[status] || STATUS.saved;
   const device = resolveDevice(project);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [pendingKey, setPendingKey] = useState(null);
+  const pick = (e, key, which, format) => {
+    e.preventDefault();
+    setPendingKey(key);
+    setTimeout(() => {
+      setMenuOpen(false);
+      setPendingKey(null);
+      onExport(which, format);
+    }, 450);
+  };
   return (
     <header className="min-h-14 safe-top shrink-0 flex items-center gap-3 px-3 sm:px-4 bg-[#0B0B12] border-b border-white/10 text-white no-callout">
       <Link to="/projects" className="w-11 h-11 grid place-items-center rounded-lg hover:bg-white/10 transition-colors" aria-label="Back to projects">
@@ -41,20 +52,28 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
       <span className="hidden lg:block text-sm text-white/60 px-2.5 py-1 rounded-full border border-white/10">
         {device.name} · {device.w} × {device.h}
       </span>
-      <DropdownMenu>
+      <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
         <DropdownMenuTrigger asChild>
           <Button size="sm" disabled={exporting} className="bg-white text-[#0B0B12] hover:bg-white/90 rounded-full px-4">
             {exporting ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
             Download
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuItem onClick={() => onExport('current', 'png')}>Current slide · PNG</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => onExport('current', 'jpeg')}>Current slide · JPEG</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => onExport('all', 'png')}>All slides · PNG</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => onExport('all', 'jpeg')}>All slides · JPEG</DropdownMenuItem>
+        <DropdownMenuContent align="end" className="w-60">
+          <DropdownMenuItem disabled={!!pendingKey} onSelect={(e) => pick(e, 'current-png', 'current', 'png')} className={pendingKey === 'current-png' ? 'bg-violet-500/15' : ''}>
+            <span className="flex items-center justify-between w-full">Current slide · PNG{pendingKey === 'current-png' && <Loader2 className="w-3.5 h-3.5 animate-spin text-violet-300" />}</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem disabled={!!pendingKey} onSelect={(e) => pick(e, 'current-jpeg', 'current', 'jpeg')} className={pendingKey === 'current-jpeg' ? 'bg-violet-500/15' : ''}>
+            <span className="flex items-center justify-between w-full">Current slide · JPEG{pendingKey === 'current-jpeg' && <Loader2 className="w-3.5 h-3.5 animate-spin text-violet-300" />}</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem disabled={!!pendingKey} onSelect={(e) => pick(e, 'all-png', 'all', 'png')} className={pendingKey === 'all-png' ? 'bg-violet-500/15' : ''}>
+            <span className="flex items-center justify-between w-full">All slides · PNG{pendingKey === 'all-png' && <Loader2 className="w-3.5 h-3.5 animate-spin text-violet-300" />}</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem disabled={!!pendingKey} onSelect={(e) => pick(e, 'all-jpeg', 'all', 'jpeg')} className={pendingKey === 'all-jpeg' ? 'bg-violet-500/15' : ''}>
+            <span className="flex items-center justify-between w-full">All slides · JPEG{pendingKey === 'all-jpeg' && <Loader2 className="w-3.5 h-3.5 animate-spin text-violet-300" />}</span>
+          </DropdownMenuItem>
         </DropdownMenuContent>
-        </DropdownMenu>
+      </DropdownMenu>
         <button onClick={onShare} className="w-11 h-11 grid place-items-center rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Share design" aria-label="Share design">
           <Share2 className="w-4 h-4" />
         </button>
