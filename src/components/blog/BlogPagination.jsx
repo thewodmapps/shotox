@@ -55,8 +55,8 @@ function buildWindow(page, total) {
 
   add(1);
 
-  const left = Math.max(2, page - 1);
-  const right = Math.min(total - 1, page + 1);
+  const left = Math.max(2, page - 2);
+  const right = Math.min(total - 1, page + 2);
 
   if (left > 2) add('…');
   for (let p = left; p <= right; p++) add(p);

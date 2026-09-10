@@ -56,9 +56,6 @@ export default function Navbar() {
           {LINKS.map(renderLink)}
         </div>
         <div className="flex items-center gap-1">
-          <Button asChild className="rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white px-5 hidden sm:inline-flex">
-            <Link to="/projects">{isAuthenticated ? 'Dashboard' : 'Get started'}</Link>
-          </Button>
           <button
             aria-label="Toggle menu"
             onClick={() => setOpen((v) => !v)}
