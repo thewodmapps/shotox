@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Crown, Check, Sparkles, Infinity as InfinityIcon, LogOut, UserCircle2 } from 'lucide-react';
+import { Crown, Check, Sparkles, Infinity as InfinityIcon, LogOut, UserCircle2, ArrowLeft } from 'lucide-react';
 import { Brand } from '@/components/Logo';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
@@ -37,6 +37,9 @@ export default function ProjectsHeader() {
   return (
     <header className="fixed top-4 inset-x-0 z-40 flex justify-center px-4">
       <nav className="w-full max-w-5xl flex items-center justify-between rounded-2xl bg-white/90 backdrop-blur-xl border border-black/5 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.35)] pl-4 pr-2 py-2 no-callout">
+        <Link to="/" className="w-10 h-10 grid place-items-center rounded-xl hover:bg-black/5 transition-colors shrink-0" aria-label="Back to home">
+          <ArrowLeft className="w-4 h-4 text-[#0B0B12]" />
+        </Link>
         <Brand to="/" size={28} textClass="text-[#0B0B12]" />
       <div className="flex items-center gap-1.5 sm:gap-2">
         {badge ? (
