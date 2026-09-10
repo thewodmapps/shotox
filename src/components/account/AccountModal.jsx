@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, Loader2, X } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
@@ -41,7 +42,7 @@ export default function AccountModal({ open, onClose }) {
     }
   };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
@@ -135,6 +136,7 @@ export default function AccountModal({ open, onClose }) {
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
