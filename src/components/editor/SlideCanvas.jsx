@@ -2,6 +2,8 @@ import React, { forwardRef } from 'react';
 import { BASE_W, slideHeight, getDevice, MOCK_TYPES } from '@/lib/templates';
 import DeviceFrame from './DeviceFrame';
 
+const WATERMARK_LOGO = 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/da9615c18_shotox.png';
+
 // Reference canvas height the pose constants were tuned against. Every layout
 // value is scaled by k = h / H_REF so a template composes identically on any
 // device — phone or tablet — regardless of aspect ratio.
@@ -216,8 +218,24 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
           </>
         )}
         {watermark && (
-          <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
-            <span className="text-[10px] font-semibold tracking-wide text-white/85 px-2 py-0.5 rounded-full bg-black/35 backdrop-blur-sm">Shotox</span>
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 12,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 30,
+              pointerEvents: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 7,
+              padding: '5px 12px',
+              borderRadius: 999,
+              background: 'rgba(0,0,0,0.42)',
+            }}
+          >
+            <img src={WATERMARK_LOGO} alt="" crossOrigin="anonymous" style={{ width: 18, height: 18, borderRadius: 5, objectFit: 'cover', display: 'block' }} />
+            <span style={{ color: '#ffffff', fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', fontFamily: 'Sora, Inter, sans-serif' }}>Shotox</span>
           </div>
         )}
       </div>

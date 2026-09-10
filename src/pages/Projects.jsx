@@ -63,7 +63,7 @@ export default function Projects() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 pb-28 md:pb-16 space-y-16 scroll-contain">
           <CreateCards onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
           <SavedDesigns projects={projects} onDelete={remove} />
-          <TemplateGallery onCreate={create} creating={creating} isPro={pro} />
+          <TemplateGallery onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
         </div>
       </div>
       <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} onUpgrade={() => navigate('/#pricing')} />

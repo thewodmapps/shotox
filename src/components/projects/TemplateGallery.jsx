@@ -4,7 +4,7 @@ import { TEMPLATES, TEMPLATE_TAGS, CATEGORIES } from '@/lib/templates';
 import { FREE_TEMPLATE_IDS } from '@/lib/entitlements';
 import ScaledSlide from '@/components/editor/ScaledSlide';
 
-export default function TemplateGallery({ onCreate, creating, isPro }) {
+export default function TemplateGallery({ onCreate, creating, isPro, onLocked }) {
   const [cat, setCat] = useState('All');
   const [tag, setTag] = useState('All');
   const list = TEMPLATES.filter(
@@ -38,7 +38,7 @@ export default function TemplateGallery({ onCreate, creating, isPro }) {
           {list.map((tpl) => {
             const locked = !isPro && !FREE_TEMPLATE_IDS.includes(tpl.id);
             return (
-            <button key={tpl.id} disabled={!!creating} onClick={() => (locked ? (window.location.href = '/#pricing') : onCreate({ templateId: tpl.id, platform: 'ios' }))} className="group relative text-left rounded-2xl overflow-hidden border border-white/10 bg-white/[0.03] hover:border-white/25 hover:-translate-y-1 hover:shadow-2xl hover:shadow-violet-500/10 transition-all disabled:opacity-60">
+            <button key={tpl.id} disabled={!!creating} onClick={() => (locked ? onLocked?.() : onCreate({ templateId: tpl.id, platform: 'ios' }))} className={`group relative text-left rounded-2xl overflow-hidden border border-white/10 bg-white/[0.03] transition-all disabled:opacity-60 ${locked ? 'opacity-70' : 'hover:border-white/25 hover:-translate-y-1 hover:shadow-2xl hover:shadow-violet-500/10'}`}>
               {locked && (
                 <div className="absolute top-2.5 right-2.5 z-10 w-7 h-7 rounded-full bg-black/60 border border-white/20 grid place-items-center">
                   <Lock className="w-3.5 h-3.5 text-white" />
