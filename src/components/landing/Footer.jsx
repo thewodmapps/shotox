@@ -12,7 +12,6 @@ const COLS = [
       { label: 'Templates', to: '/#templates' },
       { label: 'Pricing', to: '/#pricing' },
       { label: 'FAQs', to: '/#faq' },
-      { label: 'Dashboard', to: '/projects' },
     ],
   },
   {
@@ -27,9 +26,9 @@ const COLS = [
 ];
 
 const SOCIAL = [
-  { icon: Linkedin, href: 'https://www.linkedin.com/in/your-profile', label: 'LinkedIn' },
-  { icon: Youtube, href: 'https://www.youtube.com/@yourchannel', label: 'YouTube' },
-  { icon: Globe, href: 'https://yourwebsite.com', label: 'Website' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/atravellerguy/', label: 'LinkedIn' },
+  { icon: Youtube, href: 'https://www.youtube.com/@thewodmapps', label: 'YouTube' },
+  { icon: Globe, href: 'https://apps.thewodm.com/', label: 'Website' },
 ];
 
 export default function Footer() {
