@@ -8,7 +8,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { isPro } from '@/lib/entitlements';
 import ExportOverlay from '@/components/editor/ExportOverlay';
 import UpgradeModal from '@/components/editor/UpgradeModal';
-import EditorTopbar from '@/components/editor/EditorTopbar';
+import Navbar from '@/components/landing/Navbar';
 import EditorRail from '@/components/editor/EditorRail';
 import EditorPanel from '@/components/editor/EditorPanel';
 import EditorStage from '@/components/editor/EditorStage';
@@ -144,8 +144,8 @@ export default function Editor() {
   const device = resolveDevice(project);
   const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject, isPro: pro, onLocked: () => setShowUpgrade(true) };
   return (
-    <div className="h-screen flex flex-col bg-[#08080d]">
-      <EditorTopbar project={project} status={status} exporting={exporting} onRename={(name) => updateProject({ name })} onExport={onExport} onShare={() => setShowShare(true)} onRetry={retrySave} />
+    <div className="h-screen flex flex-col bg-[#08080d] pt-16">
+      <Navbar variant="editor" project={project} status={status} exporting={exporting} onRename={(name) => updateProject({ name })} onExport={onExport} onShare={() => setShowShare(true)} onRetry={retrySave} />
       <div className="flex-1 min-h-0 flex flex-col md:flex-row relative">
         <EditorRail
           active={panel}

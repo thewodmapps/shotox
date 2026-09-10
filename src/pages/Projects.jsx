@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import { isPro } from '@/lib/entitlements';
 import { getTemplate, makeId, makeSlide, solid } from '@/lib/templates';
-import ProjectsHeader from '@/components/projects/ProjectsHeader';
+import Navbar from '@/components/landing/Navbar';
 import CreateCards from '@/components/projects/CreateCards';
 import TemplateGallery from '@/components/projects/TemplateGallery';
 import SavedDesigns from '@/components/projects/SavedDesigns';
@@ -58,8 +58,8 @@ export default function Projects() {
         <div className="absolute bottom-0 left-1/3 w-[380px] h-[380px] rounded-full bg-orange-500/10 blur-[130px]" />
       </div>
       <div className="relative z-10">
-        <ProjectsHeader />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 pb-28 md:pb-16 space-y-16 scroll-contain">
+        <Navbar />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-28 md:pb-16 space-y-16 scroll-contain">
           <CreateCards onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
           <SavedDesigns projects={projects} onDelete={remove} />
           <TemplateGallery onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
