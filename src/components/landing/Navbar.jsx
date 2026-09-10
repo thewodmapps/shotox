@@ -26,8 +26,7 @@ export default function Navbar() {
     if (location.pathname === '/') {
       document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
     } else {
-      navigate('/');
-      setTimeout(() => document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' }), 120);
+      navigate(`/${href}`);
     }
   };
 

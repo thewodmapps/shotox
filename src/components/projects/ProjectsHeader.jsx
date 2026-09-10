@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Crown, Check, Sparkles, Infinity as InfinityIcon, LogOut, UserCircle2 } from 'lucide-react';
 import { Brand } from '@/components/Logo';
 import { useAuth } from '@/lib/AuthContext';
@@ -32,18 +32,7 @@ export default function ProjectsHeader() {
   const badge = PLAN_BADGE[user?.plan];
   const [accountOpen, setAccountOpen] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
-  const goPricing = () => {
-    const scroll = () => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
-    if (location.pathname === '/') { scroll(); return; }
-    navigate('/');
-    let attempts = 0;
-    const poll = () => {
-      if (document.getElementById('pricing')) { scroll(); return; }
-      if (attempts++ < 60) setTimeout(poll, 30);
-    };
-    setTimeout(poll, 50);
-  };
+  const goPricing = () => navigate('/#pricing');
 
   return (
     <header className="sticky top-0 z-30 min-h-16 safe-top bg-[#08080d]/70 backdrop-blur-xl text-white flex items-center justify-between px-4 sm:px-6 border-b border-white/10 no-callout">
