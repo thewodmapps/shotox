@@ -209,11 +209,11 @@ export default function Navbar({
       </nav>
 
       {open && !isEditor && !appBar && (
-        <div className="md:hidden absolute top-16 inset-x-3 rounded-2xl bg-white border border-black/5 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.35)] p-5">
-          <div className="flex flex-col gap-2">
+        <div className="md:hidden absolute top-16 inset-x-3 rounded-2xl bg-white border border-black/5 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.35)] p-6">
+          <div className="flex flex-col gap-3">
             {!isEditor && LINKS.map((l) => {
               const isSection = l.href.startsWith('#');
-              const cls = 'px-3 py-3.5 rounded-xl text-sm text-[#0B0B12]/80 hover:bg-black/5 transition-colors';
+              const cls = 'px-3 py-4 rounded-xl text-sm text-[#0B0B12]/80 hover:bg-black/5 transition-colors';
               if (!isSection) return <Link key={l.href} to={l.href} onClick={() => setOpen(false)} className={cls}>{l.label}</Link>;
               return <a key={l.href} href={l.href} onClick={(e) => handleSection(e, l.href)} className={cls}>{l.label}</a>;
             })}
@@ -223,7 +223,7 @@ export default function Navbar({
               </button>
             )}
             {!isEditor && (
-              <Button asChild className="mt-3 rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white">
+              <Button asChild className="mt-4 rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white">
                 <Link to="/projects" onClick={() => setOpen(false)}>{isAuthenticated ? 'Dashboard' : 'Get started free'}</Link>
               </Button>
             )}
