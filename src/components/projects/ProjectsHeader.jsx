@@ -6,6 +6,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import AccountModal from '@/components/account/AccountModal';
 import MobileMenu from '@/components/mobile/MobileMenu';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const PLAN_BADGE = {
   monthly: {
@@ -47,6 +48,7 @@ export default function ProjectsHeader() {
             <Crown className="w-3.5 h-3.5 text-yellow-200" /> Upgrade
           </Link>
         )}
+        <ThemeToggle className="w-10 h-10 text-white hover:bg-white/10" />
         <button onClick={() => setAccountOpen(true)} className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-2 rounded-full bg-white/5 border border-white/10 text-white/80 hover:bg-white/10 hover:text-white transition-colors" title="Account">
           <UserCircle2 className="w-4 h-4" /> Account
         </button>

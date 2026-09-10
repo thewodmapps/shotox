@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import { isPro } from '@/lib/entitlements';
 import AccountModal from '@/components/account/AccountModal';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const PLAN_LABEL = { monthly: 'Pro Monthly', yearly: 'Pro Yearly', lifetime: 'Lifetime' };
 
@@ -79,9 +80,12 @@ export default function MobileMenu({ open, onClose }) {
           >
             <div className="flex items-center justify-between px-5 py-5 border-b border-white/10">
               <Brand to="/" size={30} textClass="text-white" />
-              <button onClick={onClose} className="w-10 h-10 grid place-items-center rounded-xl text-white/60 hover:bg-white/10 hover:text-white transition-colors" aria-label="Close menu">
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-1">
+                <ThemeToggle className="w-10 h-10 text-white/70 hover:bg-white/10 hover:text-white" />
+                <button onClick={onClose} className="w-10 h-10 grid place-items-center rounded-xl text-white/60 hover:bg-white/10 hover:text-white transition-colors" aria-label="Close menu">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             <div className="px-5 pt-5">
