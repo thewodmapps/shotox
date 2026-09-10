@@ -8,7 +8,7 @@ export default function Terms() {
       <Navbar />
       <div className="max-w-3xl mx-auto px-6 pt-32 pb-20">
         <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#0B0B12]">Terms of Service</h1>
-        <p className="mt-3 text-sm text-[#0B0B12]/45">Last updated September 9, 2026</p>
+        <p className="mt-3 text-sm text-[#0B0B12]/45">Last updated September 10, 2026</p>
 
         <div className="article-body max-w-none mt-8">
           <p>By using Shotox you agree to these Terms. If you do not agree, do not use the service.</p>
@@ -23,7 +23,7 @@ export default function Terms() {
           <p>You agree not to upload unlawful, infringing, or malicious content, and not to attempt to disrupt or reverse-engineer the service.</p>
 
           <h2>Subscriptions and refunds</h2>
-          <p>Pro plans are billed monthly or yearly through Stripe. The Lifetime plan is a one-time purchase. Refunds are handled on a case-by-case basis; contact us for help.</p>
+          <p>Pro plans are billed monthly or yearly through Stripe. The Lifetime plan is a one-time purchase. All purchases are final — we do not offer cancellations or refunds. Subscriptions remain active until the end of their paid billing period, and Lifetime access never expires.</p>
 
           <h2>Service availability</h2>
           <p>We strive for high availability but do not guarantee uninterrupted service. We may modify or discontinue features with reasonable notice.</p>

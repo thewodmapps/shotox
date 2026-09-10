@@ -126,7 +126,7 @@ const phonePos = (layout, pW, off, k) => {
   return { marginLeft: -pW / 2 + (x / 100) * BASE_W, top, transform: `rotate(${rot}deg)` };
 };
 
-const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, width = BASE_W, className = '' }, ref) {
+const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, width = BASE_W, className = '', watermark = false }, ref) {
   const dev = device || getDevice(deviceId);
   const h = slideHeight(dev);
   const scale = width / BASE_W;
@@ -214,6 +214,11 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
               </>
             )}
           </>
+        )}
+        {watermark && (
+          <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+            <span className="text-[10px] font-semibold tracking-wide text-white/85 px-2 py-0.5 rounded-full bg-black/35 backdrop-blur-sm">Shotox</span>
+          </div>
         )}
       </div>
     </div>

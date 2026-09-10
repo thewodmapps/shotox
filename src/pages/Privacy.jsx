@@ -8,7 +8,7 @@ export default function Privacy() {
       <Navbar />
       <div className="max-w-3xl mx-auto px-6 pt-32 pb-20">
         <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#0B0B12]">Privacy Policy</h1>
-        <p className="mt-3 text-sm text-[#0B0B12]/45">Last updated September 9, 2026</p>
+        <p className="mt-3 text-sm text-[#0B0B12]/45">Last updated September 10, 2026</p>
 
         <div className="article-body max-w-none mt-8">
           <p>Shotox ("we", "us", "our") operates the app screenshot generator at shotox.in. This Privacy Policy explains what information we collect and how we use it.</p>

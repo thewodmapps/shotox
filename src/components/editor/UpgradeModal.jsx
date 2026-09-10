@@ -17,9 +17,9 @@ export default function UpgradeModal({ open, onClose, onUpgrade }) {
           <div className="mx-auto w-14 h-14 grid place-items-center rounded-2xl bg-gradient-to-br from-violet-500/30 to-pink-500/30 border border-white/10">
             <Sparkles className="w-6 h-6 text-pink-300" />
           </div>
-          <h3 className="mt-5 font-display text-xl font-bold text-white tracking-tight">You're out of free downloads</h3>
+          <h3 className="mt-5 font-display text-xl font-bold text-white tracking-tight">This is a Pro feature</h3>
           <p className="mt-2 text-sm text-white/55 leading-relaxed">
-            The free plan includes <span className="text-white font-medium">1 download</span>. Upgrade to Pro for unlimited exports, all templates, and no watermark.
+            The free plan includes 2 devices with a watermark. Upgrade to Pro to unlock every device, all templates, watermark-free export, and AI copywriting.
           </p>
           <button
             onClick={onUpgrade}

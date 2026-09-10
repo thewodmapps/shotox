@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Smartphone, Tablet, ImagePlus, Settings, ArrowRight, Loader2 } from 'lucide-react';
+import { Smartphone, Tablet, ImagePlus, Settings, ArrowRight, Loader2, Lock } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import FormPreview from './FormPreview';
+import { FREE_DEVICE_IDS } from '@/lib/entitlements';
 
 const OPTIONS = [
   { key: 'ios-phone', title: 'App Store', sub: 'iPhone 6.7" · 1290×2796', form: 'phone', platform: 'ios', device: 'iphone-6.7', icon: Smartphone, tpl: 'aurora' },
@@ -14,7 +15,7 @@ const OPTIONS = [
   { key: 'custom', title: 'Custom Size', sub: 'Any dimensions', form: 'custom', platform: 'ios', device: 'custom', icon: Settings, tpl: 'aurora' },
 ];
 
-export default function CreateCards({ onCreate, creating, isPro }) {
+export default function CreateCards({ onCreate, creating, isPro, onLocked }) {
   const [customOpen, setCustomOpen] = useState(false);
   const [custom, setCustom] = useState({ w: 1080, h: 1920 });
 
@@ -26,7 +27,9 @@ export default function CreateCards({ onCreate, creating, isPro }) {
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {OPTIONS.map((o) => {
+          const locked = !isPro && !FREE_DEVICE_IDS.includes(o.device);
           const handle = () => {
+            if (locked) return onLocked?.();
             o.form === 'custom' ? setCustomOpen((v) => !v) : onCreate({ templateId: o.tpl, platform: o.platform, device: o.device });
           };
           return (
@@ -36,13 +39,18 @@ export default function CreateCards({ onCreate, creating, isPro }) {
             onClick={handle}
             className={`group relative text-left rounded-2xl bg-white/[0.04] border backdrop-blur-sm hover:bg-white/[0.07] hover:-translate-y-1 hover:shadow-2xl hover:shadow-violet-500/10 transition-all overflow-hidden disabled:opacity-60 disabled:hover:translate-y-0 ${
               o.form === 'custom' && customOpen ? 'border-violet-400/60 ring-2 ring-violet-500/30' : 'border-white/10 hover:border-white/20'
-            }`}
+            } ${locked ? 'opacity-60' : ''}`}
           >
             <div className="h-44 grid place-items-center bg-gradient-to-br from-[#16161e] to-[#0b0b10] relative overflow-hidden">
               <div className="absolute w-48 h-48 rounded-full" style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.22) 0%, transparent 70%)' }} />
               <div className="relative z-10"><FormPreview form={o.form} platform={o.platform} /></div>
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-violet-500/15 via-transparent to-pink-500/15" />
               {creating === o.platform && <Loader2 className="w-4 h-4 animate-spin text-white absolute top-2.5 right-2.5 z-10" />}
+              {locked && (
+                <div className="absolute top-2.5 right-2.5 z-10 grid place-items-center w-7 h-7 rounded-lg bg-black/50 border border-white/15 text-white/80">
+                  <Lock className="w-3.5 h-3.5" />
+                </div>
+              )}
             </div>
             <div className="p-4 flex items-center gap-3">
               <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500/25 to-pink-500/25 border border-white/10 text-white grid place-items-center shrink-0">

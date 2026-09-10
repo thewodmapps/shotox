@@ -9,6 +9,7 @@ import CreateCards from '@/components/projects/CreateCards';
 import TemplateGallery from '@/components/projects/TemplateGallery';
 import SavedDesigns from '@/components/projects/SavedDesigns';
 import WelcomeModal from '@/components/projects/WelcomeModal';
+import UpgradeModal from '@/components/editor/UpgradeModal';
 
 export default function Projects() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function Projects() {
   const pro = isPro(user);
   const [projects, setProjects] = useState([]);
   const [creating, setCreating] = useState(null);
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   useEffect(() => { base44.entities.Project.list('-updated_date', 50).then(setProjects); }, []);
 
@@ -58,11 +60,12 @@ export default function Projects() {
       <div className="relative z-10">
         <ProjectsHeader />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 space-y-16">
-          <CreateCards onCreate={create} creating={creating} isPro={pro} />
+          <CreateCards onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
           <SavedDesigns projects={projects} onDelete={remove} />
           <TemplateGallery onCreate={create} creating={creating} isPro={pro} />
         </div>
       </div>
+      <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} onUpgrade={() => navigate('/#pricing')} />
       <WelcomeModal />
     </div>
   );

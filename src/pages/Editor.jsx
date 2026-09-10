@@ -5,7 +5,7 @@ import { base44 } from '@/api/base44Client';
 import { makeId, resolveDevice } from '@/lib/templates';
 import { exportSlide, exportAllSlides, wait } from '@/lib/exportSlides';
 import { useAuth } from '@/lib/AuthContext';
-import { isPro, FREE_MAX_DOWNLOADS } from '@/lib/entitlements';
+import { isPro } from '@/lib/entitlements';
 import ExportOverlay from '@/components/editor/ExportOverlay';
 import UpgradeModal from '@/components/editor/UpgradeModal';
 import EditorTopbar from '@/components/editor/EditorTopbar';
@@ -19,7 +19,7 @@ import ShareModal from '@/components/projects/ShareModal';
 export default function Editor() {
   const id = new URLSearchParams(window.location.search).get('id');
   const navigate = useNavigate();
-  const { user, checkUserAuth } = useAuth();
+  const { user } = useAuth();
   const pro = isPro(user);
   const [project, setProject] = useState(null);
   const [missing, setMissing] = useState(false);
@@ -97,10 +97,6 @@ export default function Editor() {
   const move = (from, to) => { const s = [...project.slides]; const [m] = s.splice(from, 1); s.splice(to, 0, m); updateProject({ slides: s }); setSel(to); };
 
   const onExport = async (which, format) => {
-    if (!pro && (user?.free_downloads || 0) >= FREE_MAX_DOWNLOADS) {
-      setShowUpgrade(true);
-      return;
-    }
     exportTarget.current = 0;
     setExportPct(0);
     setExporting(true);
@@ -113,10 +109,6 @@ export default function Editor() {
         await exportAllSlides(els, device, base, format, onProgress);
       } else {
         await exportSlide(exportRefs.current[sel], device, String(sel + 1), format, onProgress);
-      }
-      if (!pro) {
-        await base44.auth.updateMe({ free_downloads: (user?.free_downloads || 0) + 1 });
-        checkUserAuth();
       }
       exportTarget.current = 100;
       await wait(400);
@@ -134,7 +126,7 @@ export default function Editor() {
 
   const slide = project.slides[sel] || project.slides[0];
   const device = resolveDevice(project);
-  const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject };
+  const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject, isPro: pro, onLocked: () => setShowUpgrade(true) };
   return (
     <div className="h-screen flex flex-col bg-[#08080d]">
       <EditorTopbar project={project} status={status} exporting={exporting} onRename={(name) => updateProject({ name })} onExport={onExport} onShare={() => setShowShare(true)} />
@@ -148,12 +140,12 @@ export default function Editor() {
           }}
         />
         <EditorPanel active={panel} mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} {...panelProps} />
-        <EditorStage project={project} selected={sel} onSelect={setSel} onAdd={addSlide} onDuplicate={duplicate} onDelete={remove} onMove={move} />
+        <EditorStage project={project} selected={sel} onSelect={setSel} onAdd={addSlide} onDuplicate={duplicate} onDelete={remove} onMove={move} watermark={!pro} />
       </div>
       <UndoBar undo={undo} onUndo={restoreSlide} />
       <div className="fixed -left-[5000px] top-0 pointer-events-none" aria-hidden>
         {project.slides.map((s, i) => (
-          <SlideCanvas key={s.id} slide={s} device={device} ref={(el) => (exportRefs.current[i] = el)} />
+          <SlideCanvas key={s.id} slide={s} device={device} watermark={!pro} ref={(el) => (exportRefs.current[i] = el)} />
         ))}
       </div>
       {exporting && <ExportOverlay pct={exportPct} />}

@@ -13,7 +13,7 @@ const PLANS = [
     name: 'Free',
     price: '$0',
     period: 'forever',
-    features: ['Any 1 device only', '3 starter templates', 'Up to 3 projects (5 slides each)', '1 download, then upgrade', 'Shotox watermark', 'Personal use only', 'Community support'],
+    features: ['2 devices — iPhone & Android', '3 starter templates', 'Up to 3 projects', 'All 8 slides per template', 'Unlimited watermarked downloads', 'Shotox watermark', 'Personal use only', 'Community support'],
     cta: 'Start free',
   },
   {
@@ -81,7 +81,7 @@ export default function Pricing() {
         <div className="text-center max-w-2xl mx-auto mb-14">
           <p className="text-sm font-medium text-pink-400 mb-3">Pricing</p>
           <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight">Simple pricing. Serious results.</h2>
-          <p className="mt-3 text-white/55">Start free with one device. Upgrade anytime to unlock every device, template and export.</p>
+          <p className="mt-3 text-white/55">Start free with two devices. Upgrade anytime to unlock every device, template and export.</p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
           {PLANS.map((p) => (

@@ -5,7 +5,7 @@ import { resolveDevice, slideHeight, BASE_W } from '@/lib/templates';
 import SlideCanvas from './SlideCanvas';
 import SlideToolbar from './SlideToolbar';
 
-export default function EditorStage({ project, selected, onSelect, onAdd, onDuplicate, onDelete, onMove }) {
+export default function EditorStage({ project, selected, onSelect, onAdd, onDuplicate, onDelete, onMove, watermark }) {
   const device = resolveDevice(project);
   const sH = slideHeight(device);
   const wrapRef = useRef(null);
@@ -37,6 +37,7 @@ export default function EditorStage({ project, selected, onSelect, onAdd, onDupl
                 slide={sld}
                 device={device}
                 width={260}
+                watermark={watermark}
                 className={`rounded-xl overflow-hidden cursor-pointer transition-shadow ${
                   selected === i ? 'ring-2 ring-violet-400 shadow-[0_0_0_6px_rgba(139,92,246,0.15)]' : 'ring-1 ring-white/10 hover:ring-white/30'
                 }`}
@@ -76,6 +77,7 @@ export default function EditorStage({ project, selected, onSelect, onAdd, onDupl
                 slide={slide}
                 device={device}
                 width={mobileW}
+                watermark={watermark}
                 className="rounded-xl overflow-hidden ring-2 ring-violet-400 shadow-[0_0_0_6px_rgba(139,92,246,0.15)]"
               />
               <span className="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-black/50 text-white/80">{selected + 1}</span>
