@@ -8,6 +8,7 @@ import ProjectsHeader from '@/components/projects/ProjectsHeader';
 import CreateCards from '@/components/projects/CreateCards';
 import TemplateGallery from '@/components/projects/TemplateGallery';
 import SavedDesigns from '@/components/projects/SavedDesigns';
+import WelcomeModal from '@/components/projects/WelcomeModal';
 
 export default function Projects() {
   const navigate = useNavigate();
@@ -62,6 +63,7 @@ export default function Projects() {
           <TemplateGallery onCreate={create} creating={creating} isPro={pro} />
         </div>
       </div>
+      <WelcomeModal />
     </div>
   );
 }

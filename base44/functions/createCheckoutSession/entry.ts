@@ -26,7 +26,7 @@ export default async function (req: Request): Promise<Response> {
     params.set("line_items[0][quantity]", "1");
     if (userId) params.set("client_reference_id", userId);
     if (email) params.set("customer_email", email);
-    params.set("success_url", "https://shotox.in/projects?upgraded=1");
+    params.set("success_url", `https://shotox.in/projects?upgraded=1&plan=${body.plan}`);
     params.set("cancel_url", "https://shotox.in/#pricing");
     params.set("metadata[base44_app_id]", appId);
     if (userId) params.set("metadata[user_id]", userId);
