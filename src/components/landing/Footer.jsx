@@ -4,7 +4,7 @@ import { Brand } from '@/components/Logo';
 import { Image } from '@/components/ui/image';
 
 const PLAY_BADGE_URL =
-  'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/4996145b6_get-it-on-google-play-badge-logo-vector-png.jpg';
+  'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/483adea6b_1.png';
 // TODO: replace with your actual Google Play listing URL once published.
 const PLAY_STORE_URL = 'https://play.google.com/store';
 
