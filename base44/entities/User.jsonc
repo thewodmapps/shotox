@@ -10,7 +10,9 @@
       "type": "string",
       "enum": [
         "free",
-        "pro"
+        "monthly",
+        "yearly",
+        "lifetime"
       ],
       "default": "free"
     },

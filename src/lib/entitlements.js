@@ -5,7 +5,7 @@ export const FREE_MAX_PROJECTS = 3;
 export const FREE_MAX_SLIDES = 5;
 export const FREE_MAX_DOWNLOADS = 1;
 
-export const isPro = (user) => user?.plan === 'pro';
+export const isPro = (user) => !!user?.plan && user.plan !== 'free';
 
 export const canUseDevice = (user, deviceId) => isPro(user) || FREE_DEVICE_IDS.includes(deviceId);
 export const canUseTemplate = (user, id) => isPro(user) || FREE_TEMPLATE_IDS.includes(id);

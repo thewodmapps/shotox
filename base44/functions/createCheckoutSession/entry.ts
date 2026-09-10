@@ -30,9 +30,11 @@ export default async function (req: Request): Promise<Response> {
     params.set("cancel_url", "https://shotox.in/#pricing");
     params.set("metadata[base44_app_id]", appId);
     if (userId) params.set("metadata[user_id]", userId);
+    params.set("metadata[plan]", body.plan);
     if (plan.mode === "subscription") {
       params.set("subscription_data[metadata][base44_app_id]", appId);
       if (userId) params.set("subscription_data[metadata][user_id]", userId);
+      params.set("subscription_data[metadata][plan]", body.plan);
     }
 
     const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {

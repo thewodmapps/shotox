@@ -39,16 +39,18 @@ export default async function (req: Request): Promise<Response> {
     const event = JSON.parse(body);
     const base44 = createClientFromRequest(req);
 
+    const VALID_PLANS = ["monthly", "yearly", "lifetime"];
     if (event.type === "checkout.session.completed") {
       const s = event.data.object;
       const userId = s.client_reference_id || s.metadata?.user_id;
       const customerId = s.customer || null;
+      const plan = VALID_PLANS.includes(s.metadata?.plan) ? s.metadata.plan : "yearly";
       if (userId) {
         await base44.asServiceRole.entities.User.update(userId, {
-          plan: "pro",
+          plan,
           stripe_customer_id: customerId,
         });
-        console.log("Entitlement granted: pro for user", userId);
+        console.log("Entitlement granted:", plan, "for user", userId);
       }
     } else if (event.type === "customer.subscription.deleted") {
       const sub = event.data.object;
@@ -62,8 +64,9 @@ export default async function (req: Request): Promise<Response> {
       const userId = sub.metadata?.user_id;
       if (userId) {
         const active = sub.status === "active" || sub.status === "trialing";
+        const plan = VALID_PLANS.includes(sub.metadata?.plan) ? sub.metadata.plan : "yearly";
         await base44.asServiceRole.entities.User.update(userId, {
-          plan: active ? "pro" : "free",
+          plan: active ? plan : "free",
         });
       }
     }
