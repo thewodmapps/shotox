@@ -10,7 +10,6 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
-import SiteLayout from '@/components/SiteLayout';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -64,23 +63,21 @@ const AuthenticatedApp = () => {
           transition={reduce ? { duration: 0 } : routeTransition}
         >
           <Routes location={location}>
-      <Route element={<SiteLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/logo-download" element={<LogoDownload />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:slug" element={<BlogPost />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="/:slug" element={<SharedDesign />} />
-        <Route element={<ProtectedRoute />}>
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/editor" element={<Editor />} />
-        </Route>
-      </Route>
+      <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/logo-download" element={<LogoDownload />} />
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:slug" element={<BlogPost />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/:slug" element={<SharedDesign />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/editor" element={<Editor />} />
+      </Route>
       <Route path="*" element={<PageNotFound />} />
           </Routes>
         </motion.div>
