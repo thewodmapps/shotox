@@ -38,7 +38,6 @@ export default function Editor() {
   const undoTimer = useRef(null);
   const blobCache = useRef({ sig: null, png: null, jpeg: null, ready: false });
   const renderToken = useRef(0);
-  const isRendering = useRef(false);
 
   useEffect(() => {
     if (!id) return setMissing(true);
@@ -86,9 +85,8 @@ export default function Editor() {
     return () => clearInterval(id);
   }, [exporting]);
 
-  // Pre-render the current slide's PNG in the background, but only after the
-  // user has stopped editing for a while — html2canvas is heavy and running it
-  // on every keystroke freezes the UI. JPEG downloads fall back to on-demand.
+  // Pre-render the current slide in the background (debounced) so tapping
+  // download opens the save sheet instantly instead of waiting for html2canvas.
   useEffect(() => {
     if (!project || !project.slides[sel]) return;
     const device = resolveDevice(project);
@@ -100,17 +98,13 @@ export default function Editor() {
     const myToken = ++renderToken.current;
     blobCache.current = { sig, png: null, jpeg: null, ready: false };
     const handle = setTimeout(async () => {
-      // Don't start a render while the user is still editing or one is in flight.
-      if (myToken !== renderToken.current || isRendering.current) return;
-      isRendering.current = true;
-      try {
-        const png = await renderSlideBlob(el, device, 'image/png').catch(() => null);
-        if (myToken !== renderToken.current) return;
-        blobCache.current = { sig, png, jpeg: null, ready: true };
-      } finally {
-        isRendering.current = false;
-      }
-    }, 1500);
+      if (myToken !== renderToken.current) return;
+      const png = await renderSlideBlob(el, device, 'image/png').catch(() => null);
+      if (myToken !== renderToken.current) return;
+      const jpeg = await renderSlideBlob(el, device, 'image/jpeg').catch(() => null);
+      if (myToken !== renderToken.current) return;
+      blobCache.current = { sig, png, jpeg, ready: true };
+    }, 500);
     return () => clearTimeout(handle);
   }, [project, sel, pro]);
 
