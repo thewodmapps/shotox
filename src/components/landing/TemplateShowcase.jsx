@@ -28,7 +28,8 @@ export default function TemplateShowcase() {
           <div>
             <p className="text-sm font-medium text-pink-400 mb-3">Templates</p>
             <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight">Pick a look. <span className="shotox-gradient-text">Make it yours.</span></h2>
-            <p className="mt-3 text-white/55 max-w-md">100 designer templates across iPhone, iPad and Android — every device, every category.</p>
+            <p className="mt-3 text-white/55 max-w-md">Start with a professionally designed template, customize it for your app, and export store-ready screenshots in minutes.</p>
+            <p className="mt-2 text-sm text-white/40">100 designer templates across iPhone, iPad, and Android — with styles for different apps and categories.</p>
           </div>
           <Link to={dest} className="inline-flex items-center gap-1.5 text-sm font-medium text-white hover:gap-3 transition-all whitespace-nowrap">
             Browse all templates <ArrowRight className="w-4 h-4" />
@@ -50,12 +51,15 @@ export default function TemplateShowcase() {
           ))}
         </div>
         <TemplateMarquee />
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-white/40">
-          <span>iPhone 6.7" / 6.5" / 5.5"</span><span className="hidden sm:inline">•</span>
-          <span>iPad 13" / 11"</span><span className="hidden sm:inline">•</span>
-          <span>Android Phone & Tablet</span><span className="hidden sm:inline">•</span>
-          <span>Google Play Feature Graphic</span><span className="hidden sm:inline">•</span>
-          <span>Custom sizes</span>
+        <div className="mt-10 text-center">
+          <p className="text-sm font-medium text-white/60 mb-3">Create screenshots for every major store format</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-white/40">
+            <span>iPhone 6.7" / 6.5" / 5.5"</span><span className="hidden sm:inline">•</span>
+            <span>iPad 13" / 11"</span><span className="hidden sm:inline">•</span>
+            <span>Android Phone & Tablet</span><span className="hidden sm:inline">•</span>
+            <span>Google Play Feature Graphic</span><span className="hidden sm:inline">•</span>
+            <span>Custom sizes</span>
+          </div>
         </div>
       </div>
     </section>

@@ -115,6 +115,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = async (data) => {
+    const updated = await base44.auth.updateMe(data);
+    setUser(updated);
+    return updated;
+  };
+
   const navigateToLogin = () => {
     // Use the SDK's redirectToLogin method
     base44.auth.redirectToLogin(window.location.href);
@@ -130,6 +136,7 @@ export const AuthProvider = ({ children }) => {
       appPublicSettings,
       authChecked,
       logout,
+      updateUser,
       navigateToLogin,
       checkUserAuth,
       checkAppState

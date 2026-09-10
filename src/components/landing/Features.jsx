@@ -3,12 +3,12 @@ import { motion } from 'framer-motion';
 import { Smartphone, LayoutTemplate, Download, Palette, Layers, Wand2 } from 'lucide-react';
 
 const FEATURES = [
-  { icon: Wand2, title: 'AI copywriting', text: 'AI writes high-converting headlines & subheadings tailored to your app category — never start from a blank page.', ai: true },
-  { icon: Smartphone, title: 'Real device frames', text: 'iPhone 6.7", 6.5", 5.5" and Google Play sizes with pixel-exact output.' },
-  { icon: LayoutTemplate, title: 'Designer templates', text: 'Start from curated looks — 3D tilted, dark, colorful or minimal.' },
-  { icon: Palette, title: 'Backgrounds & fonts', text: 'Solid colors, rich gradients and five display typefaces.' },
-  { icon: Layers, title: 'Multi-slide stories', text: 'Build the full set side by side. Duplicate, reorder, delete.' },
-  { icon: Download, title: 'One-click export', text: 'PNG or JPEG at the exact resolution each store expects.' },
+  { icon: Wand2, title: 'AI copywriting', text: 'Generate marketing-focused screenshot copy and refine it to match your app.', ai: true },
+  { icon: Smartphone, title: 'Real device frames', text: 'Show your app inside realistic iPhone, iPad, and Android device frames.' },
+  { icon: LayoutTemplate, title: 'Designer templates', text: 'Start with professionally designed layouts instead of designing from a blank canvas.' },
+  { icon: Palette, title: 'Backgrounds & fonts', text: 'Customize colors, typography, backgrounds, and visual styling.' },
+  { icon: Layers, title: 'Multi-slide stories', text: "Create complete screenshot sets that tell your app's story across multiple slides." },
+  { icon: Download, title: 'One-click export', text: 'Export polished PNG or JPEG screenshots at store-ready dimensions.' },
 ];
 
 export default function Features() {
@@ -16,9 +16,9 @@ export default function Features() {
     <section id="features" className="py-24 px-6 bg-[#FAFAFC]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <p className="text-sm font-medium text-violet-600 mb-3">Everything you need</p>
-          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-[#0B0B12]">From raw screenshot to store-ready in minutes</h2>
-          <p className="mt-4 text-[#0B0B12]/60 leading-relaxed">Shotox pairs AI with designer-grade templates — describe your app and let AI draft the marketing copy, then fine-tune every detail and export pixel-perfect screenshots.</p>
+          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-[#0B0B12]">Everything you need</h2>
+          <p className="mt-3 text-xl font-display font-medium text-[#0B0B12]/80">From raw screenshot to store-ready in minutes</p>
+          <p className="mt-4 text-[#0B0B12]/60 leading-relaxed">Shotox combines designer-ready templates, real device frames, AI-powered copy, and exact store sizes so you can create polished App Store and Google Play screenshots without starting from scratch.</p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {FEATURES.map((f, i) => (

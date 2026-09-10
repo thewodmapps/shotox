@@ -5,7 +5,7 @@ import { base44 } from '@/api/base44Client';
 import { makeId, resolveDevice } from '@/lib/templates';
 import { exportSlide, exportAllSlides, wait } from '@/lib/exportSlides';
 import { useAuth } from '@/lib/AuthContext';
-import { isPro } from '@/lib/entitlements';
+import { isPro, getFreeDevice } from '@/lib/entitlements';
 import ExportOverlay from '@/components/editor/ExportOverlay';
 import UpgradeModal from '@/components/editor/UpgradeModal';
 import EditorTopbar from '@/components/editor/EditorTopbar';
@@ -142,7 +142,7 @@ export default function Editor() {
 
   const slide = project.slides[sel] || project.slides[0];
   const device = resolveDevice(project);
-  const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject, isPro: pro, onLocked: () => setShowUpgrade(true) };
+  const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject, isPro: pro, freeDevice: getFreeDevice(user), onLocked: () => setShowUpgrade(true) };
   return (
     <div className="h-screen flex flex-col bg-[#08080d]">
       <EditorTopbar project={project} status={status} exporting={exporting} onRename={(name) => updateProject({ name })} onExport={onExport} onShare={() => setShowShare(true)} onRetry={retrySave} />

@@ -56,7 +56,7 @@ export default function Navbar() {
         </div>
         <div className="flex items-center gap-1">
           <Button asChild className="rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white px-5 hidden sm:inline-flex">
-            <Link to="/projects">{isAuthenticated ? 'Dashboard' : 'Get started free'}</Link>
+            <Link to="/projects">{isAuthenticated ? 'Dashboard' : 'Create your first screenshot free'}</Link>
           </Button>
           <button
             aria-label="Toggle menu"
@@ -88,7 +88,7 @@ export default function Navbar() {
               );
             })}
             <Button asChild className="mt-2 rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white">
-              <Link to="/projects" onClick={() => setOpen(false)}>{isAuthenticated ? 'Dashboard' : 'Get started free'}</Link>
+              <Link to="/projects" onClick={() => setOpen(false)}>{isAuthenticated ? 'Dashboard' : 'Create your first screenshot free'}</Link>
             </Button>
           </div>
         </div>

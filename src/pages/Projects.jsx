@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
-import { isPro } from '@/lib/entitlements';
+import { isPro, getFreeDevice } from '@/lib/entitlements';
 import { getTemplate, makeId, makeSlide, solid } from '@/lib/templates';
 import ProjectsHeader from '@/components/projects/ProjectsHeader';
 import CreateCards from '@/components/projects/CreateCards';
@@ -13,7 +13,7 @@ import UpgradeModal from '@/components/editor/UpgradeModal';
 
 export default function Projects() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const pro = isPro(user);
   const [projects, setProjects] = useState([]);
   const [creating, setCreating] = useState(null);
@@ -39,6 +39,9 @@ export default function Projects() {
         custom_w: devId === 'custom' ? customW : undefined,
         custom_h: devId === 'custom' ? customH : undefined,
       });
+      if (!pro && !user?.free_device) {
+        updateUser({ free_device: devId }).catch(() => {});
+      }
       navigate(`/editor?id=${p.id}`);
     } finally {
       setCreating(null);
@@ -60,7 +63,7 @@ export default function Projects() {
       <div className="relative z-10">
         <ProjectsHeader />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 pb-28 md:pb-16 space-y-16 scroll-contain">
-          <CreateCards onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
+          <CreateCards onCreate={create} creating={creating} isPro={pro} freeDevice={getFreeDevice(user)} onLocked={() => setShowUpgrade(true)} />
           <SavedDesigns projects={projects} onDelete={remove} />
           <TemplateGallery onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
         </div>
