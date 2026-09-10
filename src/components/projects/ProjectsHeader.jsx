@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Crown, Check, Sparkles, Infinity as InfinityIcon, LogOut, UserCircle2, Menu } from 'lucide-react';
+import { Crown, Check, Sparkles, Infinity as InfinityIcon, LogOut, UserCircle2 } from 'lucide-react';
 import { Brand } from '@/components/Logo';
 import { useAuth } from '@/lib/AuthContext';
 import { base44 } from '@/api/base44Client';
 import AccountModal from '@/components/account/AccountModal';
-import MobileMenu from '@/components/mobile/MobileMenu';
 
 const PLAN_BADGE = {
   monthly: {
@@ -32,12 +31,11 @@ export default function ProjectsHeader() {
   const { user } = useAuth();
   const badge = PLAN_BADGE[user?.plan];
   const [accountOpen, setAccountOpen] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-30 min-h-16 safe-top bg-[#08080d]/70 backdrop-blur-xl text-white flex items-center justify-between px-4 sm:px-6 border-b border-white/10 no-callout">
       <Brand to="/" size={26} textClass="text-white" />
-      <div className="hidden md:flex items-center gap-2">
+      <div className="flex items-center gap-2">
         {badge ? (
           <span className={`inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-full ${badge.className}`}>
             <badge.icon className={`w-4 h-4 ${badge.iconClass}`} /> {badge.label}
@@ -54,11 +52,7 @@ export default function ProjectsHeader() {
           <LogOut className="w-4 h-4" /> Sign out
         </button>
       </div>
-      <button onClick={() => setMenuOpen(true)} className="md:hidden w-11 h-11 grid place-items-center rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-colors no-callout" aria-label="Open menu">
-        <Menu className="w-5 h-5" />
-      </button>
       <AccountModal open={accountOpen} onClose={() => setAccountOpen(false)} />
-      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
     </header>
   );
 }
