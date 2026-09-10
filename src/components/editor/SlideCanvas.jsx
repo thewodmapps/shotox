@@ -218,9 +218,9 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
           </>
         )}
         {watermark && (
-          <div style={{ position: 'absolute', left: (BASE_W - 92) / 2, bottom: 12, width: 92, height: 28, borderRadius: 9999, background: 'rgba(0,0,0,0.42)', zIndex: 30, pointerEvents: 'none', textAlign: 'center', lineHeight: '28px', whiteSpace: 'nowrap' }}>
-            <img src={WATERMARK_LOGO} alt="" crossOrigin="anonymous" style={{ width: 18, height: 18, borderRadius: 5, objectFit: 'cover', verticalAlign: 'middle', marginRight: 6 }} />
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#ffffff', letterSpacing: '0.04em', fontFamily: 'Sora, Inter, sans-serif', verticalAlign: 'middle' }}>Shotox</span>
+          <div style={{ position: 'absolute', left: (BASE_W - 92) / 2, bottom: 12, width: 92, height: 28, borderRadius: 9999, background: 'rgba(0,0,0,0.42)', zIndex: 30, pointerEvents: 'none' }}>
+            <img src={WATERMARK_LOGO} alt="" crossOrigin="anonymous" style={{ position: 'absolute', left: 10, top: 5, width: 18, height: 18, borderRadius: 5, objectFit: 'cover', display: 'block' }} />
+            <span style={{ position: 'absolute', left: 40, top: 3, width: 42, height: 18, lineHeight: '18px', fontSize: 12, fontWeight: 700, color: '#ffffff', letterSpacing: '0.04em', fontFamily: 'Sora, Inter, sans-serif', whiteSpace: 'nowrap' }}>Shotox</span>
           </div>
         )}
       </div>
