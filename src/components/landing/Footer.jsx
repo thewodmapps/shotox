@@ -1,6 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Brand } from '@/components/Logo';
+import { Image } from '@/components/ui/image';
+
+const PLAY_BADGE_URL =
+  'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/4996145b6_get-it-on-google-play-badge-logo-vector-png.jpg';
+// TODO: replace with your actual Google Play listing URL once published.
+const PLAY_STORE_URL = 'https://play.google.com/store';
 
 export default function Footer() {
   return (
@@ -10,6 +16,17 @@ export default function Footer() {
           <div className="md:col-span-2">
             <Brand to="/" size={28} textClass="text-white" />
             <p className="mt-4 text-sm max-w-sm leading-relaxed">Create beautiful, customized app screenshots for the App Store & Google Play — in minutes, not days.</p>
+            <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block rounded-lg overflow-hidden border border-white/15 hover:opacity-90 transition-opacity">
+              <Image
+                src={PLAY_BADGE_URL}
+                alt="Get it on Google Play"
+                fittingType="fit"
+                width={150}
+                height={45}
+                className="block bg-black"
+                style={{ width: 150, height: 45 }}
+              />
+            </a>
           </div>
           <div>
             <h4 className="text-white text-sm font-semibold mb-4">Product</h4>
