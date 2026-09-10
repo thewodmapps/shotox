@@ -13,7 +13,7 @@ const PLANS = [
     name: 'Free',
     price: '$0',
     period: 'forever',
-    features: ['2 devices — iPhone & Android', '3 starter templates', 'Up to 3 projects', 'All 8 slides per template', 'Unlimited watermarked downloads', 'Shotox watermark', 'Personal use only', 'Community support'],
+    features: ['2 devices — iPhone & Android', '3 starter templates', 'Up to 3 projects', 'All 8 slides per template', 'Shotox watermark', 'Personal use only'],
     cta: 'Start free',
   },
   {
