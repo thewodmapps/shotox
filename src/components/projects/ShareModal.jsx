@@ -33,8 +33,6 @@ export default function ShareModal({ open, url, title = 'My Shotox design', proj
     } catch { /* clipboard unavailable */ }
   };
 
-  const openShare = (fn) => window.open(fn(brandUrl, title), '_blank', 'noopener,noreferrer,width=620,height=540');
-
   return (
     <div className="fixed inset-0 z-50 grid place-items-center p-4 bg-black/70 backdrop-blur-sm" onClick={onClose}>
       <div
@@ -50,9 +48,11 @@ export default function ShareModal({ open, url, title = 'My Shotox design', proj
 
         <div className="grid grid-cols-3 gap-3 mb-5">
           {SOCIAL.map(({ id, label, brand, icon: Icon, share }) => (
-            <button
+            <a
               key={id}
-              onClick={() => openShare(share)}
+              href={share(brandUrl, title)}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex flex-col items-center gap-1.5 group"
             >
               <span
@@ -66,7 +66,7 @@ export default function ShareModal({ open, url, title = 'My Shotox design', proj
                 </span>
               </span>
               <span className="text-[11px] text-white/60 group-hover:text-white transition-colors">{label}</span>
-            </button>
+            </a>
           ))}
         </div>
 
