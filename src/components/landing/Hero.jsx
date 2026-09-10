@@ -18,17 +18,17 @@ export default function Hero() {
 
       <div className="relative max-w-6xl mx-auto text-center">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-lime-300 text-[#0B0B12] text-xs font-semibold">
-          <Sparkles className="w-3.5 h-3.5" /> iPhone, iPad, Tablet & Android — store-ready sizes
+          <Sparkles className="w-3.5 h-3.5" /> iPhone • iPad • Android • Tablet — Store-ready sizes
         </motion.div>
         <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="font-display font-bold tracking-[-0.04em] leading-[0.95] text-6xl sm:text-7xl lg:text-8xl mt-7">
           App Screenshot<br /><span className="shotox-gradient-text">Generator</span>
         </motion.h1>
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-7 text-lg text-white/65 max-w-xl mx-auto">
-          Create beautiful, customized app screenshots for your App Store & Google Play Store — in minutes, not days.
+          Create beautiful, customized app screenshots for the App Store & Google Play — in minutes, not days.
         </motion.p>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Button asChild size="lg" className="rounded-full h-12 px-7 bg-white text-[#0B0B12] hover:bg-white/90 text-base shadow-[0_20px_50px_-15px_rgba(255,255,255,0.4)]">
-            <Link to="/projects">{isAuthenticated ? 'Dashboard' : 'Get started free'} <ArrowRight className="w-4 h-4 ml-2" /></Link>
+            <Link to="/projects">{isAuthenticated ? 'Dashboard' : 'Create your first screenshot free'} <ArrowRight className="w-4 h-4 ml-2" /></Link>
           </Button>
           <a href="#features" className="text-sm text-white/60 hover:text-white transition-colors px-4 py-3">See how it works</a>
         </motion.div>
