@@ -33,7 +33,7 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
     }, 260);
   };
   return (
-    <header className="fixed top-3 inset-x-0 z-40 flex justify-center px-3">
+    <header className="fixed inset-x-0 z-40 flex justify-center px-3" style={{ top: 'calc(env(safe-area-inset-top) + 0.75rem)' }}>
       <nav className="w-full max-w-5xl flex items-center gap-2 rounded-2xl bg-white/90 backdrop-blur-xl border border-black/5 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.35)] pl-2 pr-2 py-2 no-callout">
         <Link to="/projects" className="w-10 h-10 grid place-items-center rounded-xl hover:bg-black/5 transition-colors shrink-0" aria-label="Back to projects">
           <ArrowLeft className="w-4 h-4" />
