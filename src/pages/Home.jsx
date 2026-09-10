@@ -2,7 +2,6 @@ import React from 'react';
 import Navbar from '@/components/landing/Navbar';
 import Hero from '@/components/landing/Hero';
 import Features from '@/components/landing/Features';
-import HowItWorks from '@/components/landing/HowItWorks';
 import TemplateShowcase from '@/components/landing/TemplateShowcase';
 import BlogSection from '@/components/landing/BlogSection';
 import FaqSection from '@/components/landing/FaqSection';
@@ -15,7 +14,6 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Features />
-      <HowItWorks />
       <TemplateShowcase />
       <BlogSection />
       <Pricing />
