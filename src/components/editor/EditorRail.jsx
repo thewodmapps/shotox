@@ -12,19 +12,19 @@ export const PANELS = [
 
 export default function EditorRail({ active, mobileOpen, onChange }) {
   return (
-    <nav className="min-h-14 md:h-auto flex md:flex-col md:w-[72px] shrink-0 bg-[#0B0B12] border-t md:border-t-0 md:border-r border-white/10 text-white/60 md:py-3 order-last md:order-first z-10 safe-bottom no-callout">
+    <nav className="shrink-0 bg-[#0B0B12] border-t md:border-t-0 md:border-r border-white/10 text-white/60 z-10 safe-bottom no-callout h-14 w-full md:h-auto md:w-[76px] md:py-3 flex md:flex-col order-last md:order-first">
       {PANELS.map((p) => {
         const isActive = active === p.id;
         return (
           <button
             key={p.id}
             onClick={() => onChange(p.id)}
-            className={`flex-1 md:flex-none flex flex-col items-center justify-center gap-1 md:py-3.5 text-sm transition-colors ${
+            className={`flex-1 md:flex-none min-w-0 flex flex-col items-center justify-center gap-1 py-2 md:py-3 transition-colors ${
               isActive && mobileOpen ? 'text-white bg-white/10' : isActive ? 'text-white' : 'hover:text-white hover:bg-white/5'
             }`}
           >
-            <p.icon className="w-5 h-5" />
-            <span className="whitespace-nowrap">{p.label}</span>
+            <p.icon className="w-5 h-5 shrink-0" />
+            <span className="text-[10px] leading-none whitespace-nowrap">{p.label}</span>
           </button>
         );
       })}

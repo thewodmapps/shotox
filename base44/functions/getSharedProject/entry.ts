@@ -12,6 +12,19 @@ export default async function(req) {
     if (!project) {
       return Response.json({ error: 'Project not found' }, { status: 404 });
     }
+    // Watermark reflects the project owner's tier: free users keep the Shotox
+    // watermark on shared previews; Pro users do not. Defaults to watermarked
+    // if the owner's plan can't be resolved (e.g. deleted account).
+    let watermark = true;
+    try {
+      if (project.created_by_id) {
+        const owner = await base44.asServiceRole.entities.User.get(project.created_by_id);
+        const plan = owner?.plan;
+        watermark = !(plan && plan !== 'free');
+      }
+    } catch {
+      // keep watermark true
+    }
     // Public-safe projection: only the data needed to render a read-only preview.
     return Response.json({
       name: project.name,
@@ -20,6 +33,7 @@ export default async function(req) {
       custom_w: project.custom_w,
       custom_h: project.custom_h,
       slides: project.slides || [],
+      watermark,
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
