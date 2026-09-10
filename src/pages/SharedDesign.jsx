@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Loader2, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Loader2, ArrowRight } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { resolveDevice } from '@/lib/templates';
 import { Brand } from '@/components/Logo';
@@ -38,22 +38,19 @@ export default function SharedDesign() {
 
   return (
     <div className="min-h-screen bg-[#08080d] text-white flex flex-col">
-      <header className="sticky top-0 z-10 safe-top flex items-center justify-between px-5 py-4 border-b border-white/10 bg-[#08080d]/80 backdrop-blur-xl no-callout">
-        <div className="flex items-center gap-3">
-          <Link to="/" aria-label="Back to home" className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-white/5 border border-white/10 text-white/80 hover:bg-white/10 hover:text-white transition-colors">
-            <ArrowLeft className="w-5 h-5" />
+      <header className="fixed top-[calc(env(safe-area-inset-top)_+_1rem)] inset-x-0 z-50 flex justify-center px-4">
+        <nav className="w-full max-w-5xl flex items-center justify-between rounded-2xl bg-white/90 backdrop-blur-xl border border-black/5 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.35)] pl-4 pr-2 py-2 no-callout">
+          <Brand to="/" size={32} textClass="text-[#0B0B12]" />
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white px-5 py-2.5 transition-colors"
+          >
+            Create your own <ArrowRight className="w-4 h-4" />
           </Link>
-          <Brand size={28} textClass="text-white" />
-        </div>
-        <Link
-          to="/"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-white/80 hover:text-white transition px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10"
-        >
-          Create your own <ArrowRight className="w-4 h-4" />
-        </Link>
+        </nav>
       </header>
 
-      <main className="flex-1 px-5 py-8 max-w-6xl mx-auto w-full">
+      <main className="flex-1 px-5 pt-24 pb-8 max-w-6xl mx-auto w-full">
         <div className="mb-6 text-center">
           <h1 className="font-display text-2xl sm:text-3xl font-bold">{project.name || 'Shared design'}</h1>
           <p className="text-white/50 text-sm mt-1">{count} slide{count === 1 ? '' : 's'}</p>
