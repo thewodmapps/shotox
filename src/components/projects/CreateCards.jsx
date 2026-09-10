@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import FormPreview from './FormPreview';
+import { FREE_DEVICE_IDS } from '@/lib/entitlements';
 
 const OPTIONS = [
   { key: 'ios-phone', title: 'App Store', sub: 'iPhone 6.7" · 1290×2796', form: 'phone', platform: 'ios', device: 'iphone-6.7', icon: Smartphone, tpl: 'aurora' },
@@ -14,7 +15,7 @@ const OPTIONS = [
   { key: 'custom', title: 'Custom Size', sub: 'Any dimensions', form: 'custom', platform: 'ios', device: 'custom', icon: Settings, tpl: 'aurora' },
 ];
 
-export default function CreateCards({ onCreate, creating, isPro, usedDevices = [], onLocked }) {
+export default function CreateCards({ onCreate, creating, isPro, onLocked }) {
   const [customOpen, setCustomOpen] = useState(false);
   const [custom, setCustom] = useState({ w: 1080, h: 1920 });
 
@@ -26,7 +27,7 @@ export default function CreateCards({ onCreate, creating, isPro, usedDevices = [
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {OPTIONS.map((o) => {
-          const locked = !isPro && (o.form === 'custom' || (usedDevices.length > 0 && !usedDevices.includes(o.device)));
+          const locked = !isPro && !FREE_DEVICE_IDS.includes(o.device);
           const handle = () => {
             if (locked) return onLocked?.();
             o.form === 'custom' ? setCustomOpen((v) => !v) : onCreate({ templateId: o.tpl, platform: o.platform, device: o.device });

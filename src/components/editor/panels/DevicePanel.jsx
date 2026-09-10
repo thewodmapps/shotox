@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { DEVICES, LAYOUTS, DEVICE_STYLES } from '@/lib/templates';
 import { Lock } from 'lucide-react';
+import { FREE_DEVICE_IDS } from '@/lib/entitlements';
 
 const Option = ({ active, onClick, children, locked }) => (
   <button onClick={onClick} className={`h-9 px-3 rounded-lg text-sm border text-left transition-colors flex items-center gap-2 ${locked ? 'border-white/10 text-white/35' : active ? 'bg-white text-[#0B0B12] border-white' : 'border-white/10 text-white/70 hover:bg-white/5'}`}>
@@ -30,7 +31,7 @@ export default function DevicePanel({ slide, updateSlide, project, updateProject
             <Label className="text-white/60 text-sm uppercase tracking-wide">{g.label}</Label>
             <div className="grid gap-1.5">
               {g.items.map((d) => {
-                const locked = !isPro && d.id !== project.device;
+                const locked = !isPro && !FREE_DEVICE_IDS.includes(d.id);
                 return (
                 <Option key={d.id} active={project.device === d.id} locked={locked} onClick={locked ? onLocked : () => updateProject({ device: d.id, platform: d.platform })}>
                   <span className="flex justify-between gap-2"><span className="truncate">{d.name}</span><span className="opacity-50 shrink-0">{d.w}×{d.h}</span></span>

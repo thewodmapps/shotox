@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
-import { isPro, FREE_MAX_PROJECTS, freeUsedDevices } from '@/lib/entitlements';
+import { isPro } from '@/lib/entitlements';
 import { getTemplate, makeId, makeSlide, solid } from '@/lib/templates';
 import ProjectsHeader from '@/components/projects/ProjectsHeader';
 import CreateCards from '@/components/projects/CreateCards';
@@ -18,15 +18,10 @@ export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [creating, setCreating] = useState(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
-  const usedDevices = pro ? [] : freeUsedDevices(projects);
 
   useEffect(() => { base44.entities.Project.list('-updated_date', 50).then(setProjects); }, []);
 
   const create = async ({ templateId, platform = 'ios', device, customW, customH, scratch = false }) => {
-    if (!pro && projects.length >= FREE_MAX_PROJECTS) {
-      setShowUpgrade(true);
-      return;
-    }
     setCreating(platform);
     try {
       const tpl = getTemplate(templateId);
@@ -65,7 +60,7 @@ export default function Projects() {
       <div className="relative z-10">
         <ProjectsHeader />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 pb-28 md:pb-16 space-y-16 scroll-contain">
-          <CreateCards onCreate={create} creating={creating} isPro={pro} usedDevices={usedDevices} onLocked={() => setShowUpgrade(true)} />
+          <CreateCards onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
           <SavedDesigns projects={projects} onDelete={remove} />
           <TemplateGallery onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
         </div>

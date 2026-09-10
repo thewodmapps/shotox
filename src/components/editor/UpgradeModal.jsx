@@ -19,7 +19,7 @@ export default function UpgradeModal({ open, onClose, onUpgrade }) {
           </div>
           <h3 className="mt-5 font-display text-xl font-bold text-white tracking-tight">This is a Pro feature</h3>
           <p className="mt-2 text-sm text-white/55 leading-relaxed">
-            The free plan includes 1 device of your choice with a watermark. Upgrade to Pro to unlock every device, all templates, watermark-free export, and AI copywriting.
+            The free plan includes 2 devices with a watermark. Upgrade to Pro to unlock every device, all templates, watermark-free export, and AI copywriting.
           </p>
           <button
             onClick={onUpgrade}
