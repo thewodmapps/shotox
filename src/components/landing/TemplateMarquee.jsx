@@ -27,8 +27,8 @@ export default function TemplateMarquee() {
               <ScaledSlide slide={tpl.slides[0]} device={DEVICE} />
             </div>
             <div className="px-2.5 py-2">
-              <span className="block text-sm font-medium text-white/80 truncate">{tpl.name}</span>
-              <span className="block text-sm text-white/40 truncate">{tpl.category}</span>
+              <span className="block text-xs font-medium text-white/80 truncate">{tpl.name}</span>
+              <span className="block text-[10px] text-white/40 truncate">{tpl.category}</span>
             </div>
           </Link>
         ))}

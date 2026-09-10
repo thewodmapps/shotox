@@ -10,8 +10,6 @@ import TemplateGallery from '@/components/projects/TemplateGallery';
 import SavedDesigns from '@/components/projects/SavedDesigns';
 import WelcomeModal from '@/components/projects/WelcomeModal';
 import UpgradeModal from '@/components/editor/UpgradeModal';
-import PullToRefresh from '@/components/mobile/PullToRefresh';
-import { useToast } from '@/components/ui/use-toast';
 
 export default function Projects() {
   const navigate = useNavigate();
@@ -20,7 +18,6 @@ export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [creating, setCreating] = useState(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
-  const { toast } = useToast();
 
   useEffect(() => { base44.entities.Project.list('-updated_date', 50).then(setProjects); }, []);
 
@@ -49,14 +46,8 @@ export default function Projects() {
   };
 
   const remove = async (id) => {
-    const prev = projects;
+    await base44.entities.Project.delete(id);
     setProjects((ps) => ps.filter((p) => p.id !== id));
-    try {
-      await base44.entities.Project.delete(id);
-    } catch (e) {
-      setProjects(prev);
-      toast({ title: 'Could not delete', description: 'Your project was restored.', variant: 'destructive' });
-    }
   };
 
   return (
@@ -68,13 +59,11 @@ export default function Projects() {
       </div>
       <div className="relative z-10">
         <ProjectsHeader />
-        <PullToRefresh onRefresh={async () => setProjects(await base44.entities.Project.list('-updated_date', 50))}>
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 pb-36 md:pb-16 space-y-16 scroll-contain">
-            <CreateCards onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
-            <SavedDesigns projects={projects} onDelete={remove} />
-            <TemplateGallery onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
-          </div>
-        </PullToRefresh>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 pb-28 md:pb-16 space-y-16 scroll-contain">
+          <CreateCards onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
+          <SavedDesigns projects={projects} onDelete={remove} />
+          <TemplateGallery onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
+        </div>
       </div>
       <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} onUpgrade={() => navigate('/#pricing')} />
       <WelcomeModal />
