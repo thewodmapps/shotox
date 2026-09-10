@@ -10,7 +10,6 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
-import PullToRefresh from './components/PullToRefresh';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -54,8 +53,6 @@ const AuthenticatedApp = () => {
 
   // Render the main app
   return (
-    <>
-    <div className="fixed top-0 inset-x-0 z-40 h-[env(safe-area-inset-top)] bg-white pointer-events-none" aria-hidden="true" />
     <Suspense fallback={<div className="fixed inset-0 grid place-items-center"><div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin" /></div>}>
       <AnimatePresence mode="wait">
         <motion.div
@@ -86,7 +83,6 @@ const AuthenticatedApp = () => {
         </motion.div>
       </AnimatePresence>
     </Suspense>
-    </>
   );
 };
 
@@ -97,7 +93,6 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <ScrollToTop />
-          <PullToRefresh />
           <AuthenticatedApp />
         </Router>
         <Toaster />

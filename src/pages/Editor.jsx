@@ -144,7 +144,7 @@ export default function Editor() {
   const device = resolveDevice(project);
   const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject, isPro: pro, onLocked: () => setShowUpgrade(true) };
   return (
-    <div className="h-screen flex flex-col bg-[#08080d] pt-[calc(env(safe-area-inset-top)_+_5.75rem)]">
+    <div className="h-screen flex flex-col bg-[#08080d]">
       <EditorTopbar project={project} status={status} exporting={exporting} onRename={(name) => updateProject({ name })} onExport={onExport} onShare={() => setShowShare(true)} onRetry={retrySave} />
       <div className="flex-1 min-h-0 flex flex-col md:flex-row relative">
         <EditorRail

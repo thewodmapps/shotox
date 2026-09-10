@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import SlideCanvas from './SlideCanvas';
 
 // Renders a slide that fills its parent's width (parent must be positioned with an aspect ratio).
-export default function ScaledSlide({ slide, deviceId = 'iphone-6.7', device, watermark = false }) {
+export default function ScaledSlide({ slide, deviceId = 'iphone-6.7', device }) {
   const ref = useRef(null);
   const [w, setW] = useState(0);
   useEffect(() => {
@@ -13,7 +13,7 @@ export default function ScaledSlide({ slide, deviceId = 'iphone-6.7', device, wa
   }, []);
   return (
     <div ref={ref} className="absolute inset-0">
-      {w > 0 && <SlideCanvas slide={slide} device={device} deviceId={deviceId} width={w} watermark={watermark} />}
+      {w > 0 && <SlideCanvas slide={slide} device={device} deviceId={deviceId} width={w} />}
     </div>
   );
 }
