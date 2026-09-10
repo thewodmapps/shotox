@@ -23,6 +23,10 @@
       "type": "number",
       "default": 0,
       "description": "Number of exports used by free-tier users; gated against FREE_MAX_DOWNLOADS"
+    },
+    "free_device": {
+      "type": "string",
+      "description": "The single device a free-tier user has chosen as their free device"
     }
   },
   "required": []

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const FAQS = [
-  { q: 'Is Shotox free to use?', a: 'Yes. The free plan lets you create screenshots for two devices with a watermark and a limited template set — no credit card required. Upgrade any time for all devices, all templates, and watermark-free export.' },
-  { q: 'Which device sizes are supported?', a: 'Shotox supports every store-required size: iPhone 6.7", 6.5", 5.5", iPad 12.9", iPad 11", Android phone, Android tablet, and the 1024×500 Google Play feature graphic.' },
+  { q: 'Is Shotox free to use?', a: 'Yes. The free plan lets you pick one device of your choice, three starter templates, and up to 3 projects with a watermark — no credit card required. Upgrade any time for all devices, all templates, and watermark-free export.' },
+  { q: 'Which device sizes are supported?', a: 'Shotox supports every store-required size: iPhone 6.7", 6.5", 5.5", iPad 13", iPad 11", Android phone, Android tablet, and the 1024×500 Google Play feature graphic.' },
   { q: 'Can I export images at the exact store resolution?', a: 'Yes. Every export is pixel-perfect at the resolution the App Store and Google Play require, so your listing never gets rejected for wrong dimensions. Export single slides or the full set as PNG or JPEG.' },
   { q: 'Does Shotox include AI features?', a: 'Yes. The built-in AI copywriter drafts high-converting headlines and subheadings tailored to your app category, so you never start from a blank page. Generate copy, tweak it, and drop it straight into your template.' },
   { q: 'Do I own the screenshots I create?', a: 'Absolutely. The designs you create are yours to use in your app listings, ads, and marketing — no attribution, no watermark on paid plans.' },
