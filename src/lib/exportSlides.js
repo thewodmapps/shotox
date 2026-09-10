@@ -29,7 +29,22 @@ const renderCanvas = async (el, device) => {
   }
 };
 
-const triggerDownload = (blob, filename) => {
+// On mobile (and inside the Base44 app shell) the blob <a download> trick is
+// silently dropped by the WebView, so nothing saves. The Web Share API with
+// files opens the native share/save sheet — the same sheet the browser uses —
+// letting the user save the image/ZIP to Photos/Files or forward it. Desktop
+// browsers without the API fall back to a normal anchor download.
+const saveBlob = async (blob, filename, mime) => {
+  const file = new File([blob], filename, { type: mime });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file] });
+      return;
+    } catch (e) {
+      if (e?.name === 'AbortError') return; // user dismissed the sheet
+      // fall through to anchor download
+    }
+  }
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -53,7 +68,7 @@ export async function exportSlide(el, device, filename, format = 'png', onProgre
   onProgress?.(85);
   const blob = await canvasToBlob(canvas, mime);
   onProgress?.(95);
-  triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`);
+  await saveBlob(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`, mime);
   onProgress?.(100);
 }
 
@@ -72,6 +87,6 @@ export async function exportAllSlides(els, device, baseName, format = 'png', onP
   }
   onProgress?.(95);
   const blob = await zip.generateAsync({ type: 'blob' });
-  triggerDownload(blob, `${baseName}-screenshots.zip`);
+  await saveBlob(blob, `${baseName}-screenshots.zip`, 'application/zip');
   onProgress?.(100);
 }
