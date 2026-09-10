@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Clock } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import Navbar from '@/components/landing/Navbar';
+import AppNavbar from '@/components/AppNavbar';
 import Footer from '@/components/landing/Footer';
 import BlogCover from '@/components/blog/BlogCover';
 import BlogCard from '@/components/blog/BlogCard';
@@ -51,7 +51,7 @@ export default function BlogPost() {
   if (notFound) {
     return (
       <div className="font-body bg-background text-foreground min-h-screen">
-        <Navbar />
+        <AppNavbar />
         <div className="pt-40 pb-24 text-center px-6">
           <h1 className="text-3xl font-bold text-foreground">Post not found</h1>
           <Button asChild className="mt-6 rounded-xl bg-[#7C3AED] hover:bg-[#7C3AED]/90 text-white">
@@ -68,7 +68,7 @@ export default function BlogPost() {
 
   return (
     <div className="font-body bg-background text-foreground">
-      <Navbar />
+      <AppNavbar />
       <article className="pt-28 pb-16 px-6">
         <div className="max-w-3xl mx-auto">
           <button onClick={() => navigate('/blog')} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-[#7C3AED] transition-colors mb-6 selectable-text">

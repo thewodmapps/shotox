@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '@/components/landing/Navbar';
+import AppNavbar from '@/components/AppNavbar';
 import Footer from '@/components/landing/Footer';
 import BlogCard from '@/components/blog/BlogCard';
 import BlogPagination from '@/components/blog/BlogPagination';
@@ -21,7 +21,7 @@ export default function Blog() {
 
   return (
     <div className="font-body bg-background text-foreground">
-      <Navbar />
+      <AppNavbar />
       <section className="pt-32 pb-12 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="font-display font-bold tracking-[-0.03em] text-foreground text-4xl sm:text-5xl">Shotox Blog</h1>

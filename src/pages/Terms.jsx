@@ -1,11 +1,11 @@
 import React from 'react';
-import Navbar from '@/components/landing/Navbar';
+import AppNavbar from '@/components/AppNavbar';
 import Footer from '@/components/landing/Footer';
 
 export default function Terms() {
   return (
     <div className="font-body bg-white">
-      <Navbar />
+      <AppNavbar />
       <div className="max-w-3xl mx-auto px-6 pt-32 pb-20">
         <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#0B0B12]">Terms of Service</h1>
         <p className="mt-3 text-sm text-[#0B0B12]/45">Last updated September 10, 2026</p>
