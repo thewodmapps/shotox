@@ -42,7 +42,7 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
         <input
           value={project.name}
           onChange={(e) => onRename(e.target.value)}
-          className="bg-transparent text-sm text-center font-medium outline-none rounded-md px-3 py-1.5 hover:bg-white/5 focus:bg-white/10 w-40 sm:w-60 transition-colors"
+          className="bg-transparent text-sm text-center font-medium outline-none rounded-md px-3 py-1.5 hover:bg-white/5 focus:bg-white/10 w-28 sm:w-60 transition-colors"
         />
       </div>
       <span className="hidden md:flex items-center gap-1.5 text-sm text-white/60">
@@ -57,7 +57,7 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
         {device.name} · {device.w} × {device.h}
       </span>
       <div className="relative">
-        <Button size="sm" disabled={exporting} onClick={() => setDlOpen((v) => !v)} className="bg-white text-[#0B0B12] hover:bg-white/90 rounded-full px-4">
+        <Button size="sm" disabled={exporting} onClick={() => setDlOpen((v) => !v)} className="bg-white text-[#0B0B12] hover:bg-white/90 rounded-full px-3 sm:px-4">
           {exporting ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
           Download
         </Button>
@@ -86,7 +86,7 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
         <button onClick={onShare} className="w-11 h-11 grid place-items-center rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Share design" aria-label="Share design">
           <Share2 className="w-4 h-4" />
         </button>
-        <button onClick={() => base44.auth.logout('/')} className="w-11 h-11 grid place-items-center rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Sign out" aria-label="Sign out">
+        <button onClick={() => base44.auth.logout('/')} className="hidden sm:grid w-11 h-11 place-items-center rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Sign out" aria-label="Sign out">
         <LogOut className="w-4 h-4" />
         </button>
         </header>
