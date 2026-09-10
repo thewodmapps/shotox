@@ -14,8 +14,8 @@ const SOCIAL = [
   { id: 'x', label: 'X', brand: '#000000', icon: Twitter, share: (url, text) => `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}` },
   { id: 'fb', label: 'Facebook', brand: '#1877F2', icon: Facebook, share: (url) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}` },
   { id: 'li', label: 'LinkedIn', brand: '#0A66C2', icon: Linkedin, share: (url) => `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}` },
-  { id: 'wa', label: 'WhatsApp', brand: '#25D366', icon: WhatsAppIcon, share: (url, text) => /Android/i.test(navigator.userAgent) ? `intent://send/?text=${encodeURIComponent(text + ' ' + url)}#Intent;scheme=whatsapp;package=com.whatsapp;S.browser_fallback_url=${encodeURIComponent('https://www.whatsapp.com/')};end` : `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}` },
-  { id: 'tg', label: 'Telegram', brand: '#229ED9', icon: Send, share: (url, text) => /Android/i.test(navigator.userAgent) ? `intent://share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}#Intent;scheme=tg;package=org.telegram.messenger;S.browser_fallback_url=${encodeURIComponent('https://t.me/')};end` : `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}` },
+  { id: 'wa', label: 'WhatsApp', brand: '#25D366', icon: WhatsAppIcon, share: (url, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}` },
+  { id: 'tg', label: 'Telegram', brand: '#229ED9', icon: Send, share: (url, text) => `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}` },
   { id: 'gm', label: 'Gmail', brand: '#EA4335', icon: Mail, share: (url, text) => `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(text)}&body=${encodeURIComponent(url)}` },
 ];
 
@@ -25,16 +25,19 @@ export default function ShareModal({ open, url, title = 'My Shotox design', proj
 
   const brandUrl = `https://shotox.in/${slugify(title)}${projectId ? `?p=${projectId}` : ''}`;
 
-  const handleShare = (share) => {
-    const shareUrl = share(brandUrl, title);
-    // On the mobile app shell, a same-window navigation lets the OS launch the
-    // native app intent directly, instead of the shell's "Open External Link?"
-    // browser prompt. Desktop opens the sharer in a new tab.
-    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      window.location.href = shareUrl;
-    } else {
-      window.open(shareUrl, '_blank', 'noopener,noreferrer');
+  const handleShare = async (share) => {
+    // On mobile (incl. the native app shell), the Web Share API opens the OS
+    // share sheet directly — no "Open External Link?" browser prompt.
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text: title, url: brandUrl });
+        return;
+      } catch (e) {
+        if (e?.name === 'AbortError') return; // user dismissed the sheet
+      }
     }
+    // Desktop fallback: open the platform-specific sharer in a new tab.
+    window.open(share(brandUrl, title), '_blank', 'noopener,noreferrer');
   };
 
   const copy = async () => {
