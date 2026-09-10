@@ -34,20 +34,20 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
   };
   return (
     <header className="fixed top-3 inset-x-0 z-40 flex justify-center px-3">
-      <nav className="w-full max-w-5xl flex items-center gap-2 rounded-2xl bg-[#111118]/80 backdrop-blur-xl border border-white/10 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.6)] pl-2 pr-2 py-2 no-callout">
-        <Link to="/projects" className="w-10 h-10 grid place-items-center rounded-xl hover:bg-white/10 transition-colors shrink-0" aria-label="Back to projects">
+      <nav className="w-full max-w-5xl flex items-center gap-2 rounded-2xl bg-white/90 backdrop-blur-xl border border-black/5 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.35)] pl-2 pr-2 py-2 no-callout">
+        <Link to="/projects" className="w-10 h-10 grid place-items-center rounded-xl hover:bg-black/5 transition-colors shrink-0" aria-label="Back to projects">
           <ArrowLeft className="w-4 h-4" />
         </Link>
-        <Brand to="/" size={22} textClass="text-white" className="hidden sm:flex shrink-0" />
+        <Brand to="/" size={22} textClass="text-[#0B0B12]" className="hidden sm:flex shrink-0" />
         <div className="flex-1 flex justify-center min-w-0">
           <input
             value={project.name}
             onChange={(e) => onRename(e.target.value)}
-            className="bg-transparent text-sm text-center font-medium outline-none rounded-md px-3 py-1.5 hover:bg-white/5 focus:bg-white/10 w-40 sm:w-56 transition-colors truncate"
+            className="bg-transparent text-sm text-center font-medium text-[#0B0B12] outline-none rounded-md px-3 py-1.5 hover:bg-black/5 focus:bg-black/10 w-40 sm:w-56 transition-colors truncate"
           />
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
-          <span className="hidden md:flex items-center gap-1.5 text-sm text-white/60">
+          <span className="hidden md:flex items-center gap-1.5 text-sm text-[#0B0B12]/60">
             <S.icon className={`w-3.5 h-3.5 ${status === 'saving' ? 'animate-spin' : ''}`} /> {S.label}
           </span>
           {status === 'error' && onRetry && (
@@ -55,11 +55,11 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
               <RefreshCw className="w-3.5 h-3.5" /> Retry
             </button>
           )}
-          <span className="hidden lg:block text-sm text-white/60 px-2.5 py-1 rounded-full border border-white/10">
+          <span className="hidden lg:block text-sm text-[#0B0B12]/60 px-2.5 py-1 rounded-full border border-black/10">
             {device.name} · {device.w} × {device.h}
           </span>
           <div className="relative">
-            <Button size="sm" disabled={exporting} onClick={() => setDlOpen((v) => !v)} className="bg-white text-[#0B0B12] hover:bg-white/90 rounded-full px-4">
+            <Button size="sm" disabled={exporting} onClick={() => setDlOpen((v) => !v)} className="bg-[#0B0B12] text-white hover:bg-[#0B0B12]/90 rounded-full px-4">
               {exporting ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
               Download
             </Button>
@@ -85,10 +85,10 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
               </>
             )}
           </div>
-          <button onClick={onShare} className="w-10 h-10 grid place-items-center rounded-xl hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Share design" aria-label="Share design">
+          <button onClick={onShare} className="w-10 h-10 grid place-items-center rounded-xl hover:bg-black/5 transition-colors text-[#0B0B12]/70 hover:text-[#0B0B12]" title="Share design" aria-label="Share design">
             <Share2 className="w-4 h-4" />
           </button>
-          <button onClick={() => base44.auth.logout('/')} className="w-10 h-10 grid place-items-center rounded-xl hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Sign out" aria-label="Sign out">
+          <button onClick={() => base44.auth.logout('/')} className="w-10 h-10 grid place-items-center rounded-xl hover:bg-black/5 transition-colors text-[#0B0B12]/70 hover:text-[#0B0B12]" title="Sign out" aria-label="Sign out">
             <LogOut className="w-4 h-4" />
           </button>
         </div>
