@@ -52,7 +52,7 @@ export default function Navbar() {
     <header className="fixed top-4 inset-x-0 z-50 flex justify-center px-4">
       <nav className="w-full max-w-5xl flex items-center justify-between rounded-2xl bg-white/90 backdrop-blur-xl border border-black/5 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.35)] pl-4 pr-2 py-2 no-callout">
         <Brand to="/" size={32} textClass="text-[#0B0B12]" />
-        <div className="hidden md:flex items-center gap-7 text-sm text-[#0B0B12]/70">
+        <div className="hidden lg:flex items-center gap-7 text-sm text-[#0B0B12]/70">
           {LINKS.map(renderLink)}
         </div>
         <div className="flex items-center gap-1">
@@ -62,7 +62,7 @@ export default function Navbar() {
           <button
             aria-label="Toggle menu"
             onClick={() => setOpen((v) => !v)}
-            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl text-[#0B0B12] hover:bg-black/5 transition-colors"
+            className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl text-[#0B0B12] hover:bg-black/5 transition-colors"
           >
             {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -70,7 +70,7 @@ export default function Navbar() {
       </nav>
 
       {open && (
-        <div className="md:hidden absolute top-20 inset-x-4 rounded-2xl bg-white border border-black/5 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.35)] p-4">
+        <div className="lg:hidden absolute top-20 inset-x-4 rounded-2xl bg-white border border-black/5 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.35)] p-4">
           <div className="flex flex-col gap-1">
             {LINKS.map((l) => {
               const isSection = l.href.startsWith('#');
