@@ -51,8 +51,6 @@ export default function ShareModal({ open, url, title = 'My Shotox design', proj
             <a
               key={id}
               href={share(brandUrl, title)}
-              target="_blank"
-              rel="noopener noreferrer"
               className="flex flex-col items-center gap-1.5 group"
             >
               <span
