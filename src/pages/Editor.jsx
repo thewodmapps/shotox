@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { makeId, resolveDevice } from '@/lib/templates';
-import { exportSlide, exportAllSlides, wait } from '@/lib/exportSlides';
+import { exportSlide, exportAllSlides, renderSlideBlob, downloadBlob, wait } from '@/lib/exportSlides';
 import { useAuth } from '@/lib/AuthContext';
 import { isPro } from '@/lib/entitlements';
 import ExportOverlay from '@/components/editor/ExportOverlay';
@@ -36,6 +36,8 @@ export default function Editor() {
   const exportRefs = useRef([]);
   const exportTarget = useRef(0);
   const undoTimer = useRef(null);
+  const blobCache = useRef({ sig: null, png: null, jpeg: null, ready: false });
+  const renderToken = useRef(0);
 
   useEffect(() => {
     if (!id) return setMissing(true);
@@ -83,6 +85,29 @@ export default function Editor() {
     return () => clearInterval(id);
   }, [exporting]);
 
+  // Pre-render the current slide in the background (debounced) so tapping
+  // download opens the save sheet instantly instead of waiting for html2canvas.
+  useEffect(() => {
+    if (!project || !project.slides[sel]) return;
+    const device = resolveDevice(project);
+    const slide = project.slides[sel];
+    const sig = `${sel}|${device.w}x${device.h}|${pro ? 1 : 0}|${JSON.stringify(slide)}`;
+    if (blobCache.current.sig === sig && blobCache.current.ready) return;
+    const el = exportRefs.current[sel];
+    if (!el) return;
+    const myToken = ++renderToken.current;
+    blobCache.current = { sig, png: null, jpeg: null, ready: false };
+    const handle = setTimeout(async () => {
+      if (myToken !== renderToken.current) return;
+      const png = await renderSlideBlob(el, device, 'image/png').catch(() => null);
+      if (myToken !== renderToken.current) return;
+      const jpeg = await renderSlideBlob(el, device, 'image/jpeg').catch(() => null);
+      if (myToken !== renderToken.current) return;
+      blobCache.current = { sig, png, jpeg, ready: true };
+    }, 500);
+    return () => clearTimeout(handle);
+  }, [project, sel, pro]);
+
   const updateProject = (patch) => { dirty.current = true; setProject((p) => ({ ...p, ...patch })); };
   const updateSlide = (patch) => updateProject({ slides: project.slides.map((s, i) => (i === sel ? { ...s, ...patch } : s)) });
   // Typography (font, alignment, text colors) is project-wide so every slide stays consistent.
@@ -113,12 +138,27 @@ export default function Editor() {
   const move = (from, to) => { const s = [...project.slides]; const [m] = s.splice(from, 1); s.splice(to, 0, m); updateProject({ slides: s }); setSel(to); };
 
   const onExport = async (which, format) => {
+    const device = resolveDevice(project);
+    const base = project.name.replace(/\s+/g, '-');
+    const ext = format === 'jpeg' ? 'jpg' : 'png';
+    const mime = format === 'jpeg' ? 'image/jpeg' : 'image/png';
+
+    // Instant path: if the current slide was pre-rendered in the background,
+    // open the save sheet right away — no progress overlay, no wait.
+    if (which === 'current') {
+      const slide = project.slides[sel];
+      const sig = `${sel}|${device.w}x${device.h}|${pro ? 1 : 0}|${JSON.stringify(slide)}`;
+      const cached = blobCache.current;
+      if (cached.ready && cached.sig === sig && cached[format]) {
+        await downloadBlob(cached[format], `${String(sel + 1)}.${ext}`, mime);
+        return;
+      }
+    }
+
     exportTarget.current = 0;
     setExportPct(0);
     setExporting(true);
     const onProgress = (p) => { exportTarget.current = p; };
-    const device = resolveDevice(project);
-    const base = project.name.replace(/\s+/g, '-');
     try {
       if (which === 'all') {
         const els = project.slides.map((_, i) => exportRefs.current[i]).filter(Boolean);
