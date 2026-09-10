@@ -33,19 +33,7 @@ export default function ShareModal({ open, url, title = 'My Shotox design', proj
     } catch { /* clipboard unavailable */ }
   };
 
-  const openShare = (fn) => {
-    const url = fn(brandUrl, title);
-    // Use a real anchor with target=_blank instead of a sized popup window so the
-    // host shell routes external share URLs to the native app / system browser
-    // (same as the browser), rather than opening an in-app popup.
-    const a = document.createElement('a');
-    a.href = url;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  };
+  const openShare = (fn) => window.open(fn(brandUrl, title), '_blank', 'noopener,noreferrer,width=620,height=540');
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center p-4 bg-black/70 backdrop-blur-sm" onClick={onClose}>

@@ -7,12 +7,10 @@ import { useAuth } from '@/lib/AuthContext';
 import CheckoutNoticeModal from '@/components/landing/CheckoutNoticeModal';
 
 const PLAN_KEY = { 'Pro Monthly': 'monthly', 'Pro Yearly': 'yearly', 'Lifetime': 'lifetime' };
-const TIERS = { free: 0, monthly: 1, yearly: 2, lifetime: 3 };
 
 const PLANS = [
   {
     name: 'Free',
-    planKey: 'free',
     price: '$0',
     period: 'forever',
     features: ['2 devices — iPhone & Android', '3 starter templates', 'Up to 3 projects', 'All 8 slides per template', 'Shotox watermark', 'Personal use only'],
@@ -20,7 +18,6 @@ const PLANS = [
   },
   {
     name: 'Pro Monthly',
-    planKey: 'monthly',
     price: '$9',
     period: '/ month',
     featured: true,
@@ -29,7 +26,6 @@ const PLANS = [
   },
   {
     name: 'Pro Yearly',
-    planKey: 'yearly',
     price: '$69',
     period: '/ year',
     badge: 'Save 36%',
@@ -38,7 +34,6 @@ const PLANS = [
   },
   {
     name: 'Lifetime',
-    planKey: 'lifetime',
     price: '$149',
     period: 'one-time',
     featured: true,
@@ -52,8 +47,6 @@ export default function Pricing() {
   const [showNotice, setShowNotice] = useState(false);
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
-  const currentPlan = user?.plan || 'free';
-  const currentTier = TIERS[currentPlan] ?? 0;
 
   async function handleCheckout(name) {
     if (window.self !== window.top) {
@@ -99,28 +92,19 @@ export default function Pricing() {
               <ul className="mt-6 space-y-2.5 text-sm flex-1">
                 {p.features.map((f) => <li key={f} className="flex items-start gap-2.5"><Check className="w-4 h-4 shrink-0 mt-0.5" /> <span>{f}</span></li>)}
               </ul>
-              {(() => {
-                const isCurrent = currentPlan === p.planKey;
-                const isLower = !isCurrent && currentTier > TIERS[p.planKey];
-                const disabled = isCurrent || isLower;
-                if (p.planKey === 'free' && !disabled) {
-                  return (
-                    <Button asChild className={`mt-7 rounded-xl h-11 ${p.featured ? 'bg-white text-[#0B0B12] hover:bg-white/90' : 'bg-white/10 hover:bg-white/20 text-white'}`}>
-                      <Link to="/projects">{p.cta}</Link>
-                    </Button>
-                  );
-                }
-                const label = isCurrent ? 'Current plan' : isLower ? 'Included' : (loadingPlan === p.name ? 'Redirecting…' : p.cta);
-                return (
-                  <Button
-                    disabled={disabled || loadingPlan === p.name}
-                    onClick={() => handleCheckout(p.name)}
-                    className={`mt-7 rounded-xl h-11 ${disabled ? 'bg-white/5 text-white/40 cursor-not-allowed border border-white/10' : p.featured ? 'bg-white text-[#0B0B12] hover:bg-white/90' : 'bg-white/10 hover:bg-white/20 text-white'}`}
-                  >
-                    {label}
-                  </Button>
-                );
-              })()}
+              {p.name === 'Free' ? (
+                <Button asChild className={`mt-7 rounded-xl h-11 ${p.featured ? 'bg-white text-[#0B0B12] hover:bg-white/90' : 'bg-white/10 hover:bg-white/20 text-white'}`}>
+                  <Link to="/projects">{p.cta}</Link>
+                </Button>
+              ) : (
+                <Button
+                  disabled={loadingPlan === p.name}
+                  onClick={() => handleCheckout(p.name)}
+                  className={`mt-7 rounded-xl h-11 ${p.featured ? 'bg-white text-[#0B0B12] hover:bg-white/90' : 'bg-white/10 hover:bg-white/20 text-white'}`}
+                >
+                  {loadingPlan === p.name ? 'Redirecting…' : p.cta}
+                </Button>
+              )}
             </div>
           ))}
         </div>

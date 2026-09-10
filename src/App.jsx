@@ -10,7 +10,6 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
-import PullToRefresh from '@/components/PullToRefresh';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -94,7 +93,6 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <ScrollToTop />
-          <PullToRefresh />
           <AuthenticatedApp />
         </Router>
         <Toaster />
