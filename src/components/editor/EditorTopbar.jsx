@@ -61,9 +61,8 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
             {device.name} · {device.w} × {device.h}
           </span>
           <div className="relative shrink-0">
-            <Button size="sm" disabled={exporting} onClick={() => setDlOpen((v) => !v)} className="bg-[#0B0B12] text-white hover:bg-[#0B0B12]/90 rounded-full px-4">
-              {exporting ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
-              Download
+            <Button size="sm" disabled={exporting} onClick={() => setDlOpen((v) => !v)} title="Download" aria-label="Download" className="w-10 h-10 p-0 rounded-xl bg-[#0B0B12] text-white hover:bg-[#0B0B12]/90 shrink-0">
+              {exporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
             </Button>
             {dlOpen && !exporting && (
               <>
