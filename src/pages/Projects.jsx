@@ -59,7 +59,7 @@ export default function Projects() {
       </div>
       <div className="relative z-10">
         <Navbar appBar />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-36 sm:pt-40 pb-28 md:pb-16 space-y-16 scroll-contain">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-32 sm:pt-36 pb-28 md:pb-16 space-y-16 scroll-contain">
           <CreateCards onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
           <SavedDesigns projects={projects} onDelete={remove} />
           <TemplateGallery onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
