@@ -10,9 +10,6 @@ import TemplateGallery from '@/components/projects/TemplateGallery';
 import SavedDesigns from '@/components/projects/SavedDesigns';
 import WelcomeModal from '@/components/projects/WelcomeModal';
 import UpgradeModal from '@/components/editor/UpgradeModal';
-import { Loader2 } from 'lucide-react';
-import { toast } from '@/components/ui/use-toast';
-import { usePullToRefresh } from '@/hooks/usePullToRefresh';
 
 export default function Projects() {
   const navigate = useNavigate();
@@ -22,13 +19,7 @@ export default function Projects() {
   const [creating, setCreating] = useState(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
 
-  const refresh = async () => {
-    const list = await base44.entities.Project.list('-updated_date', 50);
-    setProjects(list);
-  };
-
-  useEffect(() => { refresh(); }, []);
-  const { pull, refreshing } = usePullToRefresh({ onRefresh: refresh });
+  useEffect(() => { base44.entities.Project.list('-updated_date', 50).then(setProjects); }, []);
 
   const create = async ({ templateId, platform = 'ios', device, customW, customH, scratch = false }) => {
     setCreating(platform);
@@ -55,14 +46,8 @@ export default function Projects() {
   };
 
   const remove = async (id) => {
-    const prev = projects;
+    await base44.entities.Project.delete(id);
     setProjects((ps) => ps.filter((p) => p.id !== id));
-    try {
-      await base44.entities.Project.delete(id);
-    } catch (e) {
-      setProjects(prev);
-      toast({ title: 'Delete failed', description: 'Could not delete this project. Please try again.', variant: 'destructive' });
-    }
   };
 
   return (
@@ -73,15 +58,6 @@ export default function Projects() {
         <div className="absolute bottom-0 left-1/3 w-[380px] h-[380px] rounded-full bg-orange-500/10 blur-[130px]" />
       </div>
       <div className="relative z-10">
-        {/* Native-style pull-to-refresh indicator (touch only, no-op with mouse) */}
-        <div className="md:hidden fixed top-0 inset-x-0 z-40 flex justify-center pointer-events-none" aria-hidden>
-          <div
-            className="mt-2 w-9 h-9 rounded-full bg-white/10 border border-white/15 grid place-items-center transition-opacity"
-            style={{ opacity: pull > 0 || refreshing ? 1 : 0, transform: `translateY(${Math.max(0, pull - 40)}px)` }}
-          >
-            <Loader2 className={`w-5 h-5 text-white ${refreshing ? 'animate-spin' : ''}`} />
-          </div>
-        </div>
         <ProjectsHeader />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 pb-28 md:pb-16 space-y-16 scroll-contain">
           <CreateCards onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />

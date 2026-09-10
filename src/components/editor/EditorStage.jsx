@@ -62,12 +62,12 @@ export default function EditorStage({ project, selected, onSelect, onAdd, onDupl
       <div ref={wrapRef} className="md:hidden flex-1 min-h-0 flex flex-col items-center justify-center px-4 py-3 gap-2">
         <div className="flex items-center justify-center w-full flex-1 min-h-0 relative">
           {selected > 0 && (
-            <button onClick={() => onSelect(selected - 1)} className="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 z-10 max-md:min-h-11 max-md:min-w-11" aria-label="Previous slide">
+            <button onClick={() => onSelect(selected - 1)} className="absolute left-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 z-10" aria-label="Previous slide">
               <ChevronLeft className="w-5 h-5" />
             </button>
           )}
           {selected < project.slides.length - 1 && (
-            <button onClick={() => onSelect(selected + 1)} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 z-10 max-md:min-h-11 max-md:min-w-11" aria-label="Next slide">
+            <button onClick={() => onSelect(selected + 1)} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 z-10" aria-label="Next slide">
               <ChevronRight className="w-5 h-5" />
             </button>
           )}
@@ -80,17 +80,17 @@ export default function EditorStage({ project, selected, onSelect, onAdd, onDupl
                 watermark={watermark}
                 className="rounded-xl overflow-hidden ring-2 ring-violet-400 shadow-[0_0_0_6px_rgba(139,92,246,0.15)]"
               />
-              <span className="absolute top-2 left-2 text-sm px-2 py-0.5 rounded-full bg-black/50 text-white/80">{selected + 1}</span>
+              <span className="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-black/50 text-white/80">{selected + 1}</span>
             </div>
           )}
         </div>
         <div className="flex items-center gap-2">
           <SlideToolbar index={selected} count={project.slides.length} onDuplicate={onDuplicate} onDelete={onDelete} onMove={onMove} />
-          <button onClick={onAdd} className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 max-md:min-h-11 max-md:min-w-11" aria-label="Add slide">
+          <button onClick={onAdd} className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20" aria-label="Add slide">
             <Plus className="w-4 h-4" />
           </button>
         </div>
-        <span className="text-sm text-white/50">{selected + 1} / {project.slides.length}</span>
+        <span className="text-[11px] text-white/50">{selected + 1} / {project.slides.length}</span>
       </div>
     </main>
   );
