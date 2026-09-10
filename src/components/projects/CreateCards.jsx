@@ -25,7 +25,7 @@ export default function CreateCards({ onCreate, creating, isPro, onLocked }) {
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">Create a design</h2>
         <p className="text-sm text-white/50 mt-1.5">Choose a canvas and start crafting store-ready screenshots.</p>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
         {OPTIONS.map((o) => {
           const locked = !isPro && !FREE_DEVICE_IDS.includes(o.device);
           const handle = () => {
