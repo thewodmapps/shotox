@@ -4,7 +4,6 @@ import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Brand } from '@/components/Logo';
 import { useAuth } from '@/lib/AuthContext';
-import ThemeToggle from '@/components/ThemeToggle';
 
 const LINKS = [
   { href: '/', label: 'Home' },
@@ -56,7 +55,6 @@ export default function Navbar() {
           {LINKS.map(renderLink)}
         </div>
         <div className="flex items-center gap-1">
-          <ThemeToggle className="w-10 h-10 text-[#0B0B12] dark:text-white hover:bg-black/5 dark:hover:bg-white/10" />
           <Button asChild className="rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white px-5 hidden sm:inline-flex">
             <Link to="/projects">{isAuthenticated ? 'Dashboard' : 'Get started free'}</Link>
           </Button>
