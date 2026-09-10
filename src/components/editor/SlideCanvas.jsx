@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import { BASE_W, slideHeight, getDevice, MOCK_TYPES } from '@/lib/templates';
 import DeviceFrame from './DeviceFrame';
 
-const WATERMARK_LOGO = 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/da9615c18_shotox.png';
+const WATERMARK_LOGO = 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/b3e63b968_shotox.png';
 
 // Reference canvas height the pose constants were tuned against. Every layout
 // value is scaled by k = h / H_REF so a template composes identically on any
@@ -218,9 +218,9 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
           </>
         )}
         {watermark && (
-          <div style={{ position: 'absolute', left: (BASE_W - 92) / 2, bottom: 12, width: 92, height: 28, borderRadius: 9999, background: 'rgba(0,0,0,0.42)', zIndex: 30, pointerEvents: 'none' }}>
-            <img src={WATERMARK_LOGO} alt="" crossOrigin="anonymous" style={{ position: 'absolute', left: 10, top: 5, width: 18, height: 18, borderRadius: 5, objectFit: 'cover', display: 'block' }} />
-            <span style={{ position: 'absolute', left: 40, top: 0, width: 42, height: 28, lineHeight: '28px', fontSize: 12, fontWeight: 700, color: '#ffffff', letterSpacing: '0.04em', fontFamily: 'Sora, Inter, sans-serif', whiteSpace: 'nowrap' }}>Shotox</span>
+          <div style={{ position: 'absolute', left: (BASE_W - 110) / 2, bottom: 14, width: 110, height: 30, borderRadius: 9999, background: 'rgba(255,255,255,0.92)', border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 4px 14px rgba(0,0,0,0.18)', zIndex: 30, pointerEvents: 'none' }}>
+            <img src={WATERMARK_LOGO} alt="" crossOrigin="anonymous" style={{ position: 'absolute', left: 6, top: 5.5, width: 19, height: 19, borderRadius: 6, objectFit: 'cover', display: 'block' }} />
+            <span style={{ position: 'absolute', left: 31, top: 0, height: 30, lineHeight: '30px', fontSize: 13, fontWeight: 700, color: '#0B0B12', letterSpacing: '-0.01em', fontFamily: 'Sora, Inter, sans-serif', whiteSpace: 'nowrap' }}>Shotox</span>
           </div>
         )}
       </div>
