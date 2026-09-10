@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Twitter, Instagram, Github } from 'lucide-react';
+import { Linkedin, Youtube, Globe } from 'lucide-react';
 import { Brand } from '@/components/Logo';
 
 const COLS = [
@@ -19,7 +19,6 @@ const COLS = [
     title: 'Resources',
     links: [
       { label: 'Blog', to: '/blog' },
-      { label: 'Logo & assets', to: '/logo-download' },
       { label: 'Privacy Policy', to: '/privacy' },
       { label: 'Terms of Service', to: '/terms' },
       { label: 'Support', to: 'mailto:thewodmapps@gmail.com' },
@@ -28,9 +27,9 @@ const COLS = [
 ];
 
 const SOCIAL = [
-  { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
-  { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
-  { icon: Github, href: 'https://github.com', label: 'GitHub' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/your-profile', label: 'LinkedIn' },
+  { icon: Youtube, href: 'https://www.youtube.com/@yourchannel', label: 'YouTube' },
+  { icon: Globe, href: 'https://yourwebsite.com', label: 'Website' },
 ];
 
 export default function Footer() {
