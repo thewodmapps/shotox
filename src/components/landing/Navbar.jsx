@@ -31,6 +31,7 @@ const STATUS = {
 
 export default function Navbar({
   variant = 'site',
+  appBar = false,
   project,
   status = 'saved',
   exporting = false,
@@ -181,24 +182,33 @@ export default function Navbar({
             </button>
           </>
         )}
-        {!isEditor && (
+        {!isEditor && !appBar && (
           <Button asChild className="rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white px-5 hidden sm:inline-flex">
             <Link to="/projects">{isAuthenticated ? 'Dashboard' : 'Get started free'}</Link>
           </Button>
         )}
-        {isAuthenticated && (
+        {isAuthenticated && appBar && (
+          <div className="flex items-center gap-1.5">
+            {renderPlan(false)}
+            {renderAccount(false)}
+            {renderSignOut(false)}
+          </div>
+        )}
+        {isAuthenticated && !isEditor && !appBar && (
           <div className="hidden md:flex items-center gap-1.5">
             {renderPlan(true)}
             {renderAccount(true)}
             {renderSignOut(true)}
           </div>
         )}
-        <button aria-label="Toggle menu" onClick={() => setOpen((v) => !v)} className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl text-[#0B0B12] hover:bg-black/5 transition-colors">
-          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
+        {!isEditor && !appBar && (
+          <button aria-label="Toggle menu" onClick={() => setOpen((v) => !v)} className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl text-[#0B0B12] hover:bg-black/5 transition-colors">
+            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        )}
       </nav>
 
-      {open && (
+      {open && !isEditor && !appBar && (
         <div className="md:hidden absolute top-16 inset-x-3 rounded-2xl bg-white border border-black/5 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.35)] p-4">
           <div className="flex flex-col gap-1">
             {!isEditor && LINKS.map((l) => {

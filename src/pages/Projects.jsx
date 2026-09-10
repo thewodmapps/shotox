@@ -58,7 +58,7 @@ export default function Projects() {
         <div className="absolute bottom-0 left-1/3 w-[380px] h-[380px] rounded-full bg-orange-500/10 blur-[130px]" />
       </div>
       <div className="relative z-10">
-        <Navbar />
+        <Navbar appBar />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-28 md:pb-16 space-y-16 scroll-contain">
           <CreateCards onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
           <SavedDesigns projects={projects} onDelete={remove} />
