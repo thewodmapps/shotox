@@ -35,8 +35,9 @@ export default function ProjectsHeader() {
   const goPricing = () => navigate('/#pricing');
 
   return (
-    <header className="sticky top-0 z-30 min-h-16 safe-top bg-[#08080d]/70 backdrop-blur-xl text-white flex items-center justify-between px-4 sm:px-6 border-b border-white/10 no-callout">
-      <Brand to="/" size={26} textClass="text-white" />
+    <header className="fixed top-4 inset-x-0 z-40 flex justify-center px-4">
+      <nav className="w-full max-w-5xl flex items-center justify-between rounded-2xl bg-[#111118]/70 backdrop-blur-xl border border-white/10 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.6)] pl-4 pr-2 py-2 no-callout">
+        <Brand to="/" size={28} textClass="text-white" />
       <div className="flex items-center gap-1.5 sm:gap-2">
         {badge ? (
           <button onClick={goPricing} title="View plans" className={`inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full ${badge.className} hover:opacity-90 transition-opacity`}>
@@ -54,6 +55,7 @@ export default function ProjectsHeader() {
           <LogOut className="w-4 h-4 shrink-0" /> <span className="hidden sm:inline">Sign out</span>
         </button>
       </div>
+      </nav>
       <AccountModal open={accountOpen} onClose={() => setAccountOpen(false)} />
     </header>
   );
