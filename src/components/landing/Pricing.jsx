@@ -15,7 +15,7 @@ const PLANS = [
     planKey: 'free',
     price: '$0',
     period: 'forever',
-    features: ['2 devices — iPhone & Android', '3 starter templates', 'Up to 3 projects', 'All 8 slides per template', 'Shotox watermark', 'Personal use only'],
+    features: ['2 devices — iPhone & Android', '2 starter templates', 'Up to 2 projects', 'All 8 slides per template', 'Shotox watermark', 'Personal use only'],
     cta: 'Start free',
   },
   {
@@ -24,7 +24,7 @@ const PLANS = [
     price: '$9',
     period: '/ month',
     featured: true,
-    features: ['All devices — iPhone, iPad, Android, Feature Graphic, custom', 'All 20+ designer templates', 'Unlimited projects & slides', 'No watermark', 'PNG + JPEG export', 'AI copy generator', 'Commercial use license', 'Email support'],
+    features: ['All devices — iPhone, iPad, Android, Feature Graphic, custom', 'All 100 designer templates', 'Unlimited projects & slides', 'No watermark', 'PNG + JPEG export', 'AI copy generator', 'Commercial use license', 'Email support'],
     cta: 'Go monthly',
   },
   {
