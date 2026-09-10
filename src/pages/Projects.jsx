@@ -9,7 +9,6 @@ import CreateCards from '@/components/projects/CreateCards';
 import TemplateGallery from '@/components/projects/TemplateGallery';
 import SavedDesigns from '@/components/projects/SavedDesigns';
 import WelcomeModal from '@/components/projects/WelcomeModal';
-import BottomTabBar from '@/components/mobile/BottomTabBar';
 import UpgradeModal from '@/components/editor/UpgradeModal';
 
 export default function Projects() {
@@ -68,7 +67,6 @@ export default function Projects() {
       </div>
       <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} onUpgrade={() => navigate('/#pricing')} />
       <WelcomeModal />
-      <BottomTabBar />
     </div>
   );
 }
