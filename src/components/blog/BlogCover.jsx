@@ -31,7 +31,7 @@ export default function BlogCover({ color = '#7C3AED', icon: Icon, title, classN
       </div>
 
       {/* floating tile cluster */}
-      <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden sm:block">
+      <div className="absolute right-4 top-1/2 -translate-y-1/2">
         <div className="relative w-[150px] h-[150px]">
           {[
             'top-0 right-6',
@@ -59,16 +59,9 @@ export default function BlogCover({ color = '#7C3AED', icon: Icon, title, classN
         </div>
       </div>
 
-      {/* mobile: compact center icon */}
-      {Icon && (
-        <div className="absolute right-3 top-3 sm:hidden w-11 h-11 rounded-xl bg-white/95 shadow-lg flex items-center justify-center">
-          <Icon className="w-6 h-6" style={{ color }} />
-        </div>
-      )}
-
       {/* title scrim + overlay */}
       <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/35 via-black/10 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 p-5 sm:pr-[150px]">
+      <div className="absolute bottom-0 left-0 right-0 p-5 pr-[150px]">
         <h3 className="text-white font-display font-bold leading-tight text-lg sm:text-xl line-clamp-3 drop-shadow-sm">
           {title}
         </h3>
