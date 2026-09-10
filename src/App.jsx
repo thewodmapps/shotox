@@ -1,28 +1,35 @@
+import { useEffect, lazy, Suspense } from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { routeVariants, routeTransition } from '@/lib/routeVariants';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
-import Editor from './pages/Editor';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
 import ResetPassword from '@/pages/ResetPassword';
 import LogoDownload from '@/pages/LogoDownload';
-import Blog from '@/pages/Blog';
-import BlogPost from '@/pages/BlogPost';
 import Privacy from '@/pages/Privacy';
 import Terms from '@/pages/Terms';
-import SharedDesign from '@/pages/SharedDesign';
+
+const Editor = lazy(() => import('@/pages/Editor'));
+const Blog = lazy(() => import('@/pages/Blog'));
+const BlogPost = lazy(() => import('@/pages/BlogPost'));
+const SharedDesign = lazy(() => import('@/pages/SharedDesign'));
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const location = useLocation();
+  const reduce = usePrefersReducedMotion();
 
   // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
@@ -46,7 +53,16 @@ const AuthenticatedApp = () => {
 
   // Render the main app
   return (
-    <Routes>
+    <Suspense fallback={<div className="fixed inset-0 grid place-items-center"><div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin" /></div>}>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={location.pathname}
+          initial={reduce ? false : routeVariants.initial}
+          animate={reduce ? { opacity: 1 } : routeVariants.animate}
+          exit={reduce ? { opacity: 0 } : routeVariants.exit}
+          transition={reduce ? { duration: 0 } : routeTransition}
+        >
+          <Routes location={location}>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
@@ -63,12 +79,27 @@ const AuthenticatedApp = () => {
         <Route path="/editor" element={<Editor />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
-    </Routes>
+          </Routes>
+        </motion.div>
+      </AnimatePresence>
+    </Suspense>
   );
 };
 
 
 function App() {
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const apply = () => document.documentElement.classList.toggle('dark', mq.matches);
+    apply();
+    if (mq.addEventListener) mq.addEventListener('change', apply);
+    else mq.addListener(apply);
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener('change', apply);
+      else mq.removeListener(apply);
+    };
+  }, []);
 
   return (
     <AuthProvider>

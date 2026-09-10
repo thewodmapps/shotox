@@ -12,14 +12,14 @@ export const PANELS = [
 
 export default function EditorRail({ active, mobileOpen, onChange }) {
   return (
-    <nav className="h-14 md:h-auto flex md:flex-col md:w-[72px] shrink-0 bg-[#0B0B12] border-t md:border-t-0 md:border-r border-white/10 text-white/60 md:py-3 order-last md:order-first z-10">
+    <nav className="min-h-14 md:h-auto flex md:flex-col md:w-[72px] shrink-0 bg-[#0B0B12] border-t md:border-t-0 md:border-r border-white/10 text-white/60 md:py-3 order-last md:order-first z-10 safe-bottom no-callout">
       {PANELS.map((p) => {
         const isActive = active === p.id;
         return (
           <button
             key={p.id}
             onClick={() => onChange(p.id)}
-            className={`flex-1 md:flex-none flex flex-col items-center justify-center gap-1 md:py-3.5 text-[10px] sm:text-[11px] transition-colors ${
+            className={`flex-1 md:flex-none flex flex-col items-center justify-center gap-1 md:py-3.5 text-sm transition-colors ${
               isActive && mobileOpen ? 'text-white bg-white/10' : isActive ? 'text-white' : 'hover:text-white hover:bg-white/5'
             }`}
           >

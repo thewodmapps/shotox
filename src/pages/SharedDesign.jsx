@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Loader2, ArrowRight } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { resolveDevice } from '@/lib/templates';
 import { Brand } from '@/components/Logo';
@@ -38,8 +38,13 @@ export default function SharedDesign() {
 
   return (
     <div className="min-h-screen bg-[#08080d] text-white flex flex-col">
-      <header className="sticky top-0 z-10 flex items-center justify-between px-5 py-4 border-b border-white/10 bg-[#08080d]/80 backdrop-blur-xl">
-        <Brand size={28} textClass="text-white" />
+      <header className="sticky top-0 z-10 safe-top flex items-center justify-between px-5 py-4 border-b border-white/10 bg-[#08080d]/80 backdrop-blur-xl no-callout">
+        <div className="flex items-center gap-3">
+          <Link to="/" aria-label="Back to home" className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-white/5 border border-white/10 text-white/80 hover:bg-white/10 hover:text-white transition-colors">
+            <ArrowLeft className="w-5 h-5" />
+          </Link>
+          <Brand size={28} textClass="text-white" />
+        </div>
         <Link
           to="/"
           className="inline-flex items-center gap-1.5 text-sm font-semibold text-white/80 hover:text-white transition px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10"

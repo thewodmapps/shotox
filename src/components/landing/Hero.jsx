@@ -5,14 +5,16 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/lib/AuthContext';
 import HeroShowcase from './HeroShowcase';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 export default function Hero() {
   const { isAuthenticated } = useAuth();
+  const reduce = usePrefersReducedMotion();
   return (
     <section className="relative min-h-screen bg-[#0B0B12] text-white overflow-hidden pt-36 pb-20 px-6 bg-grid">
-      <motion.div className="absolute -top-32 -left-24 w-[520px] h-[520px] rounded-full bg-violet-600/40 blur-[120px]" animate={{ x: [0, 40, 0], y: [0, 30, 0] }} transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }} />
-      <motion.div className="absolute top-40 -right-24 w-[520px] h-[520px] rounded-full bg-pink-500/35 blur-[120px]" animate={{ x: [0, -40, 0], y: [0, 40, 0] }} transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }} />
-      <motion.div className="absolute bottom-0 left-1/3 w-[420px] h-[420px] rounded-full bg-orange-500/25 blur-[120px]" animate={{ y: [0, -50, 0] }} transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }} />
+      <motion.div className="absolute -top-32 -left-24 w-[520px] h-[520px] rounded-full bg-violet-600/40 blur-[120px]" animate={reduce ? {} : { x: [0, 40, 0], y: [0, 30, 0] }} transition={reduce ? { duration: 0 } : { duration: 12, repeat: Infinity, ease: 'easeInOut' }} />
+      <motion.div className="absolute top-40 -right-24 w-[520px] h-[520px] rounded-full bg-pink-500/35 blur-[120px]" animate={reduce ? {} : { x: [0, -40, 0], y: [0, 40, 0] }} transition={reduce ? { duration: 0 } : { duration: 14, repeat: Infinity, ease: 'easeInOut' }} />
+      <motion.div className="absolute bottom-0 left-1/3 w-[420px] h-[420px] rounded-full bg-orange-500/25 blur-[120px]" animate={reduce ? {} : { y: [0, -50, 0] }} transition={reduce ? { duration: 0 } : { duration: 10, repeat: Infinity, ease: 'easeInOut' }} />
 
       <div className="relative max-w-6xl mx-auto text-center">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-lime-300 text-[#0B0B12] text-xs font-semibold">

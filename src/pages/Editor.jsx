@@ -48,11 +48,27 @@ export default function Editor() {
     const tm = setTimeout(async () => {
       setStatus('saving');
       const { name, platform, device, template_id, slides, uploads, custom_w, custom_h } = project;
-      await base44.entities.Project.update(project.id, { name, platform, device, template_id, slides, uploads, custom_w, custom_h });
-      setStatus('saved');
+      try {
+        await base44.entities.Project.update(project.id, { name, platform, device, template_id, slides, uploads, custom_w, custom_h });
+        setStatus('saved');
+      } catch (e) {
+        setStatus('error');
+      }
     }, 1200);
     return () => clearTimeout(tm);
   }, [project]);
+
+  const retrySave = async () => {
+    if (!project) return;
+    setStatus('saving');
+    const { name, platform, device, template_id, slides, uploads, custom_w, custom_h } = project;
+    try {
+      await base44.entities.Project.update(project.id, { name, platform, device, template_id, slides, uploads, custom_w, custom_h });
+      setStatus('saved');
+    } catch (e) {
+      setStatus('error');
+    }
+  };
 
   useEffect(() => {
     if (!exporting) return;
@@ -129,7 +145,7 @@ export default function Editor() {
   const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject, isPro: pro, onLocked: () => setShowUpgrade(true) };
   return (
     <div className="h-screen flex flex-col bg-[#08080d]">
-      <EditorTopbar project={project} status={status} exporting={exporting} onRename={(name) => updateProject({ name })} onExport={onExport} onShare={() => setShowShare(true)} />
+      <EditorTopbar project={project} status={status} exporting={exporting} onRename={(name) => updateProject({ name })} onExport={onExport} onShare={() => setShowShare(true)} onRetry={retrySave} />
       <div className="flex-1 min-h-0 flex flex-col md:flex-row relative">
         <EditorRail
           active={panel}

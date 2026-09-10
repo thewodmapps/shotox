@@ -8,7 +8,7 @@ import ShareModal from './ShareModal';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 
 const ICON = 'w-4 h-4';
-const BTN_BASE = 'grid place-items-center w-8 h-8 rounded-lg backdrop-blur transition-all text-white/60 opacity-70 hover:opacity-100 hover:text-white hover:bg-white/10';
+const BTN_BASE = 'grid place-items-center w-11 h-11 rounded-lg backdrop-blur transition-all text-white/60 hover:opacity-100 hover:text-white hover:bg-white/10';
 
 export default function ProjectCard({ project, onDelete }) {
   const p = project;
@@ -56,7 +56,7 @@ export default function ProjectCard({ project, onDelete }) {
         <div className="px-4 py-3.5 flex items-end justify-between gap-3">
           <Link to={`/editor?id=${p.id}`} className="min-w-0">
             <div className="font-semibold text-sm text-white truncate">{p.name}</div>
-            <div className="text-xs text-white/40 mt-0.5">{(p.slides || []).length} slides · {format(new Date(p.updated_date), 'MMM d, yyyy')}</div>
+            <div className="text-sm text-white/60 mt-0.5">{(p.slides || []).length} slides · {format(new Date(p.updated_date), 'MMM d, yyyy')}</div>
           </Link>
           <div className="flex items-center gap-1.5 shrink-0">
             <button onClick={edit} aria-label="Edit design" className={BTN_BASE}>

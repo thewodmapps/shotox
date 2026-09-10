@@ -167,3 +167,21 @@
   -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
   mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
 }
+
+/* ===== Android WebView / mobile hardening (additive — light mode untouched) ===== */
+.safe-top { padding-top: env(safe-area-inset-top); }
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+.app-shell { overscroll-behavior: contain; }
+.scroll-contain { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.no-callout { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+.selectable-text { -webkit-user-select: text; user-select: text; }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none !important; }
+}
+
+.dark .article-body h2 { color: #ffffff; }
+.dark .article-body p { color: rgba(255, 255, 255, 0.72); }
+.dark .article-body strong { color: #ffffff; }
+.dark .article-body a { color: #c4b5fd; }
+.dark .article-body ul { color: rgba(255, 255, 255, 0.72); }

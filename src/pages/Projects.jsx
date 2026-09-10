@@ -9,6 +9,7 @@ import CreateCards from '@/components/projects/CreateCards';
 import TemplateGallery from '@/components/projects/TemplateGallery';
 import SavedDesigns from '@/components/projects/SavedDesigns';
 import WelcomeModal from '@/components/projects/WelcomeModal';
+import BottomTabBar from '@/components/mobile/BottomTabBar';
 import UpgradeModal from '@/components/editor/UpgradeModal';
 
 export default function Projects() {
@@ -51,7 +52,7 @@ export default function Projects() {
   };
 
   return (
-    <div className="min-h-screen bg-[#08080d] font-body text-white relative">
+    <div className="min-h-screen bg-[#08080d] font-body text-white relative app-shell">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -top-40 -left-24 w-[520px] h-[520px] rounded-full bg-violet-600/20 blur-[130px]" />
         <div className="absolute top-40 -right-24 w-[460px] h-[460px] rounded-full bg-pink-500/15 blur-[130px]" />
@@ -59,7 +60,7 @@ export default function Projects() {
       </div>
       <div className="relative z-10">
         <ProjectsHeader />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 space-y-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 pb-28 md:pb-16 space-y-16 scroll-contain">
           <CreateCards onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
           <SavedDesigns projects={projects} onDelete={remove} />
           <TemplateGallery onCreate={create} creating={creating} isPro={pro} />
@@ -67,6 +68,7 @@ export default function Projects() {
       </div>
       <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} onUpgrade={() => navigate('/#pricing')} />
       <WelcomeModal />
+      <BottomTabBar />
     </div>
   );
 }

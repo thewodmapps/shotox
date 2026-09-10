@@ -32,7 +32,7 @@ export default function TemplatesPanel({ project, updateProject }) {
   const list = cat === 'All' ? TEMPLATES : TEMPLATES.filter((t) => t.category === cat);
   return (
     <div className="space-y-3">
-      <p className="text-xs text-white/50">Applying a template keeps your uploaded screenshots.</p>
+      <p className="text-sm text-white/60">Applying a template keeps your uploaded screenshots.</p>
       <Select value={cat} onValueChange={setCat}>
         <SelectTrigger className="bg-white/5 border-white/10 text-white h-9">
           <SelectValue placeholder="All categories" />
@@ -61,12 +61,12 @@ export default function TemplatesPanel({ project, updateProject }) {
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <h3 className="font-display font-bold text-lg leading-tight tracking-tight truncate">{tpl.name}</h3>
-                  <p className="text-[11px] mt-0.5 truncate" style={{ color: sub }}>
+                  <p className="text-sm mt-0.5 truncate" style={{ color: sub }}>
                     {tpl.slides[0].subheading}
                   </p>
                 </div>
                 <span
-                  className="shrink-0 text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full"
+                  className="shrink-0 text-sm font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full"
                   style={{ background: fg === '#FFFFFF' ? 'rgba(255,255,255,0.18)' : 'rgba(11,11,18,0.12)' }}
                 >
                   {tpl.category}
