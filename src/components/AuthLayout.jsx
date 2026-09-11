@@ -77,7 +77,7 @@ export default function AuthLayout({ icon: Icon, title, subtitle, footer, childr
 
       {/* Right — form panel */}
       <div className="w-full lg:w-1/2 flex flex-col">
-        <div className="flex items-center justify-between px-6 sm:px-10 pb-4" style={{ paddingTop: 'max(env(safe-area-inset-top), 3rem)' }}>
+        <div className="flex items-center justify-between px-6 sm:px-10 pb-4" style={{ paddingTop: 'max(env(safe-area-inset-top), 2.5rem)' }}>
           <Link
             to="/"
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
