@@ -5,18 +5,22 @@ import { base44 } from '@/api/base44Client';
 import { resolveDevice } from '@/lib/templates';
 import { Brand } from '@/components/Logo';
 import ScaledSlide from '@/components/editor/ScaledSlide';
+import PullToRefresh from '@/components/PullToRefresh';
 
 export default function SharedDesign() {
   const id = new URLSearchParams(window.location.search).get('p');
   const [project, setProject] = useState(null);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (!id) return setError('no_id');
+  const load = () =>
     base44.functions
       .invoke('getSharedProject', { id })
       .then((res) => setProject(res.data))
       .catch(() => setError('load_failed'));
+
+  useEffect(() => {
+    if (!id) return setError('no_id');
+    load();
   }, [id]);
 
   if (error === 'no_id') {
@@ -38,6 +42,7 @@ export default function SharedDesign() {
 
   return (
     <div className="min-h-screen bg-[#08080d] text-white flex flex-col">
+      <PullToRefresh onRefresh={load} />
       <header className="sticky top-0 z-10 safe-top h-16 flex items-center justify-between px-4 sm:px-6 border-b border-white/10 bg-[#08080d]/80 backdrop-blur-xl no-callout">
         <div className="flex items-center gap-3">
           <Link to="/" aria-label="Back to home" className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-white/80 hover:bg-white/10 hover:text-white transition-colors">

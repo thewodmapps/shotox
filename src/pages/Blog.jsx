@@ -3,6 +3,7 @@ import Navbar from '@/components/landing/Navbar';
 import Footer from '@/components/landing/Footer';
 import BlogCard from '@/components/blog/BlogCard';
 import BlogPagination from '@/components/blog/BlogPagination';
+import PullToRefresh from '@/components/PullToRefresh';
 import { BLOG_POSTS } from '@/lib/blogPosts';
 
 const PER_PAGE = 9;
@@ -19,8 +20,15 @@ export default function Blog() {
     window.scrollTo(0, 0);
   }, []);
 
+  const refresh = async () => {
+    setPage(1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    await new Promise((r) => setTimeout(r, 500));
+  };
+
   return (
     <div className="font-body bg-white">
+      <PullToRefresh onRefresh={refresh} tone="light" />
       <Navbar />
       <section className="pt-32 pb-12 px-6">
         <div className="max-w-3xl mx-auto text-center">

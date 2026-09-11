@@ -8,10 +8,12 @@ import BlogSection from '@/components/landing/BlogSection';
 import FaqSection from '@/components/landing/FaqSection';
 import Pricing from '@/components/landing/Pricing';
 import Footer from '@/components/landing/Footer';
+import PullToRefresh from '@/components/PullToRefresh';
 
 export default function Home() {
   return (
     <div className="font-body">
+      <PullToRefresh onRefresh={() => window.location.reload()} tone="light" />
       <Navbar />
       <Hero />
       <HowItWorks />

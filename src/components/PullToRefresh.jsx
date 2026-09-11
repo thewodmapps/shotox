@@ -7,7 +7,7 @@ const THRESHOLD = 66;
 // Attractive, branded pull-to-refresh for touch devices. Shows a gradient
 // Shotox pill (violet → pink → amber) that scales & rotates as you pull, then
 // spins while refreshing. Desktop is unaffected (no touch events fire).
-export default function PullToRefresh({ onRefresh }) {
+export default function PullToRefresh({ onRefresh, tone = 'dark' }) {
   const [pull, setPull] = useState(0);
   const [active, setActive] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -91,7 +91,7 @@ export default function PullToRefresh({ onRefresh }) {
           style={{ transform: refreshing ? undefined : `rotate(${progress * 220}deg)`, transition: active ? 'none' : 'transform 0.15s ease-out' }}
         />
       </div>
-      <span className="mt-1.5 text-[10px] font-semibold tracking-wide text-white/75">
+      <span className={`mt-1.5 text-[10px] font-semibold tracking-wide ${tone === 'light' ? 'text-[#0B0B12]/55' : 'text-white/75'}`}>
         {refreshing ? 'Refreshing…' : pull >= THRESHOLD ? 'Release to refresh' : 'Pull to refresh'}
       </span>
     </div>
