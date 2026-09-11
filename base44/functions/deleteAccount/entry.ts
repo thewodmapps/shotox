@@ -8,7 +8,7 @@ export default async function deleteAccount(req: Request): Promise<Response> {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Permanently remove the user's design data: all projects they own.
+    // 1. Permanently remove the user's design data: all projects they own.
     // RLS scopes Project operations to created_by_id === user.id for the calling user.
     let deletedProjects = 0;
     let hasMore = true;
@@ -25,9 +25,14 @@ export default async function deleteAccount(req: Request): Promise<Response> {
       }
     }
 
+    // 2. Permanently delete the user account itself so the email can be re-used.
+    // Auth was verified above; deleting one's own account is a legitimate self-service
+    // operation, so service-role elevation is justified here.
+    await base44.asServiceRole.entities.User.delete(user.id);
+
     return Response.json({ ok: true, deletedProjects });
   } catch (error) {
     console.error('deleteAccount error:', error?.message || error);
-    return Response.json({ error: error?.message || 'Failed to delete account data' }, { status: 500 });
+    return Response.json({ error: error?.message || 'Failed to delete account' }, { status: 500 });
   }
 }

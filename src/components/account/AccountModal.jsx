@@ -78,7 +78,7 @@ export default function AccountModal({ open, onClose }) {
             {status === 'done' ? (
               <div className="py-6 text-center">
                 <p className="text-white/80 text-sm leading-relaxed">
-                  Your projects and design data have been permanently removed. Signing you out…
+                  Your account and all design data have been permanently deleted. Signing you out…
                 </p>
                 <Loader2 className="w-5 h-5 animate-spin text-white/60 mx-auto mt-4" />
               </div>
