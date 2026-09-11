@@ -44,10 +44,18 @@ export const DEVICE_STYLES = [
   { id: 'white', name: 'White' },
   { id: 'titanium', name: 'Titanium' },
 ];
-export const SOLID_COLORS = ['#0B0B12', '#1E1B4B', '#2C2542', '#7C3AED', '#DB2777', '#EA580C', '#F59E0B', '#16A34A', '#0EA5E9', '#D9F99D', '#FDF2F8', '#FFFFFF'];
+export const SOLID_COLORS = [
+  '#0B0B12', '#1E1B4B', '#2C2542', '#4C1D95', '#7C3AED', '#9333EA', '#DB2777', '#BE185D',
+  '#EA580C', '#F59E0B', '#FBBF24', '#16A34A', '#15803D', '#0EA5E9', '#0C4A6E', '#3B82F6',
+  '#D9F99D', '#FDF2F8', '#FFE4D6', '#F0F9FF', '#FFFFFF', '#1C1917', '#0F172A', '#064E3B',
+];
 export const GRADIENTS = [
   ['#7C3AED', '#EC4899'], ['#0EA5E9', '#6366F1'], ['#F97316', '#F43F5E'], ['#10B981', '#3B82F6'],
   ['#111827', '#4C1D95'], ['#FDE68A', '#F97316'], ['#A7F3D0', '#67E8F9'], ['#FBCFE8', '#C4B5FD'],
+  ['#6366F1', '#A855F7'], ['#3B82F6', '#06B6D4'], ['#8B5CF6', '#3B82F6'], ['#EC4899', '#F97316'],
+  ['#14B8A6', '#0EA5E9'], ['#F43F5E', '#8B5CF6'], ['#0F0524', '#6D28D9'], ['#FBBF24', '#DB2777'],
+  ['#059669', '#3B82F6'], ['#D9F99D', '#22C55E'], ['#FDA4AF', '#FBBF24'], ['#1E1B4B', '#DB2777'],
+  ['#0C4A6E', '#06B6D4'], ['#4C1D95', '#9D174D'], ['#FED7AA', '#FDBA74'], ['#0B0B12', '#16A34A'],
 ];
 
 export const THEME_STYLES = ['swipe', 'spotlight', 'split', 'grid', 'brush', 'orbs', 'neon', 'minimal'];

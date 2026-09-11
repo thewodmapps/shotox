@@ -41,49 +41,75 @@ export default function Editor() {
   const history = useRef([]);
   const hPtr = useRef(-1);
   const histTimer = useRef(null);
-  const skipHistory = useRef(false);
-  const firstProject = useRef(true);
+  const pendingRef = useRef(null);
 
-  const snapshot = (proj) => JSON.parse(JSON.stringify({
-    name: proj.name, slides: proj.slides, platform: proj.platform,
-    device: proj.device, template_id: proj.template_id,
-    custom_w: proj.custom_w, custom_h: proj.custom_h, uploads: proj.uploads,
-  }));
+  const syncFlags = () => {
+    setCanUndo(hPtr.current >= 0);
+    setCanRedo(hPtr.current < history.current.length - 1);
+  };
 
-  const queueHistory = (proj) => {
+  const flushPending = () => {
     clearTimeout(histTimer.current);
-    histTimer.current = setTimeout(() => {
-      const snap = snapshot(proj);
-      const top = history.current[hPtr.current];
-      if (top && JSON.stringify(top) === JSON.stringify(snap)) return;
-      history.current = history.current.slice(0, hPtr.current + 1);
-      history.current.push(snap);
-      if (history.current.length > 50) history.current.shift();
-      hPtr.current = history.current.length - 1;
-      setCanUndo(hPtr.current > 0);
-      setCanRedo(false);
-    }, 350);
+    const entry = pendingRef.current;
+    pendingRef.current = null;
+    if (!entry) return;
+    if (JSON.stringify(entry.before) === JSON.stringify(entry.after)) { syncFlags(); return; }
+    history.current = history.current.slice(0, hPtr.current + 1);
+    history.current.push(entry);
+    if (history.current.length > 60) history.current.shift();
+    hPtr.current = history.current.length - 1;
+    syncFlags();
+  };
+
+  // Debounced, per-target history. Rapid edits to the same slide merge into
+  // one undo step (first before → last after). Switching to a different slide
+  // or a structural change flushes the pending entry immediately.
+  const queueHistory = (entry) => {
+    if (pendingRef.current) {
+      const sameSlide = entry.type === 'slide' && pendingRef.current.type === 'slide' && entry.idx === pendingRef.current.idx;
+      const sameAll = entry.type === 'all' && pendingRef.current.type === 'all';
+      if (sameSlide || sameAll) {
+        pendingRef.current = { ...pendingRef.current, after: entry.after };
+      } else {
+        flushPending();
+        pendingRef.current = entry;
+      }
+    } else {
+      pendingRef.current = entry;
+    }
+    setCanUndo(true);
+    setCanRedo(false);
+    clearTimeout(histTimer.current);
+    histTimer.current = setTimeout(flushPending, 400);
   };
 
   const undoEdit = () => {
-    if (hPtr.current <= 0) return;
+    flushPending();
+    if (hPtr.current < 0) return;
+    const entry = history.current[hPtr.current];
+    if (entry.type === 'slide') {
+      setProject((p) => ({ ...p, slides: p.slides.map((s, i) => (i === entry.idx ? entry.before : s)) }));
+      setSel(entry.idx);
+    } else {
+      setProject((p) => ({ ...p, slides: entry.before }));
+    }
     hPtr.current--;
-    skipHistory.current = true;
-    const snap = JSON.parse(JSON.stringify(history.current[hPtr.current]));
-    setProject((p) => ({ ...p, ...snap }));
-    setCanUndo(hPtr.current > 0);
-    setCanRedo(hPtr.current < history.current.length - 1);
+    syncFlags();
     dirty.current = true;
   };
 
   const redoEdit = () => {
+    flushPending();
     if (hPtr.current >= history.current.length - 1) return;
     hPtr.current++;
-    skipHistory.current = true;
-    const snap = JSON.parse(JSON.stringify(history.current[hPtr.current]));
-    setProject((p) => ({ ...p, ...snap }));
-    setCanUndo(hPtr.current > 0);
-    setCanRedo(hPtr.current < history.current.length - 1);
+    const entry = history.current[hPtr.current];
+    if (entry.type === 'slide') {
+      setProject((p) => ({ ...p, slides: p.slides.map((s, i) => (i === entry.idx ? entry.after : s)) }));
+      setSel(entry.idx);
+    } else {
+      setProject((p) => ({ ...p, slides: entry.after }));
+    }
+    syncFlags();
     dirty.current = true;
   };
 
@@ -92,19 +118,13 @@ export default function Editor() {
     base44.entities.Project.get(id).then((p) => {
       if (!p) return setMissing(true);
       setProject(p);
-      history.current = [snapshot(p)];
-      hPtr.current = 0;
+      history.current = [];
+      hPtr.current = -1;
+      pendingRef.current = null;
       setCanUndo(false);
       setCanRedo(false);
     });
   }, [id]);
-
-  useEffect(() => {
-    if (!project) return;
-    if (firstProject.current) { firstProject.current = false; return; }
-    if (skipHistory.current) { skipHistory.current = false; return; }
-    queueHistory(project);
-  }, [project]);
 
   useEffect(() => {
     if (!project || !dirty.current) return;
@@ -148,15 +168,39 @@ export default function Editor() {
   }, [exporting]);
 
   const updateProject = (patch) => { dirty.current = true; setProject((p) => ({ ...p, ...patch })); };
-  const updateSlide = (patch) => updateProject({ slides: project.slides.map((s, i) => (i === sel ? { ...s, ...patch } : s)) });
+  const updateSlide = (patch) => {
+    const before = project.slides[sel];
+    const after = { ...before, ...patch };
+    queueHistory({ type: 'slide', idx: sel, before, after });
+    updateProject({ slides: project.slides.map((s, i) => (i === sel ? after : s)) });
+  };
   // Typography (font, alignment, text colors) is project-wide so every slide stays consistent.
-  const updateTextStyle = (patch) => updateProject({ slides: project.slides.map((s) => ({ ...s, ...patch })) });
-  const addSlide = () => { updateProject({ slides: [...project.slides, { ...project.slides[sel], id: makeId(), screenshotUrl: '' }] }); setSel(project.slides.length); };
-  const duplicate = (i) => { const s = [...project.slides]; s.splice(i + 1, 0, { ...s[i], id: makeId() }); updateProject({ slides: s }); setSel(i + 1); };
+  const updateTextStyle = (patch) => {
+    const before = project.slides;
+    const after = project.slides.map((s) => ({ ...s, ...patch }));
+    queueHistory({ type: 'all', before, after });
+    updateProject({ slides: after });
+  };
+  const addSlide = () => {
+    const before = project.slides;
+    const after = [...project.slides, { ...project.slides[sel], id: makeId(), screenshotUrl: '' }];
+    queueHistory({ type: 'all', before, after });
+    updateProject({ slides: after });
+    setSel(project.slides.length);
+  };
+  const duplicate = (i) => {
+    const before = project.slides;
+    const s = [...before]; s.splice(i + 1, 0, { ...s[i], id: makeId() });
+    queueHistory({ type: 'all', before, after: s });
+    updateProject({ slides: s });
+    setSel(i + 1);
+  };
 
   const remove = (i) => {
     const removed = project.slides[i];
-    const s = project.slides.filter((_, k) => k !== i);
+    const before = project.slides;
+    const s = before.filter((_, k) => k !== i);
+    queueHistory({ type: 'all', before, after: s });
     updateProject({ slides: s });
     setSel(Math.max(0, Math.min(sel, s.length - 1)));
     setUndo({ slide: removed, index: i });
@@ -174,7 +218,13 @@ export default function Editor() {
     clearTimeout(undoTimer.current);
   };
 
-  const move = (from, to) => { const s = [...project.slides]; const [m] = s.splice(from, 1); s.splice(to, 0, m); updateProject({ slides: s }); setSel(to); };
+  const move = (from, to) => {
+    const before = project.slides;
+    const s = [...before]; const [m] = s.splice(from, 1); s.splice(to, 0, m);
+    queueHistory({ type: 'all', before, after: s });
+    updateProject({ slides: s });
+    setSel(to);
+  };
 
   const onExport = async (which, format) => {
     exportTarget.current = 0;
