@@ -35,7 +35,9 @@ export default function ProjectsHeader() {
   const goPricing = () => navigate('/#pricing');
 
   return (
-    <header className="sticky top-0 z-30 min-h-16 safe-top bg-[#0B0B12] text-white flex items-center gap-3 px-3 sm:px-4 border-b border-white/10 no-callout">
+    <header className="sticky top-0 z-30 bg-[#0B0B12] text-white border-b border-white/10 no-callout">
+      <div className="safe-top" />
+      <div className="min-h-16 flex items-center gap-3 px-3 sm:px-4">
       <Brand to="/" size={24} textClass="text-white" />
       <div className="ml-auto flex items-center gap-3">
         {badge ? (
@@ -55,6 +57,7 @@ export default function ProjectsHeader() {
         </button>
       </div>
       <AccountModal open={accountOpen} onClose={() => setAccountOpen(false)} />
+      </div>
     </header>
   );
 }
