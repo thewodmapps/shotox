@@ -43,13 +43,13 @@ export default function SharedDesign() {
   return (
     <div className="min-h-screen bg-[#08080d] text-white flex flex-col">
       <PullToRefresh onRefresh={load} />
-      <header className="sticky top-0 z-10 safe-top min-h-16 flex items-center gap-3 px-3 sm:px-4 border-b border-white/10 bg-[#0B0B12] no-callout overflow-x-hidden">
+      <header className="sticky top-0 z-10 safe-top min-h-16 flex items-center justify-center gap-3 px-6 sm:px-8 border-b border-white/10 bg-[#0B0B12] no-callout overflow-x-hidden">
         <Brand to="/" size={24} textClass="text-white" />
         <Link
           to="/"
-          className="ml-auto shrink-0 inline-flex items-center gap-1.5 h-9 text-sm font-semibold text-white hover:opacity-90 transition-opacity rounded-full px-3 sm:px-4 bg-gradient-to-r from-violet-500 to-pink-500 shadow-lg shadow-pink-500/30 border border-white/10"
+          className="shrink-0 inline-flex items-center gap-1.5 h-9 text-sm font-semibold text-white hover:opacity-90 transition-opacity rounded-full px-4 bg-gradient-to-r from-violet-500 to-pink-500 shadow-lg shadow-pink-500/30 border border-white/10"
         >
-          <span className="hidden sm:inline">Create your own</span><span className="sm:hidden">Create</span> <ArrowRight className="w-4 h-4" />
+          Create your own <ArrowRight className="w-4 h-4" />
         </Link>
       </header>
 
