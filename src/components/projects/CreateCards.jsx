@@ -10,7 +10,7 @@ const OPTIONS = [
   { key: 'android-phone', title: 'Google Play', sub: 'Phone · 1080×1920', form: 'phone', platform: 'android', device: 'android-phone', icon: Smartphone, tpl: 'ocean' },
   { key: 'ipad', title: 'iPad', sub: '13" · 2064×2752', form: 'tablet', platform: 'ios', device: 'ipad-13', icon: Tablet, tpl: 'editorial' },
   { key: 'android-tab', title: 'Android Tablet', sub: '10" · 1200×1920', form: 'tablet', platform: 'android', device: 'android-tab-10', icon: Tablet, tpl: 'mint' },
-  { key: 'feature', title: 'Feature Graphic', sub: 'Banner · 1024×500', form: 'feature', platform: 'android', device: 'feature-graphic', icon: ImagePlus, tpl: 'coral' },
+  { key: 'feature', title: 'Feature Graphic', sub: 'Banner · 1024×500', form: 'feature', platform: 'android', device: 'feature-graphic', icon: ImagePlus, tpl: 'feature-banner' },
   { key: 'custom', title: 'Custom Size', sub: 'Any dimensions', form: 'custom', platform: 'ios', device: 'custom', icon: Settings, tpl: 'aurora' },
 ];
 

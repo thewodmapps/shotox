@@ -295,6 +295,24 @@ const D = [
       s: ['App Store & Google Play ready in minutes', 'Describe your app, get a full set instantly', 'Realistic phones & tablets that pop off the screen', 'Your colors, fonts and screenshots, perfectly placed', 'High-converting layouts proven to boost installs', 'PNG, JPEG or ZIP, store-ready every time', 'If you can type, you can ship beautiful screenshots', 'Launch on the App Store & Google Play today'],
     },
   },
+  // ── Feature Graphic — banner-tuned template for the 1024×500 Google Play listing graphic ──
+  {
+    id: 'feature-banner',
+    name: 'Feature Banner',
+    cat: 'AI',
+    style: 'swipe',
+    font: 'Sora',
+    dev: 'titanium',
+    hc: '#FFFFFF',
+    sc: 'rgba(255,255,255,0.85)',
+    hScale: 1.25,
+    sScale: 1.05,
+    colors: [grad('#7C3AED', '#EC4899'), grad('#6366F1', '#0EA5E9'), solid('#0B0B12'), grad('#A855F7', '#FB7185'), grad('#F97316', '#DB2777'), grad('#10B981', '#3B82F6'), solid('#1E1B4B'), grad('#EC4899', '#8B5CF6')],
+    copy: {
+      h: ['Stunning app screenshots', 'AI screenshots in seconds', 'From screen to store', 'Designed to convert', 'Your app, beautifully framed', '3D templates that pop', 'Export store-ready today', 'Launch on every store'],
+      s: ['App Store & Google Play ready in minutes', 'Describe your app — get a full set instantly', 'Beautiful screenshots that drive installs', 'High-converting layouts proven to boost downloads', 'Your colors, fonts and screenshots, perfectly placed', 'Realistic devices that make your app look pro', 'PNG, JPEG or ZIP at exact store-ready sizes', 'Ship to the App Store & Google Play today'],
+    },
+  },
   // ── Shotox Aurora — signature "midnight sunset" template, brand palette reimagined ──
   {
     id: 'shotox-aurora',
