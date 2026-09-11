@@ -41,6 +41,7 @@ export default function Blog() {
 
       <section className="px-6 pb-24">
         <div className="max-w-6xl mx-auto">
+          <h2 className="sr-only">All articles</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((post, i) => (
               <BlogCard key={post.slug} post={post} index={i} />

@@ -41,15 +41,15 @@ export default function Footer() {
             <p className="mt-4 text-sm max-w-sm leading-relaxed">Create beautiful, customized app screenshots for the Apple App Store & Google Play — in minutes, not days.</p>
             <div className="flex items-center gap-3 mt-5">
               {SOCIAL.map((s) => (
-                <a key={s.label} href={s.href} target="_blank" rel="noreferrer" aria-label={s.label} className="w-9 h-9 rounded-xl grid place-items-center bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
-                  <s.icon className="w-4 h-4" />
+                <a key={s.label} href={s.href} target="_blank" rel="noreferrer" aria-label={s.label} className="w-11 h-11 rounded-xl grid place-items-center bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
+                  <s.icon className="w-5 h-5" />
                 </a>
               ))}
             </div>
           </div>
           {COLS.map((col) => (
             <div key={col.title}>
-              <h4 className="text-white text-sm font-semibold mb-4">{col.title}</h4>
+              <h2 className="text-white text-sm font-semibold mb-4">{col.title}</h2>
               <ul className="space-y-2.5 text-sm">
                 {col.links.map((l) => (
                   <li key={l.label}>

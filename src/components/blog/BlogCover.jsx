@@ -62,9 +62,9 @@ export default function BlogCover({ color = '#7C3AED', icon: Icon, title, classN
       {/* title scrim + overlay */}
       <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/35 via-black/10 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 p-5 pr-[150px]">
-        <h3 className="text-white font-display font-bold leading-tight text-lg sm:text-xl line-clamp-3 drop-shadow-sm">
+        <div className="text-white font-display font-bold leading-tight text-lg sm:text-xl line-clamp-3 drop-shadow-sm">
           {title}
-        </h3>
+        </div>
       </div>
     </div>
   );

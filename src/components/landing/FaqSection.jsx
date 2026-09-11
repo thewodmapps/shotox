@@ -29,9 +29,10 @@ export default function FaqSection() {
               <button
                 onClick={() => setOpen(open === i ? -1 : i)}
                 className="w-full flex items-center justify-between gap-4 text-left px-5 py-4"
+                aria-expanded={open === i}
               >
-                <span className="font-semibold text-[#111827]">{f.q}</span>
-                <span className={`text-[#7C3AED] text-xl transition-transform ${open === i ? 'rotate-45' : ''}`}>+</span>
+                <h3 className="font-semibold text-[#111827] text-base">{f.q}</h3>
+                <span aria-hidden="true" className={`text-[#7C3AED] text-xl transition-transform ${open === i ? 'rotate-45' : ''}`}>+</span>
               </button>
               {open === i && (
                 <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} className="px-5 pb-5">
