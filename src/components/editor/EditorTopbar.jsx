@@ -34,6 +34,7 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
   };
   return (
     <header className="shrink-0 bg-[#0B0B12] border-b border-white/10 text-white no-callout">
+      <div className="safe-top" />
       <div className="min-h-14 flex items-center gap-2 sm:gap-3 px-3 sm:px-4 overflow-x-hidden">
       <Link to="/projects" className="shrink-0 w-11 h-11 grid place-items-center rounded-lg hover:bg-white/10 transition-colors" aria-label="Back to projects">
         <ArrowLeft className="w-4 h-4" />

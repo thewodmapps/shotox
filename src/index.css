@@ -175,6 +175,10 @@
 @media (max-width: 1024px) {
   .safe-top { padding-top: max(env(safe-area-inset-top), 1.75rem); }
 }
+/* Builder preview runs in a desktop iframe where env(safe-area-inset-top) is 0;
+   suppress the forced mobile clearance so the navbar stays flush there.
+   Real devices (top window) keep the status-bar clearance above. */
+.in-frame .safe-top { padding-top: env(safe-area-inset-top); }
 .app-shell { overscroll-behavior: contain; }
 .scroll-contain { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 .no-callout { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
