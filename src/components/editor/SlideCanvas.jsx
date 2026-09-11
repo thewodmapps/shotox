@@ -54,7 +54,11 @@ const Sparkle = ({ size, color, style }) => (
   </svg>
 );
 
-const Decor = ({ style, accent }) => {
+// `u` is the render unit = displayWidth / BASE_W. Every pixel constant is scaled
+// by it so the composition renders natively at any size with NO css transform —
+// which is what lets the export capture the element 1:1 without html2canvas
+// mis-rendering a scale transform as a top offset.
+const Decor = ({ style, accent, u = 1 }) => {
   switch (style) {
     case 'spotlight':
       return (
@@ -74,12 +78,12 @@ const Decor = ({ style, accent }) => {
       return (
         <div
           className="absolute pointer-events-none inset-0"
-          style={{ backgroundImage: `radial-gradient(${hexA(accent, 0.4)} 1.4px, transparent 1.4px)`, backgroundSize: '22px 22px', opacity: 0.55 }}
+          style={{ backgroundImage: `radial-gradient(${hexA(accent, 0.4)} 1.4px, transparent 1.4px)`, backgroundSize: `${22 * u}px ${22 * u}px`, opacity: 0.55 }}
         />
       );
     case 'brush':
       return (
-        <svg className="absolute pointer-events-none" style={{ left: '50%', top: '52%', transform: 'translate(-50%,-50%) rotate(-10deg)' }} width="480" height="280" viewBox="0 0 480 280" fill="none" aria-hidden>
+        <svg className="absolute pointer-events-none" style={{ left: '50%', top: '52%', transform: 'translate(-50%,-50%) rotate(-10deg)' }} width={480 * u} height={280 * u} viewBox="0 0 480 280" fill="none" aria-hidden>
           <path d="M-30 150 C 70 40, 230 22, 380 140" stroke={accent} strokeWidth="58" strokeLinecap="round" style={{ opacity: 0.16 }} />
           <path d="M30 210 C 140 110, 300 110, 440 200" stroke={accent} strokeWidth="34" strokeLinecap="round" style={{ opacity: 0.12 }} />
         </svg>
@@ -94,8 +98,8 @@ const Decor = ({ style, accent }) => {
     case 'neon':
       return (
         <>
-          <div className="absolute pointer-events-none" style={{ left: '50%', top: '42%', transform: 'translate(-50%,-50%)', width: '74%', height: '74%', borderRadius: '50%', border: `1.5px solid ${hexA(accent, 0.32)}` }} />
-          <div className="absolute pointer-events-none" style={{ left: '50%', top: '42%', transform: 'translate(-50%,-50%)', width: '54%', height: '54%', borderRadius: '50%', border: `1.5px solid ${hexA(accent, 0.2)}` }} />
+          <div className="absolute pointer-events-none" style={{ left: '50%', top: '42%', transform: 'translate(-50%,-50%)', width: '74%', height: '74%', borderRadius: '50%', border: `${1.5 * u}px solid ${hexA(accent, 0.32)}` }} />
+          <div className="absolute pointer-events-none" style={{ left: '50%', top: '42%', transform: 'translate(-50%,-50%)', width: '54%', height: '54%', borderRadius: '50%', border: `${1.5 * u}px solid ${hexA(accent, 0.2)}` }} />
         </>
       );
     case 'minimal':
@@ -104,62 +108,66 @@ const Decor = ({ style, accent }) => {
     default:
       return (
         <>
-          <svg className="absolute pointer-events-none" style={{ left: '50%', top: '52%', transform: 'translate(-50%,-50%) rotate(-12deg)' }} width="460" height="260" viewBox="0 0 460 260" fill="none" aria-hidden>
+          <svg className="absolute pointer-events-none" style={{ left: '50%', top: '52%', transform: 'translate(-50%,-50%) rotate(-12deg)' }} width={460 * u} height={260 * u} viewBox="0 0 460 260" fill="none" aria-hidden>
             <path d="M-20 150 C 80 40, 220 18, 360 120 C 400 152, 470 168, 520 150" stroke={accent} strokeWidth="64" strokeLinecap="round" style={{ opacity: 0.16 }} />
           </svg>
-          <Sparkle size={26} color={accent} style={{ position: 'absolute', top: 22, right: 24, opacity: 0.6 }} />
-          <Sparkle size={15} color={accent} style={{ position: 'absolute', top: 64, right: 70, opacity: 0.4 }} />
+          <Sparkle size={26 * u} color={accent} style={{ position: 'absolute', top: 22 * u, right: 24 * u, opacity: 0.6 }} />
+          <Sparkle size={15 * u} color={accent} style={{ position: 'absolute', top: 64 * u, right: 70 * u, opacity: 0.4 }} />
         </>
       );
   }
 };
 
 // Scaled per-template pose. Same template → same composition on every device.
-const phonePos = (layout, pW, off, k) => {
+// Inputs are already in render space: pWU = phone width * u, K = k * u, W = BASE_W * u.
+const phonePos = (layout, pWU, off, K, W) => {
   let top, rot = 0, x = 0;
-  if (layout === 'phone-top') top = -90 * k;
-  else if (layout === 'tilted') { top = 192 * k; rot = -8; x = 8; }
-  else top = 176 * k;
+  if (layout === 'phone-top') top = -90 * K;
+  else if (layout === 'tilted') { top = 192 * K; rot = -8; x = 8; }
+  else top = 176 * K;
   if (off) {
     x += off.x;
     rot += off.rot;
-    if (layout !== 'phone-top') top += (off.topDelta || 0) * k;
+    if (layout !== 'phone-top') top += (off.topDelta || 0) * K;
   }
-  return { marginLeft: -pW / 2 + (x / 100) * BASE_W, top, transform: rot ? `rotate(${rot}deg)` : 'none' };
+  return { marginLeft: -pWU / 2 + (x / 100) * W, top, transform: rot ? `rotate(${rot}deg)` : 'none' };
 };
 
 const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, width = BASE_W, className = '', watermark = false }, ref) {
   const dev = device || getDevice(deviceId);
   const h = slideHeight(dev);
-  const scale = width / BASE_W;
+  const u = width / BASE_W;
+  const innerH = h * u;
   const landscape = dev.w > dev.h;
   const form = dev.form || 'phone';
   const ratio = RATIO[form] || 2.1;
   const k = h / H_REF;
+  const K = k * u;
   const pScale = slide.pose?.scale ?? 1;
   const phoneW = landscape ? (h * 0.82) / 2.1 : (DEVICE_FILL * h) / ratio;
   const userScale = slide.phoneScale ?? 1;
   const pW = landscape ? phoneW : phoneW * pScale * userScale;
+  const pWU = pW * u;
 
   const accent = slide.headingColor && slide.headingColor.startsWith('#') ? slide.headingColor : (isLight(slide.bg.from || slide.bg.color) ? '#0B0B12' : '#FFFFFF');
   const theme = slide.style || 'swipe';
   const hScale = slide.headingScale ?? 1;
   const sScale = slide.subScale ?? 1;
-  const hFs = landscape ? 24 * hScale : 33 * k * hScale;
-  const sFs = landscape ? 11.5 * sScale : 13.5 * k * sScale;
+  const hFs = landscape ? 24 * hScale : 33 * K * hScale;
+  const sFs = landscape ? 11.5 * sScale : 13.5 * K * sScale;
   const hAlign = slide.headingAlign || slide.align;
   const sAlign = slide.subAlign || slide.align;
-  const ty = ((slide.textY || 0) / 100) * h;
+  const ty = ((slide.textY || 0) / 100) * innerH;
 
   const renderText = (pos) => {
-    const pad = pos === 'bottom' ? `0 26px ${28 * k}px` : pos === 'center' ? '0 26px' : `${34 * k}px 26px 0`;
+    const pad = pos === 'bottom' ? `0 ${26 * u}px ${28 * K}px` : pos === 'center' ? `0 ${26 * u}px` : `${34 * K}px ${26 * u}px 0`;
     return (
       <div style={{ textAlign: hAlign, fontFamily: `'${slide.font}', sans-serif`, padding: pad }}>
-        <h2 style={{ color: slide.headingColor, fontSize: hFs, lineHeight: 1.02, fontWeight: 800, letterSpacing: -1 }}>
+        <h2 style={{ color: slide.headingColor, fontSize: hFs, lineHeight: 1.02, fontWeight: 800, letterSpacing: -u }}>
           {slide.heading}
         </h2>
         {slide.subheading && (
-          <p style={{ color: slide.subColor, fontSize: sFs, marginTop: 10 * k, lineHeight: 1.4, fontWeight: 500, maxWidth: landscape ? '100%' : '88%', textAlign: sAlign, marginInline: sAlign === 'center' ? 'auto' : '0' }}>
+          <p style={{ color: slide.subColor, fontSize: sFs, marginTop: 10 * K, lineHeight: 1.4, fontWeight: 500, maxWidth: landscape ? '100%' : '88%', textAlign: sAlign, marginInline: sAlign === 'center' ? 'auto' : '0' }}>
             {slide.subheading}
           </p>
         )}
@@ -168,33 +176,33 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
   };
 
   return (
-    <div className={className} style={{ width, height: h * scale, flexShrink: 0 }}>
+    <div className={className} style={{ width, height: innerH, flexShrink: 0 }}>
       <div
         ref={ref}
         className="relative overflow-hidden"
-        style={{ width: BASE_W, height: h, transform: `scale(${scale})`, transformOrigin: 'top left', ...bgStyle(slide.bg) }}
+        style={{ width, height: innerH, ...bgStyle(slide.bg) }}
       >
-        {slide.layout !== 'text-only' && <Decor style={theme} accent={accent} />}
+        {slide.layout !== 'text-only' && <Decor style={theme} accent={accent} u={u} />}
 
         {landscape ? (() => {
           const pi = Math.max(0, MOCK_TYPES.indexOf(slide.mock));
           const L = LAND[pi % LAND.length];
-          const lk = h / 146;
-          const devH = h * L.scale;
-          const devW = devH / 2.1;
+          const Lk = (h / 146) * u;
+          const devHU = h * L.scale * u;
+          const devWU = devHU / 2.1;
           const textLeft = L.text === 'left';
           return (
             <div className="relative w-full h-full">
               <div className="absolute inset-y-0 flex items-center z-10" style={{ [L.text]: 0, width: `${L.textW * 100}%`, padding: textLeft ? '0 4% 0 8%' : '0 8% 0 4%', transform: ty ? `translateY(${ty}px)` : 'none' }}>
                 <div className="w-full" style={{ textAlign: hAlign || L.tAlign, fontFamily: `'${slide.font}', sans-serif` }}>
-                  <h2 style={{ color: slide.headingColor, fontSize: 26 * lk * hScale, lineHeight: 1.02, fontWeight: 800, letterSpacing: -0.5 * lk }}>{slide.heading}</h2>
-                  {slide.subheading && <p style={{ color: slide.subColor, fontSize: 12 * lk * sScale, marginTop: 8 * lk, lineHeight: 1.35, fontWeight: 500, textAlign: sAlign || L.tAlign }}>{slide.subheading}</p>}
+                  <h2 style={{ color: slide.headingColor, fontSize: 26 * Lk * hScale, lineHeight: 1.02, fontWeight: 800, letterSpacing: -0.5 * Lk }}>{slide.heading}</h2>
+                  {slide.subheading && <p style={{ color: slide.subColor, fontSize: 12 * Lk * sScale, marginTop: 8 * Lk, lineHeight: 1.35, fontWeight: 500, textAlign: sAlign || L.tAlign }}>{slide.subheading}</p>}
                 </div>
               </div>
               {slide.layout !== 'text-only' && (
-                <div className="absolute z-[1]" style={{ [L.dev]: `${L.devEdge}%`, top: '50%', width: devW, transform: `translateY(-50%)${L.rot ? ` rotate(${L.rot}deg)` : ''}` }}>
-                  <div style={{ transform: (slide.phoneX || slide.phoneY) ? `translate(${(slide.phoneX || 0) / 100 * BASE_W}px, ${(slide.phoneY || 0) / 100 * h}px)` : 'none' }}>
-                    <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={devW} form="phone" platform={dev.platform} />
+                <div className="absolute z-[1]" style={{ [L.dev]: `${L.devEdge}%`, top: '50%', width: devWU, transform: `translateY(-50%)${L.rot ? ` rotate(${L.rot}deg)` : ''}` }}>
+                  <div style={{ transform: (slide.phoneX || slide.phoneY) ? `translate(${(slide.phoneX || 0) / 100 * width}px, ${(slide.phoneY || 0) / 100 * innerH}px)` : 'none' }}>
+                    <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={devWU} form="phone" platform={dev.platform} />
                   </div>
                 </div>
               )}
@@ -209,9 +217,9 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
                 <div className={`absolute inset-x-0 z-10 ${slide.layout === 'phone-top' ? 'bottom-0' : 'top-0'}`} style={{ transform: ty ? `translateY(${ty}px)` : 'none' }}>
                   {renderText(slide.layout === 'phone-top' ? 'bottom' : 'top')}
                 </div>
-                <div className="absolute left-1/2 z-[1]" style={phonePos(slide.layout, pW, slide.pose, k)}>
-                  <div style={{ display: 'inline-block', transform: (slide.phoneX || slide.phoneY) ? `translate(${(slide.phoneX || 0) / 100 * BASE_W}px, ${(slide.phoneY || 0) / 100 * h}px)` : 'none' }}>
-                    <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={pW} form={form} platform={dev.platform} />
+                <div className="absolute left-1/2 z-[1]" style={phonePos(slide.layout, pWU, slide.pose, K, width)}>
+                  <div style={{ display: 'inline-block', transform: (slide.phoneX || slide.phoneY) ? `translate(${(slide.phoneX || 0) / 100 * width}px, ${(slide.phoneY || 0) / 100 * innerH}px)` : 'none' }}>
+                    <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={pWU} form={form} platform={dev.platform} />
                   </div>
                 </div>
               </>
@@ -219,9 +227,9 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
           </>
         )}
         {watermark && (
-          <div style={{ position: 'absolute', left: (BASE_W - 104) / 2, bottom: 14, width: 104, height: 30, borderRadius: 9999, background: 'rgba(0,0,0,0.42)', border: '1px solid rgba(255,255,255,0.12)', zIndex: 30, pointerEvents: 'none' }}>
-            <img src={WATERMARK_LOGO} alt="" crossOrigin="anonymous" style={{ position: 'absolute', left: 16, top: 5.5, width: 19, height: 19, borderRadius: 6, objectFit: 'cover', display: 'block' }} />
-            <span style={{ position: 'absolute', left: 41, top: 0, width: 47, height: 30, lineHeight: '30px', textAlign: 'center', fontSize: 13, fontWeight: 700, color: '#ffffff', letterSpacing: '0.02em', fontFamily: 'Sora, Inter, sans-serif', whiteSpace: 'nowrap' }}>Shotox</span>
+          <div style={{ position: 'absolute', left: (width - 104 * u) / 2, bottom: 14 * u, width: 104 * u, height: 30 * u, borderRadius: 9999, background: 'rgba(0,0,0,0.42)', border: `${u}px solid rgba(255,255,255,0.12)`, zIndex: 30, pointerEvents: 'none' }}>
+            <img src={WATERMARK_LOGO} alt="" crossOrigin="anonymous" style={{ position: 'absolute', left: 16 * u, top: 5.5 * u, width: 19 * u, height: 19 * u, borderRadius: 6 * u, objectFit: 'cover', display: 'block' }} />
+            <span style={{ position: 'absolute', left: 41 * u, top: 0, width: 47 * u, height: 30 * u, lineHeight: `${30 * u}px`, textAlign: 'center', fontSize: 13 * u, fontWeight: 700, color: '#ffffff', letterSpacing: '0.02em', fontFamily: 'Sora, Inter, sans-serif', whiteSpace: 'nowrap' }}>Shotox</span>
           </div>
         )}
       </div>

@@ -1,6 +1,5 @@
 import html2canvas from 'html2canvas';
 import JSZip from 'jszip';
-import { BASE_W, slideHeight } from '@/lib/templates';
 
 export const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -10,18 +9,14 @@ export const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 // cloned iframe". Rendering a fresh clone placed directly under <body> keeps
 // the lookup path trivial and stable.
 const renderCanvas = async (el, device) => {
-  const h = slideHeight(device);
-  // Render on-screen at the origin, behind the export overlay (z-50). html2canvas
-  // letterboxes/off-sets content captured from off-screen (negative-left) holders
-  // and from a scrolled window — placing the holder at 0,0 with a pinned zero
-  // scroll origin makes the export match the editor composition exactly.
+  // The hidden export instances are rendered at the device's exact native
+  // dimensions (width = device.w) with NO css transform — every position
+  // constant is already scaled to that size. So we capture 1:1 at scale 1,
+  // which removes the html2canvas scale factor / transform that was shifting
+  // content down and producing the extra top space in exported slides.
   const holder = document.createElement('div');
-  holder.style.cssText = `position:fixed;left:0;top:0;width:${BASE_W}px;height:${h}px;overflow:hidden;pointer-events:none;z-index:-1;`;
+  holder.style.cssText = `position:fixed;left:0;top:0;width:${device.w}px;height:${device.h}px;overflow:hidden;pointer-events:none;z-index:-1;`;
   const clone = el.cloneNode(true);
-  clone.style.transform = 'none';
-  clone.style.transformOrigin = 'top left';
-  // Pin the clone to the holder's origin so html2canvas renders content from the
-  // very top edge — no in-flow offset, no blank band above the heading.
   clone.style.position = 'absolute';
   clone.style.top = '0';
   clone.style.left = '0';
@@ -32,17 +27,15 @@ const renderCanvas = async (el, device) => {
   if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch {} }
   try {
     return await html2canvas(holder, {
-      scale: device.w / BASE_W,
+      scale: 1,
       useCORS: true,
       backgroundColor: null,
-      width: BASE_W,
-      height: h,
+      width: device.w,
+      height: device.h,
       scrollX: 0,
       scrollY: 0,
-      // Constrain the cloned render window to exactly the slide box so no viewport
-      // size or page scroll can shift the captured content down.
-      windowWidth: BASE_W,
-      windowHeight: h,
+      windowWidth: device.w,
+      windowHeight: device.h,
       logging: false,
     });
   } finally {
