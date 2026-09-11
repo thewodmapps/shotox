@@ -13,22 +13,17 @@ const STATUS = {
   error: { icon: AlertTriangle, label: 'Save failed' },
 };
 
-export default function EditorTopbar({ project, status, onRename, onExport, onShare, exporting, onRetry, isFeature }) {
+export default function EditorTopbar({ project, status, onRename, onExport, onShare, exporting, onRetry }) {
   const S = STATUS[status] || STATUS.saved;
   const device = resolveDevice(project);
   const [dlOpen, setDlOpen] = useState(false);
   const [picked, setPicked] = useState(null);
-  const opts = isFeature
-    ? [
-        { key: 'feature-png', which: 'current', format: 'png', label: 'Feature graphic', sub: 'PNG · single image' },
-        { key: 'feature-jpeg', which: 'current', format: 'jpeg', label: 'Feature graphic', sub: 'JPEG · single image' },
-      ]
-    : [
-        { key: 'current-png', which: 'current', format: 'png', label: 'Current slide', sub: 'PNG · single image' },
-        { key: 'current-jpeg', which: 'current', format: 'jpeg', label: 'Current slide', sub: 'JPEG · single image' },
-        { key: 'all-png', which: 'all', format: 'png', label: 'All slides', sub: 'PNG · ZIP archive' },
-        { key: 'all-jpeg', which: 'all', format: 'jpeg', label: 'All slides', sub: 'JPEG · ZIP archive' },
-      ];
+  const opts = [
+    { key: 'current-png', which: 'current', format: 'png', label: 'Current slide', sub: 'PNG · single image' },
+    { key: 'current-jpeg', which: 'current', format: 'jpeg', label: 'Current slide', sub: 'JPEG · single image' },
+    { key: 'all-png', which: 'all', format: 'png', label: 'All slides', sub: 'PNG · ZIP archive' },
+    { key: 'all-jpeg', which: 'all', format: 'jpeg', label: 'All slides', sub: 'JPEG · ZIP archive' },
+  ];
   const choose = (o) => {
     setPicked(o.key);
     setTimeout(() => {

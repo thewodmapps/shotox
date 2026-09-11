@@ -35,11 +35,6 @@
         "additionalProperties": true
       }
     },
-    "feature": {
-      "type": "object",
-      "additionalProperties": true,
-      "description": "Independent feature-graphic slide (kept separate from phone slides)"
-    },
     "uploads": {
       "type": "array",
       "items": {

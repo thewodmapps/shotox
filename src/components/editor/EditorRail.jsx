@@ -10,13 +10,10 @@ export const PANELS = [
   { id: 'device', label: 'Device', icon: Smartphone },
 ];
 
-export default function EditorRail({ active, mobileOpen, onChange, isFeature }) {
-  // Templates & AI operate on the phone slide set — hide them in feature mode
-  // so nothing in the feature graphic editor can touch the phone screenshots.
-  const panels = isFeature ? PANELS.filter((p) => p.id !== 'templates' && p.id !== 'ai') : PANELS;
+export default function EditorRail({ active, mobileOpen, onChange }) {
   return (
     <nav className="shrink-0 bg-[#0B0B12] border-t md:border-t-0 md:border-r border-white/10 text-white/60 z-10 safe-bottom no-callout h-14 w-full md:h-auto md:w-[76px] md:py-3 flex md:flex-col order-last md:order-first">
-      {panels.map((p) => {
+      {PANELS.map((p) => {
         const isActive = active === p.id;
         return (
           <button

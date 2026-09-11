@@ -5,7 +5,7 @@ import { resolveDevice, slideHeight, BASE_W } from '@/lib/templates';
 import SlideCanvas from './SlideCanvas';
 import SlideToolbar from './SlideToolbar';
 
-export default function EditorStage({ project, selected, onSelect, onAdd, onDuplicate, onDelete, onMove, watermark, isFeature, feature }) {
+export default function EditorStage({ project, selected, onSelect, onAdd, onDuplicate, onDelete, onMove, watermark }) {
   const device = resolveDevice(project);
   const sH = slideHeight(device);
   const wrapRef = useRef(null);
@@ -25,31 +25,6 @@ export default function EditorStage({ project, selected, onSelect, onAdd, onDupl
   // Slide width that fits the available mobile height (room for toolbar + counter).
   const fitByH = (box.h - 96) * (BASE_W / sH);
   const mobileW = Math.max(50, Math.min(box.w - 40, fitByH));
-  // Feature graphic: fit the wide banner into the available width.
-  const featureW = Math.max(50, Math.min(box.w - 48, (box.h - 80) * (device.w / device.h)));
-
-  if (isFeature) {
-    return (
-      <main className="flex-1 min-w-0 bg-[#08080d] bg-grid flex flex-col items-center justify-center overflow-auto p-6">
-        <p className="text-xs text-white/40 mb-3">Feature graphic · {device.name} · independent from your phone screenshots</p>
-        <div className="relative">
-          {feature ? (
-            <SlideCanvas
-              slide={feature}
-              device={device}
-              width={featureW}
-              watermark={watermark}
-              className="rounded-xl overflow-hidden ring-2 ring-violet-400 shadow-[0_0_0_6px_rgba(139,92,246,0.15)]"
-            />
-          ) : (
-            <div className="grid place-items-center text-white/50" style={{ width: featureW, height: featureW * (device.h / device.w) }}>
-              Preparing feature graphic…
-            </div>
-          )}
-        </div>
-      </main>
-    );
-  }
 
   return (
     <main className="flex-1 min-w-0 bg-[#08080d] bg-grid flex flex-col overflow-hidden md:overflow-auto">
