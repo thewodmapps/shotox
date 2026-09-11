@@ -98,16 +98,6 @@ const Decor = ({ style, accent }) => {
           <div className="absolute pointer-events-none" style={{ left: '50%', top: '42%', transform: 'translate(-50%,-50%)', width: '54%', height: '54%', borderRadius: '50%', border: `1.5px solid ${hexA(accent, 0.2)}` }} />
         </>
       );
-    case 'shotox':
-      return (
-        <>
-          <div className="absolute pointer-events-none" style={{ left: '-12%', top: '6%', width: '72%', height: '55%', background: 'radial-gradient(circle, rgba(124,58,237,0.45) 0%, transparent 70%)' }} />
-          <div className="absolute pointer-events-none" style={{ right: '-14%', bottom: '-4%', width: '74%', height: '60%', background: 'radial-gradient(circle, rgba(236,72,153,0.42) 0%, transparent 70%)' }} />
-          <div className="absolute pointer-events-none" style={{ left: 14, top: 14, width: 66, height: 66, backgroundImage: 'radial-gradient(rgba(255,255,255,0.55) 1.3px, transparent 1.3px)', backgroundSize: '13px 13px', opacity: 0.5, borderRadius: 8 }} />
-          <div className="absolute pointer-events-none" style={{ left: '50%', top: '46%', transform: 'translate(-50%,-50%)', width: '82%', height: '82%', borderRadius: '50%', border: '1.5px solid rgba(255,255,255,0.16)' }} />
-          <div className="absolute pointer-events-none" style={{ left: '50%', top: '46%', transform: 'translate(-50%,-50%)', width: '60%', height: '60%', borderRadius: '50%', border: '1.5px solid rgba(255,255,255,0.1)' }} />
-        </>
-      );
     case 'minimal':
       return null;
     case 'swipe':
@@ -225,17 +215,6 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
                 </div>
               </>
             )}
-          </>
-        )}
-        {theme === 'shotox' && !landscape && slide.layout !== 'text-only' && (
-          <>
-            <div className="absolute pointer-events-none" style={{ right: 14 * k, top: 16 * k, transform: 'rotate(8deg)', zIndex: 30, padding: `${4 * k}px ${11 * k}px`, borderRadius: 9999, background: 'linear-gradient(90deg,#FCD34D,#FB7185)', color: '#1E1B4B', fontSize: 10.5 * k, fontWeight: 800, letterSpacing: '0.05em', fontFamily: 'Sora, sans-serif', boxShadow: `0 ${6 * k}px ${16 * k}px rgba(251,113,133,0.4)` }}>✦ AI</div>
-            <svg className="absolute pointer-events-none" style={{ left: 14 * k, bottom: 22 * k, transform: 'rotate(-12deg)', zIndex: 30 }} width={52 * k} height={52 * k} viewBox="0 0 64 64" aria-hidden>
-              <path d="M32 0 L37 23 L60 18 L42 36 L60 54 L37 49 L32 64 L27 49 L4 54 L22 36 L4 18 L27 23 Z" fill="#F472B6" />
-              <text x="32" y="38" textAnchor="middle" fontSize="13" fontWeight="800" fill="#ffffff" fontFamily="Sora, sans-serif">3D</text>
-            </svg>
-            <Sparkle size={26 * k} color="#F472B6" style={{ position: 'absolute', top: 72 * k, right: 30 * k, opacity: 0.95, zIndex: 30 }} />
-            <Sparkle size={15 * k} color="#C4B5FD" style={{ position: 'absolute', bottom: 96 * k, right: 24 * k, opacity: 0.85, zIndex: 30 }} />
           </>
         )}
         {watermark && (

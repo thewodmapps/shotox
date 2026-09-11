@@ -282,7 +282,7 @@ const D = [
     id: 'shotox',
     name: 'Shotox',
     cat: 'AI',
-    style: 'shotox',
+    style: 'neon',
     font: 'Sora',
     dev: 'titanium',
     hc: '#FFFFFF',
