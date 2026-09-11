@@ -289,8 +289,8 @@ const D = [
     sc: 'rgba(255,255,255,0.82)',
     colors: [grad('#7C3AED', '#EC4899'), grad('#6366F1', '#F472B6'), solid('#0B0B12'), grad('#A855F7', '#FB7185')],
     copy: {
-      h: ['Stunning app screenshots', 'AI does the heavy lifting', '3D device templates', 'Store-ready in minutes', 'Beautiful, by default', 'Export in a single tap', 'Your app, perfectly framed', 'From screen to store'],
-      s: ['App Store & Google Play ready in minutes', 'Pick a template, we handle the design', 'Realistic phones & tablets, instantly', 'No design skills needed, ever', 'High-converting layouts that sell', 'Download PNG, JPEG or a ZIP', 'Made for founders, makers & marketers', 'Drag, drop and ship the same day'],
+      h: ['Stunning app screenshots', 'AI does the design', '3D device templates', 'On-brand in seconds', 'Built to convert', 'Export in one tap', 'No design skills needed', 'From screen to store'],
+      s: ['App Store & Google Play ready in minutes', 'Describe your app, get a full set instantly', 'Realistic phones & tablets that pop off the screen', 'Your colors, fonts and screenshots, perfectly placed', 'High-converting layouts proven to boost installs', 'PNG, JPEG or ZIP, store-ready every time', 'If you can type, you can ship beautiful screenshots', 'Launch on the App Store & Google Play today'],
     },
   },
 ];
