@@ -287,6 +287,8 @@ const D = [
     dev: 'titanium',
     hc: '#FFFFFF',
     sc: 'rgba(255,255,255,0.82)',
+    hScale: 1.18,
+    sScale: 1.1,
     colors: [grad('#7C3AED', '#EC4899'), grad('#6366F1', '#F472B6'), solid('#0B0B12'), grad('#A855F7', '#FB7185')],
     copy: {
       h: ['Stunning app screenshots', 'AI does the design', '3D device templates', 'On-brand in seconds', 'Built to convert', 'Export in one tap', 'No design skills needed', 'From screen to store'],
@@ -325,6 +327,8 @@ export const TEMPLATES = D.map((d, di) => {
         headingColor: d.hc,
         subColor: d.sc,
         deviceStyle: d.dev,
+        headingScale: d.hScale,
+        subScale: d.sScale,
       })
     );
   }
