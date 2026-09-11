@@ -171,25 +171,9 @@
 /* ===== Android WebView / mobile hardening (additive — light mode untouched) ===== */
 .safe-top { padding-top: env(safe-area-inset-top); }
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
-/* Android WebView often reports 0 for safe-area-inset-top, and some older WebViews don't
-   support max()/env() at all. The fixed 2rem rule below is the guaranteed fallback; the
-   env-aware max() rule that follows overrides it only in browsers that support it. */
+/* Android WebView often reports 0 for safe-area-inset-top; guarantee status-bar clearance on phones & tablets */
 @media (max-width: 1024px) {
-  .safe-top { padding-top: 2rem; }
-  .safe-top { padding-top: max(env(safe-area-inset-top), 2rem); }
-}
-/* Fixed fallback for elements that use an inline max(env(...), …) value: older WebViews
-   that don't support max() ignore the inline style and fall back to this class instead. */
-.pt-safe { padding-top: 1.75rem; }
-@media (max-width: 1024px) {
-  .safe-bottom { padding-bottom: 1rem; }
-  .safe-bottom { padding-bottom: max(env(safe-area-inset-bottom), 1rem); }
-}
-/* Floating landing navbar: desktop unchanged at 1rem; mobile gets guaranteed status-bar clearance */
-.nav-safe { top: 1rem; }
-@media (max-width: 1024px) {
-  .nav-safe { top: 2rem; }
-  .nav-safe { top: max(env(safe-area-inset-top), 2rem); }
+  .safe-top { padding-top: max(env(safe-area-inset-top), 1.75rem); }
 }
 .app-shell { overscroll-behavior: contain; }
 .scroll-contain { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
