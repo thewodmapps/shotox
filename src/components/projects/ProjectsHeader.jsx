@@ -10,20 +10,20 @@ const PLAN_BADGE = {
   monthly: {
     label: 'Pro Monthly',
     icon: Check,
-    className: 'bg-white/10 border border-white/15 text-white',
-    iconClass: 'text-lime-300',
+    className: 'bg-gradient-to-r from-sky-500 to-blue-600 shadow-lg shadow-blue-500/30 ring-1 ring-white/15',
+    iconClass: 'text-white',
   },
   yearly: {
     label: 'Pro Yearly',
     icon: Sparkles,
-    className: 'bg-violet-500/15 border border-violet-400/30 text-violet-200',
-    iconClass: 'text-violet-300',
+    className: 'bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-lg shadow-violet-500/30 ring-1 ring-white/15',
+    iconClass: 'text-white',
   },
   lifetime: {
     label: 'Lifetime',
     icon: InfinityIcon,
-    className: 'bg-gradient-to-r from-amber-400/20 to-pink-500/20 border border-amber-300/30 text-amber-100',
-    iconClass: 'text-amber-300',
+    className: 'bg-gradient-to-r from-amber-400 to-pink-500 shadow-lg shadow-pink-500/30 ring-1 ring-white/15',
+    iconClass: 'text-white',
   },
 };
 
@@ -39,18 +39,18 @@ export default function ProjectsHeader() {
       <Brand to="/" size={26} textClass="text-white" />
       <div className="ml-auto flex items-center gap-1.5">
         {badge ? (
-          <button onClick={goPricing} title="View plans" className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-full ${badge.className} hover:opacity-90 transition-opacity`}>
+          <button onClick={goPricing} title="View plans" className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full text-white ${badge.className} hover:brightness-110 transition`}>
             <badge.icon className={`w-3.5 h-3.5 ${badge.iconClass}`} /> {badge.label}
           </button>
         ) : (
-          <Link to="/#pricing" className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 hover:opacity-90 transition-opacity shadow-lg shadow-pink-500/20">
+          <Link to="/#pricing" className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full text-white bg-gradient-to-r from-violet-500 to-pink-500 hover:brightness-110 transition shadow-lg shadow-pink-500/30 ring-1 ring-white/15">
             <Crown className="w-3.5 h-3.5 text-yellow-200" /> Upgrade
           </Link>
         )}
-        <button onClick={() => setAccountOpen(true)} className="w-9 h-9 grid place-items-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors" title="Account" aria-label="Account">
+        <button onClick={() => setAccountOpen(true)} className="w-10 h-10 grid place-items-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors" title="Account" aria-label="Account">
           <UserCircle2 className="w-4 h-4" />
         </button>
-        <button onClick={() => base44.auth.logout('/')} className="w-9 h-9 grid place-items-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors" title="Sign out" aria-label="Sign out">
+        <button onClick={() => base44.auth.logout('/')} className="w-10 h-10 grid place-items-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors" title="Sign out" aria-label="Sign out">
           <LogOut className="w-4 h-4" />
         </button>
       </div>
