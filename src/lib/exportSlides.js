@@ -13,7 +13,15 @@ const renderCanvas = async (el, device) => {
   const h = slideHeight(device);
   const holder = document.createElement('div');
   holder.style.cssText = `position:fixed;left:-99999px;top:0;width:${BASE_W}px;height:${h}px;overflow:hidden;pointer-events:none;`;
-  holder.appendChild(el.cloneNode(true));
+  const clone = el.cloneNode(true);
+  // The live node carries `transform: scale(...)` so it shrinks inside the editor
+  // preview. The export node is already at BASE_W (scale 1), but html2canvas
+  // mis-honours an identity transform on the captured root and offsets/letterboxes
+  // the output (extra top space, shifted spacing). Strip it so the render matches
+  // the on-screen composition exactly.
+  clone.style.transform = 'none';
+  clone.style.transformOrigin = 'top left';
+  holder.appendChild(clone);
   document.body.appendChild(holder);
   try {
     return await html2canvas(holder, {
