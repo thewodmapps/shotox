@@ -37,20 +37,20 @@ export default function ProjectsHeader() {
   return (
     <header className="sticky top-0 z-30 min-h-16 safe-top bg-[#08080d]/70 backdrop-blur-xl text-white flex items-center gap-2 sm:gap-3 px-4 sm:px-6 border-b border-white/10 no-callout">
       <Brand to="/" size={26} textClass="text-white" />
-      <div className="ml-auto flex items-center gap-1 sm:gap-1.5">
+      <div className="ml-auto flex items-center gap-1.5">
         {badge ? (
-          <button onClick={goPricing} title="View plans" className={`inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full ${badge.className} hover:opacity-90 transition-opacity`}>
-            <badge.icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${badge.iconClass}`} /> <span className="hidden sm:inline">{badge.label}</span>
+          <button onClick={goPricing} title="View plans" className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-full ${badge.className} hover:opacity-90 transition-opacity`}>
+            <badge.icon className={`w-3.5 h-3.5 ${badge.iconClass}`} /> {badge.label}
           </button>
         ) : (
-          <Link to="/#pricing" className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 hover:opacity-90 transition-opacity shadow-lg shadow-pink-500/20">
-            <Crown className="w-3.5 h-3.5 text-yellow-200" /> <span className="hidden sm:inline">Upgrade</span>
+          <Link to="/#pricing" className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 hover:opacity-90 transition-opacity shadow-lg shadow-pink-500/20">
+            <Crown className="w-3.5 h-3.5 text-yellow-200" /> Upgrade
           </Link>
         )}
-        <button onClick={() => setAccountOpen(true)} className="w-11 h-11 grid place-items-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors" title="Account" aria-label="Account">
+        <button onClick={() => setAccountOpen(true)} className="w-9 h-9 grid place-items-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors" title="Account" aria-label="Account">
           <UserCircle2 className="w-4 h-4" />
         </button>
-        <button onClick={() => base44.auth.logout('/')} className="w-11 h-11 grid place-items-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors" title="Sign out" aria-label="Sign out">
+        <button onClick={() => base44.auth.logout('/')} className="w-9 h-9 grid place-items-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors" title="Sign out" aria-label="Sign out">
           <LogOut className="w-4 h-4" />
         </button>
       </div>
