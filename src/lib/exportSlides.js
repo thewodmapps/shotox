@@ -29,14 +29,24 @@ const renderCanvas = async (el, device) => {
   }
 };
 
-export const triggerDownload = (blob, filename) => {
+const triggerDownload = (blob, filename) => {
   const url = URL.createObjectURL(blob);
+  const inFrame = (() => { try { return window.self !== window.top; } catch { return true; } })();
   const a = document.createElement('a');
   a.href = url;
   a.download = filename;
   document.body.appendChild(a);
   a.click();
   a.remove();
+  // Sandboxed builder-preview iframes silently block anchor downloads;
+  // fall back to opening the file in a new tab so it can still be saved.
+  if (inFrame) {
+    const win = window.open(url, '_blank');
+    if (!win) {
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+      return;
+    }
+  }
   setTimeout(() => URL.revokeObjectURL(url), 2000);
 };
 
@@ -46,15 +56,15 @@ const canvasToBlob = (canvas, mime) =>
   });
 
 export async function exportSlide(el, device, filename, format = 'png', onProgress) {
-  if (!el) return null;
-  const ext = format === 'jpeg' ? 'jpg' : 'png';
+  if (!el) return;
   const mime = format === 'jpeg' ? 'image/jpeg' : 'image/png';
   onProgress?.(5);
   const canvas = await renderCanvas(el, device);
   onProgress?.(85);
   const blob = await canvasToBlob(canvas, mime);
+  onProgress?.(95);
+  triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`);
   onProgress?.(100);
-  return { blob, filename: `${filename}.${ext}`, mime, count: 1 };
 }
 
 export async function exportAllSlides(els, device, baseName, format = 'png', onProgress) {
@@ -62,7 +72,6 @@ export async function exportAllSlides(els, device, baseName, format = 'png', onP
   const mime = format === 'jpeg' ? 'image/jpeg' : 'image/png';
   const zip = new JSZip();
   const total = els.length;
-  let count = 0;
   for (let i = 0; i < total; i++) {
     const el = els[i];
     if (!el) continue;
@@ -70,10 +79,9 @@ export async function exportAllSlides(els, device, baseName, format = 'png', onP
     const canvas = await renderCanvas(el, device);
     const blob = await canvasToBlob(canvas, mime);
     zip.file(`${i + 1}.${ext}`, blob);
-    count++;
   }
   onProgress?.(95);
   const blob = await zip.generateAsync({ type: 'blob' });
+  triggerDownload(blob, `${baseName}-screenshots.zip`);
   onProgress?.(100);
-  return { blob, filename: `${baseName}-screenshots.zip`, mime: 'application/zip', count };
 }
