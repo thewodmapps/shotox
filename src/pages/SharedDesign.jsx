@@ -44,7 +44,6 @@ export default function SharedDesign() {
     <div className="min-h-screen bg-[#08080d] text-white flex flex-col">
       <PullToRefresh onRefresh={load} />
       <header className="sticky top-0 z-10 bg-[#0B0B12] no-callout">
-        <div className="safe-top" />
         <div className="min-h-16 flex items-center gap-3 px-3 sm:px-4 border-b border-white/10 overflow-x-hidden">
         <Brand to="/" size={24} textClass="text-white" />
         <Link
