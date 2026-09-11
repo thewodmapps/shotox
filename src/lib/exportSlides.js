@@ -24,6 +24,12 @@ const renderCanvas = async (el, device) => {
   document.body.appendChild(holder);
   try {
     return await html2canvas(holder, {
+      // Use the browser's own renderer (SVG foreignObject) instead of html2canvas's
+      // manual DOM re-parser. The manual renderer mis-places absolutely-positioned
+      // / transformed children and leaves a blank band at the top; foreignObject
+      // snapshots the live DOM exactly as the editor shows it, so the download
+      // matches the on-screen composition. Screenshot imgs are CORS-clean already.
+      foreignObjectRendering: true,
       scale: device.w / BASE_W,
       useCORS: true,
       backgroundColor: null,
