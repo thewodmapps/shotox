@@ -295,6 +295,24 @@ const D = [
       s: ['App Store & Google Play ready in minutes', 'Describe your app, get a full set instantly', 'Realistic phones & tablets that pop off the screen', 'Your colors, fonts and screenshots, perfectly placed', 'High-converting layouts proven to boost installs', 'PNG, JPEG or ZIP, store-ready every time', 'If you can type, you can ship beautiful screenshots', 'Launch on the App Store & Google Play today'],
     },
   },
+  // ── Shotox Aurora — signature "midnight sunset" template, brand palette reimagined ──
+  {
+    id: 'shotox-aurora',
+    name: 'Shotox Aurora',
+    cat: 'AI',
+    style: 'orbs',
+    font: 'Sora',
+    dev: 'titanium',
+    hc: '#FFFFFF',
+    sc: 'rgba(255,255,255,0.82)',
+    hScale: 1.22,
+    sScale: 1.06,
+    colors: [grad('#4C1D95', '#9D174D'), grad('#6D28D9', '#BE185D'), solid('#0B0B12'), grad('#831843', '#7C2D12')],
+    copy: {
+      h: ['Screenshots that sell', 'From idea to App Store', 'AI designs every slide', '3D devices that pop', 'Your brand, perfectly placed', 'Built to convert', 'Export in one tap', 'Launch worldwide today'],
+      s: ['App Store & Google Play screenshots that drive installs', 'Describe your app — get a full set in seconds', 'High-converting copy and layouts, generated for you', 'Realistic phones & tablets that make your app look pro', 'Drop in your colors, fonts and screenshots instantly', 'Proven templates tuned to boost your downloads', 'PNG, JPEG or ZIP at exact store-ready sizes', 'Ship to the App Store & Google Play in minutes'],
+    },
+  },
 ];
 
 const tagsFor = (d) => {
