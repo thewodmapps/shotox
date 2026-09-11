@@ -34,13 +34,11 @@ const inlineImages = async (root) =>
   );
 
 const renderCanvas = async (el, device) => {
-  // The hidden export instances may be rendered supersampled (e.g. the
-  // 1024×500 feature graphic at 2x) for a crisper result. Capture at the
-  // element's actual render size, then downscale to the device's true spec.
-  const rw = el.offsetWidth || device.w;
-  const rh = el.offsetHeight || device.h;
+  // The hidden export instances are rendered at the device's exact native
+  // dimensions (width = device.w) with NO css transform — every position
+  // constant is already scaled to that size, so we capture 1:1 at scale 1.
   const holder = document.createElement('div');
-  holder.style.cssText = `position:fixed;left:0;top:0;width:${rw}px;height:${rh}px;overflow:hidden;pointer-events:none;z-index:-1;`;
+  holder.style.cssText = `position:fixed;left:0;top:0;width:${device.w}px;height:${device.h}px;overflow:hidden;pointer-events:none;z-index:-1;`;
   const clone = el.cloneNode(true);
   clone.style.position = 'absolute';
   clone.style.top = '0';
@@ -49,33 +47,21 @@ const renderCanvas = async (el, device) => {
   document.body.appendChild(holder);
   if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch {} }
   await inlineImages(holder);
-  const capOpts = { scale: 1, useCORS: true, backgroundColor: null, width: rw, height: rh, scrollX: 0, scrollY: 0, windowWidth: rw, windowHeight: rh, logging: false };
-  let canvas;
+  const baseOpts = { scale: 1, useCORS: true, backgroundColor: null, width: device.w, height: device.h, scrollX: 0, scrollY: 0, windowWidth: device.w, windowHeight: device.h, logging: false };
   try {
     // foreignObjectRendering makes the browser render the slide itself, so text
     // lands exactly where it does in the editor (html2canvas's own text renderer
     // is what was pushing the heading down). The timeout guards against any
     // pending-resource hang; on failure we fall back to the default renderer.
-    canvas = await Promise.race([
-      html2canvas(holder, { ...capOpts, foreignObjectRendering: true }),
+    return await Promise.race([
+      html2canvas(holder, { ...baseOpts, foreignObjectRendering: true }),
       new Promise((_, rej) => setTimeout(() => rej(new Error('fo-timeout')), 25000)),
     ]);
   } catch {
-    canvas = await html2canvas(holder, capOpts);
+    return await html2canvas(holder, baseOpts);
   } finally {
     document.body.removeChild(holder);
   }
-  if (canvas.width !== device.w || canvas.height !== device.h) {
-    const out = document.createElement('canvas');
-    out.width = device.w;
-    out.height = device.h;
-    const ctx = out.getContext('2d');
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(canvas, 0, 0, device.w, device.h);
-    return out;
-  }
-  return canvas;
 };
 
 const triggerDownload = (blob, filename) => {
