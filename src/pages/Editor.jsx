@@ -111,7 +111,7 @@ export default function Editor() {
       return next;
     });
   };
-  const isFeature = project ? resolveDevice(project).form === 'feature' : false;
+  const isFeature = resolveDevice(project).form === 'feature';
   // Feature mode edits the independent `feature` slide; phone mode edits the
   // selected phone slide. The two never share data.
   const updateSlide = (patch) => {
