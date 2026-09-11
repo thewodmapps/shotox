@@ -57,7 +57,7 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
         {device.name} · {device.w} × {device.h}
       </span>
       <div className="relative">
-        <Button size="sm" disabled={exporting} onClick={() => setDlOpen((v) => !v)} className="bg-white text-[#0B0B12] hover:bg-white/90 rounded-full px-4">
+        <Button size="sm" disabled={exporting} onClick={() => setDlOpen((v) => !v)} className="bg-gradient-to-r from-violet-500 to-pink-500 text-white hover:opacity-90 rounded-full px-4 shadow-lg shadow-pink-500/30 border border-white/10">
           {exporting ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
           Download
         </Button>
