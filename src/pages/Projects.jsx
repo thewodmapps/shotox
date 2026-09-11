@@ -61,6 +61,8 @@ export default function Projects() {
     setProjects((ps) => ps.filter((p) => p.id !== id));
   };
 
+  const rename = (id, name) => setProjects((ps) => ps.map((p) => (p.id === id ? { ...p, name } : p)));
+
   return (
     <div className="min-h-screen bg-[#08080d] font-body text-white relative app-shell">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
@@ -72,7 +74,7 @@ export default function Projects() {
         <ProjectsHeader />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 pb-28 md:pb-16 space-y-16 scroll-contain">
           <CreateCards onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} freeDevice={freeDevice} />
-          <SavedDesigns projects={projects} onDelete={remove} />
+          <SavedDesigns projects={projects} onDelete={remove} onRename={rename} />
           <TemplateGallery onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
         </div>
       </div>

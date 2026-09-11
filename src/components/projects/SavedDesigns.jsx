@@ -2,7 +2,7 @@ import React from 'react';
 import { FolderOpen, Sparkles } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 
-export default function SavedDesigns({ projects, onDelete }) {
+export default function SavedDesigns({ projects, onDelete, onRename }) {
   return (
     <section>
       <h2 className="font-display text-xl font-bold text-white mb-5 flex items-center gap-2.5">
@@ -22,7 +22,7 @@ export default function SavedDesigns({ projects, onDelete }) {
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {projects.map((p) => (
-            <ProjectCard key={p.id} project={p} onDelete={onDelete} />
+            <ProjectCard key={p.id} project={p} onDelete={onDelete} onRename={onRename} />
           ))}
         </div>
       )}
