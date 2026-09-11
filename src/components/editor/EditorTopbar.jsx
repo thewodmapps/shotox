@@ -56,34 +56,34 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
       <span className="hidden lg:block text-sm text-white/60 px-2.5 py-1 rounded-full border border-white/10">
         {device.name} · {device.w} × {device.h}
       </span>
+      <div className="relative">
+        <Button size="sm" disabled={exporting} onClick={() => setDlOpen((v) => !v)} className="bg-white text-[#0B0B12] hover:bg-white/90 rounded-full px-4">
+          {exporting ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
+          Download
+        </Button>
+        {dlOpen && !exporting && (
+          <>
+            <div className="fixed inset-0 z-40" onClick={() => setDlOpen(false)} />
+            <div className="absolute right-0 top-full mt-2 z-50 w-60 rounded-2xl bg-[#111118] border border-white/10 shadow-2xl p-1.5">
+              {opts.map((o) => {
+                const active = picked === o.key;
+                return (
+                  <button key={o.key} onClick={() => choose(o)} className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left transition-colors ${active ? 'bg-violet-500/20 text-white' : 'text-white/80 hover:bg-white/10'}`}>
+                    <span className={`grid place-items-center w-8 h-8 rounded-lg shrink-0 ${active ? 'bg-violet-500 text-white' : 'bg-white/5 text-white/70'}`}>
+                      {active ? <Check className="w-4 h-4" /> : <Download className="w-4 h-4" />}
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-sm font-medium">{o.label}</span>
+                      <span className="block text-xs text-white/50">{o.sub}</span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        )}
+      </div>
       <div className="flex items-center gap-1.5">
-        <div className="relative">
-          <Button disabled={exporting} onClick={() => setDlOpen((v) => !v)} className="h-10 bg-white text-[#0B0B12] hover:bg-white/90 rounded-full px-4">
-            {exporting ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
-            Download
-          </Button>
-          {dlOpen && !exporting && (
-            <>
-              <div className="fixed inset-0 z-40" onClick={() => setDlOpen(false)} />
-              <div className="absolute right-0 top-full mt-2 z-50 w-60 rounded-2xl bg-[#111118] border border-white/10 shadow-2xl p-1.5">
-                {opts.map((o) => {
-                  const active = picked === o.key;
-                  return (
-                    <button key={o.key} onClick={() => choose(o)} className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left transition-colors ${active ? 'bg-violet-500/20 text-white' : 'text-white/80 hover:bg-white/10'}`}>
-                      <span className={`grid place-items-center w-8 h-8 rounded-lg shrink-0 ${active ? 'bg-violet-500 text-white' : 'bg-white/5 text-white/70'}`}>
-                        {active ? <Check className="w-4 h-4" /> : <Download className="w-4 h-4" />}
-                      </span>
-                      <span className="min-w-0">
-                        <span className="block text-sm font-medium">{o.label}</span>
-                        <span className="block text-xs text-white/50">{o.sub}</span>
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </>
-          )}
-        </div>
         <button onClick={onShare} className="w-10 h-10 grid place-items-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors" title="Share design" aria-label="Share design">
           <Share2 className="w-4 h-4" />
         </button>
