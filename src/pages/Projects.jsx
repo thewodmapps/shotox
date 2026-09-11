@@ -10,6 +10,7 @@ import TemplateGallery from '@/components/projects/TemplateGallery';
 import SavedDesigns from '@/components/projects/SavedDesigns';
 import WelcomeModal from '@/components/projects/WelcomeModal';
 import UpgradeModal from '@/components/editor/UpgradeModal';
+import PullToRefresh from '@/components/PullToRefresh';
 
 export default function Projects() {
   const navigate = useNavigate();
@@ -21,6 +22,11 @@ export default function Projects() {
   const [showUpgrade, setShowUpgrade] = useState(false);
 
   useEffect(() => { base44.entities.Project.list('-updated_date', 50).then(setProjects); }, []);
+
+  const reloadProjects = async () => {
+    const list = await base44.entities.Project.list('-updated_date', 50);
+    setProjects(list);
+  };
 
   const create = async ({ templateId, platform = 'ios', device, customW, customH, scratch = false }) => {
     setCreating(platform);
@@ -70,6 +76,7 @@ export default function Projects() {
           <TemplateGallery onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
         </div>
       </div>
+      <PullToRefresh onRefresh={reloadProjects} />
       <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} onUpgrade={() => navigate('/#pricing')} />
       <WelcomeModal />
     </div>
