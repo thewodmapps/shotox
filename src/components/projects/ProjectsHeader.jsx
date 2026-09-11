@@ -39,8 +39,8 @@ export default function ProjectsHeader() {
       <Brand to="/" size={24} textClass="text-white" />
       <div className="ml-auto flex items-center gap-3">
         {badge ? (
-          <button onClick={goPricing} title={badge.label} className={`inline-flex items-center text-xs font-semibold p-2 rounded-full ${badge.className} hover:opacity-90 transition-opacity`}>
-            <badge.icon className={`w-4 h-4 ${badge.iconClass}`} />
+          <button onClick={goPricing} title="View plans" className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full ${badge.className} hover:opacity-90 transition-opacity`}>
+            <badge.icon className={`w-3.5 h-3.5 ${badge.iconClass}`} /> {badge.label}
           </button>
         ) : (
           <Link to="/#pricing" className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 text-white hover:opacity-90 transition-opacity shadow-lg shadow-pink-500/30">
