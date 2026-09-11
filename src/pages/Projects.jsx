@@ -9,6 +9,7 @@ import CreateCards from '@/components/projects/CreateCards';
 import TemplateGallery from '@/components/projects/TemplateGallery';
 import SavedDesigns from '@/components/projects/SavedDesigns';
 import WelcomeModal from '@/components/projects/WelcomeModal';
+import FeatureGraphicModal from '@/components/projects/FeatureGraphicModal';
 import UpgradeModal from '@/components/editor/UpgradeModal';
 import PullToRefresh from '@/components/PullToRefresh';
 
@@ -20,6 +21,7 @@ export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [creating, setCreating] = useState(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [showFeature, setShowFeature] = useState(false);
 
   useEffect(() => { base44.entities.Project.list('-updated_date', 50).then(setProjects); }, []);
 
@@ -28,19 +30,20 @@ export default function Projects() {
     setProjects(list);
   };
 
-  const create = async ({ templateId, platform = 'ios', device, customW, customH, scratch = false }) => {
+  const create = async ({ templateId, platform = 'ios', device, customW, customH, scratch = false, slides: customSlides }) => {
     setCreating(platform);
     try {
-      const tpl = getTemplate(templateId);
       const devId = device || (platform === 'android' ? 'android-phone' : 'iphone-6.7');
-      const slides = scratch
-        ? [makeSlide({ bg: solid('#0B0B12') }), makeSlide({ bg: solid('#0B0B12'), layout: 'phone-top' })]
-        : tpl.slides.map((s) => ({ ...s, id: makeId() }));
+      let slides;
+      if (customSlides) slides = customSlides.map((s) => ({ ...makeSlide(), ...s, id: makeId() }));
+      else if (scratch) slides = [makeSlide({ bg: solid('#0B0B12') }), makeSlide({ bg: solid('#0B0B12'), layout: 'phone-top' })];
+      else { const tpl = getTemplate(templateId); slides = tpl.slides.map((s) => ({ ...s, id: makeId() })); }
+      const tplId = customSlides || scratch ? '' : getTemplate(templateId).id;
       const p = await base44.entities.Project.create({
         name: 'Untitled project',
         platform: devId === 'feature-graphic' ? 'android' : platform,
         device: devId,
-        template_id: scratch ? '' : tpl.id,
+        template_id: tplId,
         slides,
         uploads: [],
         custom_w: devId === 'custom' ? customW : undefined,
@@ -71,13 +74,18 @@ export default function Projects() {
       <div className="relative z-10">
         <ProjectsHeader />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 pb-28 md:pb-16 space-y-16 scroll-contain">
-          <CreateCards onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} freeDevice={freeDevice} />
+          <CreateCards onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} freeDevice={freeDevice} onFeature={() => setShowFeature(true)} />
           <SavedDesigns projects={projects} onDelete={remove} />
           <TemplateGallery onCreate={create} creating={creating} isPro={pro} onLocked={() => setShowUpgrade(true)} />
         </div>
       </div>
       <PullToRefresh onRefresh={reloadProjects} />
       <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} onUpgrade={() => navigate('/#pricing')} />
+      <FeatureGraphicModal
+        open={showFeature}
+        onClose={() => setShowFeature(false)}
+        onPick={(slide) => { setShowFeature(false); create({ device: 'feature-graphic', platform: 'android', slides: [slide] }); }}
+      />
       <WelcomeModal />
     </div>
   );
