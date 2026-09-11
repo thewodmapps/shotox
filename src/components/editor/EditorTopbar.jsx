@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Download, Check, Loader2, Cloud, LogOut, Share2, AlertTriangle, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Download, Check, Loader2, Cloud, LogOut, Share2, AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { resolveDevice } from '@/lib/templates';
 import { Brand } from '@/components/Logo';
@@ -85,6 +85,9 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
           </>
         )}
       </div>
+        <Link to="/" className="shrink-0 w-11 h-11 grid place-items-center rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Home" aria-label="Home">
+          <Home className="w-4 h-4" />
+        </Link>
         <button onClick={onShare} className="shrink-0 w-11 h-11 grid place-items-center rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Share design" aria-label="Share design">
           <Share2 className="w-4 h-4" />
         </button>

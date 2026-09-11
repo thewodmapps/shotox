@@ -39,9 +39,6 @@ export default function ProjectsHeader() {
       <div className="safe-top" />
       <div className="min-h-16 flex items-center gap-3 px-3 sm:px-4">
       <Brand to="/" size={24} textClass="text-white" />
-      <Link to="/" className="w-11 h-11 grid place-items-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors" title="Home" aria-label="Home">
-        <Home className="w-4 h-4" />
-      </Link>
       <div className="ml-auto flex items-center gap-3">
         {badge ? (
           <button onClick={goPricing} title="View plans" className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full ${badge.className} hover:opacity-90 transition-opacity`}>
@@ -52,6 +49,9 @@ export default function ProjectsHeader() {
             <Crown className="w-3.5 h-3.5 text-yellow-200" /> Upgrade
           </Link>
         )}
+        <Link to="/" className="w-11 h-11 grid place-items-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors" title="Home" aria-label="Home">
+          <Home className="w-4 h-4" />
+        </Link>
         <button onClick={() => setAccountOpen(true)} className="w-11 h-11 grid place-items-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors" title="Account" aria-label="Account">
           <UserCircle2 className="w-4 h-4" />
         </button>
