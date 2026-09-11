@@ -20,16 +20,15 @@ const renderCanvas = async (el, device) => {
   const clone = el.cloneNode(true);
   clone.style.transform = 'none';
   clone.style.transformOrigin = 'top left';
+  // Pin the clone to the holder's origin so html2canvas renders content from the
+  // very top edge — no in-flow offset, no blank band above the heading.
+  clone.style.position = 'absolute';
+  clone.style.top = '0';
+  clone.style.left = '0';
   holder.appendChild(clone);
   document.body.appendChild(holder);
   try {
     return await html2canvas(holder, {
-      // Use the browser's own renderer (SVG foreignObject) instead of html2canvas's
-      // manual DOM re-parser. The manual renderer mis-places absolutely-positioned
-      // / transformed children and leaves a blank band at the top; foreignObject
-      // snapshots the live DOM exactly as the editor shows it, so the download
-      // matches the on-screen composition. Screenshot imgs are CORS-clean already.
-      foreignObjectRendering: true,
       scale: device.w / BASE_W,
       useCORS: true,
       backgroundColor: null,
@@ -37,6 +36,10 @@ const renderCanvas = async (el, device) => {
       height: h,
       scrollX: 0,
       scrollY: 0,
+      // Constrain the cloned render window to exactly the slide box so no viewport
+      // size or page scroll can shift the captured content down.
+      windowWidth: BASE_W,
+      windowHeight: h,
       logging: false,
     });
   } finally {
