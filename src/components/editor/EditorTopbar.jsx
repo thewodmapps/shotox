@@ -33,16 +33,16 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
     }, 260);
   };
   return (
-    <header className="min-h-14 safe-top shrink-0 flex items-center gap-3 px-3 sm:px-4 bg-[#0B0B12] border-b border-white/10 text-white no-callout">
-      <Link to="/projects" className="w-11 h-11 grid place-items-center rounded-lg hover:bg-white/10 transition-colors" aria-label="Back to projects">
+    <header className="min-h-14 safe-top shrink-0 flex items-center gap-2 sm:gap-3 px-3 sm:px-4 bg-[#0B0B12] border-b border-white/10 text-white no-callout overflow-x-hidden">
+      <Link to="/projects" className="shrink-0 w-11 h-11 grid place-items-center rounded-lg hover:bg-white/10 transition-colors" aria-label="Back to projects">
         <ArrowLeft className="w-4 h-4" />
       </Link>
       <Brand to="/" size={24} textClass="text-white" className="hidden sm:flex" />
-      <div className="flex-1 flex justify-center">
+      <div className="flex-1 min-w-0 flex justify-center">
         <input
           value={project.name}
           onChange={(e) => onRename(e.target.value)}
-          className="bg-transparent text-sm text-center font-medium outline-none rounded-md px-3 py-1.5 hover:bg-white/5 focus:bg-white/10 w-40 sm:w-60 transition-colors"
+          className="min-w-0 w-full max-w-[140px] sm:max-w-[240px] truncate bg-transparent text-sm text-center font-medium outline-none rounded-md px-3 py-1.5 hover:bg-white/5 focus:bg-white/10 transition-colors"
         />
       </div>
       <span className="hidden md:flex items-center gap-1.5 text-sm text-white/60">
@@ -56,10 +56,10 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
       <span className="hidden lg:block text-sm text-white/60 px-2.5 py-1 rounded-full border border-white/10">
         {device.name} · {device.w} × {device.h}
       </span>
-      <div className="relative">
-        <Button size="sm" disabled={exporting} onClick={() => setDlOpen((v) => !v)} className="bg-gradient-to-r from-violet-500 to-pink-500 text-white hover:opacity-90 rounded-full px-4 shadow-lg shadow-pink-500/30 border border-white/10">
-          {exporting ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Download className="w-4 h-4 mr-1.5" />}
-          Download
+      <div className="relative shrink-0">
+        <Button size="sm" disabled={exporting} onClick={() => setDlOpen((v) => !v)} className="bg-gradient-to-r from-violet-500 to-pink-500 text-white hover:opacity-90 rounded-full px-3 sm:px-4 shadow-lg shadow-pink-500/30 border border-white/10">
+          {exporting ? <Loader2 className="w-4 h-4 sm:mr-1.5 animate-spin" /> : <Download className="w-4 h-4 sm:mr-1.5" />}
+          <span className="hidden sm:inline">Download</span>
         </Button>
         {dlOpen && !exporting && (
           <>
@@ -83,10 +83,10 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
           </>
         )}
       </div>
-        <button onClick={onShare} className="w-11 h-11 grid place-items-center rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Share design" aria-label="Share design">
+        <button onClick={onShare} className="shrink-0 w-11 h-11 grid place-items-center rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Share design" aria-label="Share design">
           <Share2 className="w-4 h-4" />
         </button>
-        <button onClick={() => base44.auth.logout('/')} className="w-11 h-11 grid place-items-center rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Sign out" aria-label="Sign out">
+        <button onClick={() => base44.auth.logout('/')} className="shrink-0 w-11 h-11 grid place-items-center rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white" title="Sign out" aria-label="Sign out">
         <LogOut className="w-4 h-4" />
         </button>
         </header>
