@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Loader2, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Loader2, ArrowRight } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { resolveDevice } from '@/lib/templates';
 import { Brand } from '@/components/Logo';
@@ -44,9 +44,6 @@ export default function SharedDesign() {
     <div className="min-h-screen bg-[#08080d] text-white flex flex-col">
       <PullToRefresh onRefresh={load} />
       <header className="sticky top-0 z-10 safe-top min-h-16 flex items-center gap-3 px-3 sm:px-4 border-b border-white/10 bg-[#0B0B12] no-callout overflow-x-hidden">
-        <Link to="/" aria-label="Back to home" className="shrink-0 w-11 h-11 grid place-items-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white transition-colors">
-          <ArrowLeft className="w-4 h-4" />
-        </Link>
         <Brand to="/" size={24} textClass="text-white" />
         <Link
           to="/"
