@@ -158,6 +158,8 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
   const hAlign = slide.headingAlign || slide.align;
   const sAlign = slide.subAlign || slide.align;
   const ty = ((slide.textY || 0) / 100) * innerH;
+  const tx = ((slide.textX || 0) / 100) * width;
+  const textTransform = tx || ty ? `translate(${tx}px, ${ty}px)` : 'none';
 
   const renderText = (pos) => {
     const pad = pos === 'bottom' ? `0 ${26 * u}px ${28 * K}px` : pos === 'center' ? `0 ${26 * u}px` : `${34 * K}px ${26 * u}px 0`;
@@ -193,7 +195,7 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
           const textLeft = L.text === 'left';
           return (
             <div className="relative w-full h-full">
-              <div className="absolute inset-y-0 flex items-center z-10" style={{ [L.text]: 0, width: `${L.textW * 100}%`, padding: textLeft ? '0 4% 0 8%' : '0 8% 0 4%', transform: ty ? `translateY(${ty}px)` : 'none' }}>
+              <div className="absolute inset-y-0 flex items-center z-10" style={{ [L.text]: 0, width: `${L.textW * 100}%`, padding: textLeft ? '0 4% 0 8%' : '0 8% 0 4%', transform: textTransform }}>
                 <div className="w-full" style={{ textAlign: hAlign || L.tAlign, fontFamily: `'${slide.font}', sans-serif` }}>
                   <h2 style={{ color: slide.headingColor, fontSize: 26 * Lk * hScale, lineHeight: 1.02, fontWeight: 800, letterSpacing: -0.5 * Lk }}>{slide.heading}</h2>
                   {slide.subheading && <p style={{ color: slide.subColor, fontSize: 12 * Lk * sScale, marginTop: 8 * Lk, lineHeight: 1.35, fontWeight: 500, textAlign: sAlign || L.tAlign }}>{slide.subheading}</p>}
@@ -211,10 +213,10 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
         })() : (
           <>
             {slide.layout === 'text-only' ? (
-              <div className="absolute inset-0 flex items-center" style={{ transform: ty ? `translateY(${ty}px)` : 'none' }}>{renderText('center')}</div>
+              <div className="absolute inset-0 flex items-center" style={{ transform: textTransform }}>{renderText('center')}</div>
             ) : (
               <>
-                <div className={`absolute inset-x-0 z-10 ${slide.layout === 'phone-top' ? 'bottom-0' : 'top-0'}`} style={{ transform: ty ? `translateY(${ty}px)` : 'none' }}>
+                <div className={`absolute inset-x-0 z-10 ${slide.layout === 'phone-top' ? 'bottom-0' : 'top-0'}`} style={{ transform: textTransform }}>
                   {renderText(slide.layout === 'phone-top' ? 'bottom' : 'top')}
                 </div>
                 <div className="absolute left-1/2 z-[1]" style={phonePos(slide.layout, pWU, slide.pose, K, width)}>

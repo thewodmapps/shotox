@@ -49,7 +49,11 @@ export default function TextPanel({ slide, updateSlide, updateTextStyle }) {
         </div>
       </div>
       <div className="space-y-2">
-        <Label className="text-white/70 text-xs">Text position · {slide.textY ?? 0}</Label>
+        <Label className="text-white/70 text-xs">Text position · left ↔ right · {slide.textX ?? 0}</Label>
+        <Slider value={[slide.textX ?? 0]} min={-30} max={30} step={1} onValueChange={([v]) => updateSlide({ textX: v })} />
+      </div>
+      <div className="space-y-2">
+        <Label className="text-white/70 text-xs">Text position · up ↕ down · {slide.textY ?? 0}</Label>
         <Slider value={[slide.textY ?? 0]} min={-30} max={30} step={1} onValueChange={([v]) => updateSlide({ textY: v })} />
       </div>
       <div className="space-y-2">
