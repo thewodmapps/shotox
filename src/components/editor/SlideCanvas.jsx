@@ -125,7 +125,7 @@ const phonePos = (layout, pW, off, k) => {
     rot += off.rot;
     if (layout !== 'phone-top') top += (off.topDelta || 0) * k;
   }
-  return { marginLeft: -pW / 2 + (x / 100) * BASE_W, top, transform: `rotate(${rot}deg)` };
+  return { marginLeft: -pW / 2 + (x / 100) * BASE_W, top, transform: rot ? `rotate(${rot}deg)` : 'none' };
 };
 
 const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, width = BASE_W, className = '', watermark = false }, ref) {
@@ -185,15 +185,15 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
           const textLeft = L.text === 'left';
           return (
             <div className="relative w-full h-full">
-              <div className="absolute inset-y-0 flex items-center z-10" style={{ [L.text]: 0, width: `${L.textW * 100}%`, padding: textLeft ? '0 4% 0 8%' : '0 8% 0 4%', transform: `translateY(${ty}px)` }}>
+              <div className="absolute inset-y-0 flex items-center z-10" style={{ [L.text]: 0, width: `${L.textW * 100}%`, padding: textLeft ? '0 4% 0 8%' : '0 8% 0 4%', transform: ty ? `translateY(${ty}px)` : 'none' }}>
                 <div className="w-full" style={{ textAlign: hAlign || L.tAlign, fontFamily: `'${slide.font}', sans-serif` }}>
                   <h2 style={{ color: slide.headingColor, fontSize: 26 * lk * hScale, lineHeight: 1.02, fontWeight: 800, letterSpacing: -0.5 * lk }}>{slide.heading}</h2>
                   {slide.subheading && <p style={{ color: slide.subColor, fontSize: 12 * lk * sScale, marginTop: 8 * lk, lineHeight: 1.35, fontWeight: 500, textAlign: sAlign || L.tAlign }}>{slide.subheading}</p>}
                 </div>
               </div>
               {slide.layout !== 'text-only' && (
-                <div className="absolute z-[1]" style={{ [L.dev]: `${L.devEdge}%`, top: '50%', width: devW, transform: `translateY(-50%) rotate(${L.rot}deg)` }}>
-                  <div style={{ transform: `translate(${(slide.phoneX || 0) / 100 * BASE_W}px, ${(slide.phoneY || 0) / 100 * h}px)` }}>
+                <div className="absolute z-[1]" style={{ [L.dev]: `${L.devEdge}%`, top: '50%', width: devW, transform: `translateY(-50%)${L.rot ? ` rotate(${L.rot}deg)` : ''}` }}>
+                  <div style={{ transform: (slide.phoneX || slide.phoneY) ? `translate(${(slide.phoneX || 0) / 100 * BASE_W}px, ${(slide.phoneY || 0) / 100 * h}px)` : 'none' }}>
                     <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={devW} form="phone" platform={dev.platform} />
                   </div>
                 </div>
@@ -203,14 +203,14 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
         })() : (
           <>
             {slide.layout === 'text-only' ? (
-              <div className="absolute inset-0 flex items-center" style={{ transform: `translateY(${ty}px)` }}>{renderText('center')}</div>
+              <div className="absolute inset-0 flex items-center" style={{ transform: ty ? `translateY(${ty}px)` : 'none' }}>{renderText('center')}</div>
             ) : (
               <>
-                <div className={`absolute inset-x-0 z-10 ${slide.layout === 'phone-top' ? 'bottom-0' : 'top-0'}`} style={{ transform: `translateY(${ty}px)` }}>
+                <div className={`absolute inset-x-0 z-10 ${slide.layout === 'phone-top' ? 'bottom-0' : 'top-0'}`} style={{ transform: ty ? `translateY(${ty}px)` : 'none' }}>
                   {renderText(slide.layout === 'phone-top' ? 'bottom' : 'top')}
                 </div>
                 <div className="absolute left-1/2 z-[1]" style={phonePos(slide.layout, pW, slide.pose, k)}>
-                  <div style={{ display: 'inline-block', transform: `translate(${(slide.phoneX || 0) / 100 * BASE_W}px, ${(slide.phoneY || 0) / 100 * h}px)` }}>
+                  <div style={{ display: 'inline-block', transform: (slide.phoneX || slide.phoneY) ? `translate(${(slide.phoneX || 0) / 100 * BASE_W}px, ${(slide.phoneY || 0) / 100 * h}px)` : 'none' }}>
                     <DeviceFrame url={slide.screenshotUrl} style={slide.deviceStyle} mock={slide.mock} tint={slide.bg} width={pW} form={form} platform={dev.platform} />
                   </div>
                 </div>

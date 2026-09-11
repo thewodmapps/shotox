@@ -27,6 +27,9 @@ const renderCanvas = async (el, device) => {
   clone.style.left = '0';
   holder.appendChild(clone);
   document.body.appendChild(holder);
+  // Ensure web fonts are loaded before capture — html2canvas renders text offset
+  // (extra top space) when it falls back to a default font mid-capture.
+  if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch {} }
   try {
     return await html2canvas(holder, {
       scale: device.w / BASE_W,
