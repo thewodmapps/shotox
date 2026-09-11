@@ -65,13 +65,7 @@ export default function PullToRefresh({ onRefresh, tone = 'dark' }) {
   const progress = Math.min(1, pull / THRESHOLD);
   const visible = pull > 0 || refreshing;
 
-  const SIZE = 56;
-  const R = 24;
-  const C = 2 * Math.PI * R;
-  const ringProgress = refreshing ? 1 : progress;
-  const dashOffset = C * (1 - ringProgress);
-  const trackColor = tone === 'light' ? 'rgba(11,11,18,0.09)' : 'rgba(255,255,255,0.12)';
-  const labelColor = tone === 'light' ? 'text-[#0B0B12]/55' : 'text-white/75';
+  const HUB = 42;
 
   return (
     <div
@@ -84,65 +78,35 @@ export default function PullToRefresh({ onRefresh, tone = 'dark' }) {
       }}
     >
       <div
-        className="relative mt-1"
+        className="relative grid place-items-center"
         style={{
-          width: SIZE,
-          height: SIZE,
-          transform: `scale(${0.82 + progress * 0.18})`,
-          transition: active ? 'none' : 'transform 0.2s ease-out',
+          width: HUB,
+          height: HUB,
+          transform: `scale(${0.55 + progress * 0.45})`,
+          transition: active ? 'none' : 'transform 0.18s ease-out',
         }}
       >
         {/* soft brand glow */}
         <div
-          className="absolute inset-0 rounded-full blur-xl"
+          className="absolute inset-0 rounded-full blur-lg"
           style={{
             background: 'linear-gradient(135deg, #c4b5fd 0%, #f472b6 50%, #fdba74 100%)',
-            opacity: 0.18 + progress * 0.4,
+            opacity: 0.25 + progress * 0.4,
             transition: active ? 'none' : 'opacity 0.2s ease-out',
           }}
         />
-        <div className={refreshing ? 'animate-spin' : ''} style={{ width: SIZE, height: SIZE, position: 'relative' }}>
-          <svg width={SIZE} height={SIZE} className="relative block">
-            <defs>
-              <linearGradient id="shotox-ptr-grad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#c4b5fd" />
-                <stop offset="50%" stopColor="#f472b6" />
-                <stop offset="100%" stopColor="#fdba74" />
-              </linearGradient>
-            </defs>
-            <circle cx={SIZE / 2} cy={SIZE / 2} r={R} fill="none" stroke={trackColor} strokeWidth="4" />
-            <circle
-              cx={SIZE / 2}
-              cy={SIZE / 2}
-              r={R}
-              fill="none"
-              stroke="url(#shotox-ptr-grad)"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeDasharray={C}
-              strokeDashoffset={dashOffset}
-              transform={`rotate(-90 ${SIZE / 2} ${SIZE / 2})`}
-              style={{ transition: active ? 'none' : 'stroke-dashoffset 0.12s linear' }}
-            />
-          </svg>
-          {/* center hub */}
-          <div className="absolute inset-0 grid place-items-center">
-            <div
-              className="grid place-items-center rounded-full shadow-[0_6px_18px_-4px_rgba(236,72,153,0.65)]"
-              style={{ width: 24, height: 24, background: 'linear-gradient(135deg, #c4b5fd 0%, #f472b6 50%, #fdba74 100%)' }}
-            >
-              <RefreshCw
-                className="w-3.5 h-3.5 text-white"
-                strokeWidth={2.75}
-                style={{ transform: refreshing ? undefined : `rotate(${progress * 240}deg)`, transition: active ? 'none' : 'transform 0.12s ease-out' }}
-              />
-            </div>
-          </div>
+        {/* gradient hub with refresh glyph */}
+        <div
+          className={`relative grid place-items-center rounded-full shadow-[0_8px_22px_-6px_rgba(236,72,153,0.7)] ${refreshing ? 'animate-spin' : ''}`}
+          style={{ width: HUB, height: HUB, background: 'linear-gradient(135deg, #c4b5fd 0%, #f472b6 50%, #fdba74 100%)' }}
+        >
+          <RefreshCw
+            className="w-5 h-5 text-white"
+            strokeWidth={2.75}
+            style={{ transform: refreshing ? undefined : `rotate(${progress * 300}deg)`, transition: active ? 'none' : 'transform 0.12s ease-out' }}
+          />
         </div>
       </div>
-      <span className={`mt-1.5 text-[10px] font-semibold tracking-wide ${labelColor}`}>
-        {refreshing ? 'Refreshing…' : pull >= THRESHOLD ? 'Release to refresh' : 'Pull to refresh'}
-      </span>
     </div>
   );
 }
