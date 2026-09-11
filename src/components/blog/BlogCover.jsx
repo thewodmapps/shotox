@@ -1,11 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
 
 /**
- * Attention-grabbing cover: rich gradient mesh, floating app-icon tiles, the
- * post title overlaid in white, and a hover "Read article →" pill that nudges
- * the user to click.
+ * AppLaunchpad-style cover graphic: solid color background, white grid overlay,
+ * a cluster of floating rounded "app icon" tiles, the post title overlaid in
+ * white, and a small brand mark.
  */
 const TILES = ['A', 'F', 'PS', 'Ui', '<>', 'ASO', '★', '⚙', '◎', '✦'];
 
@@ -13,14 +12,8 @@ export default function BlogCover({ color = '#7C3AED', icon: Icon, title, classN
   const gridId = `grid-${color.replace('#', '')}`;
   return (
     <div className={`relative w-full aspect-[16/9] overflow-hidden ${className}`} style={{ background: color }}>
-      {/* rich gradient mesh — light sheen top-right, dark depth bottom-left */}
-      <div
-        className="absolute inset-0"
-        style={{ background: 'radial-gradient(100% 75% at 100% 0%, rgba(255,255,255,0.28), transparent 52%), radial-gradient(85% 65% at 5% 100%, rgba(0,0,0,0.32), transparent 55%)' }}
-      />
-
       {/* grid overlay */}
-      <svg className="absolute inset-0 w-full h-full opacity-[0.10]" aria-hidden="true">
+      <svg className="absolute inset-0 w-full h-full opacity-[0.13]" aria-hidden="true">
         <defs>
           <pattern id={gridId} width="26" height="26" patternUnits="userSpaceOnUse">
             <path d="M26 0H0V26" fill="none" stroke="white" strokeWidth="1" />
@@ -28,6 +21,9 @@ export default function BlogCover({ color = '#7C3AED', icon: Icon, title, classN
         </defs>
         <rect width="100%" height="100%" fill={`url(#${gridId})`} />
       </svg>
+
+      {/* soft radial sheen */}
+      <div className="absolute inset-0" style={{ background: 'radial-gradient(120% 90% at 80% 0%, rgba(255,255,255,0.22), transparent 55%)' }} />
 
       {/* brand mark */}
       <div className="absolute top-3 left-3 flex items-center gap-1.5">
@@ -64,19 +60,11 @@ export default function BlogCover({ color = '#7C3AED', icon: Icon, title, classN
       </div>
 
       {/* title scrim + overlay */}
-      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/45 via-black/12 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/35 via-black/10 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 p-5 pr-[150px]">
         <h3 className="text-white font-display font-bold leading-tight text-lg sm:text-xl line-clamp-3 drop-shadow-sm">
           {title}
         </h3>
-      </div>
-
-      {/* hover CTA overlay — appears on group-hover (BlogCard wraps this in a `group` Link) */}
-      <div className="absolute inset-0 flex items-center justify-center bg-black/25 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-[#111827] font-semibold text-sm shadow-xl group-hover:scale-105 transition-transform duration-300">
-          Read article
-          <ArrowRight className="w-4 h-4" />
-        </div>
       </div>
     </div>
   );
