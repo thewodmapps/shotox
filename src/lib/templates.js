@@ -277,6 +277,22 @@ const D = [
   { id: 'bloomwell', name: 'Bloom Well', cat: 'Health', style: 'brush', font: 'Playfair Display', dev: 'white', hc: '#831843', sc: 'rgba(131,24,67,0.7)', colors: [solid('#FCE7F3'), grad('#FBCFE8', '#FCE7F3'), solid('#FDF2F8'), grad('#F9A8D4', '#FBCFE8')] },
   // ── Commerce ──
   { id: 'kicksy', name: 'Kicksy', cat: 'Commerce', style: 'brush', font: 'Playfair Display', dev: 'white', hc: '#14532D', sc: 'rgba(20,83,45,0.7)', colors: [solid('#b8e9b0'), grad('#BBF7D0', '#b8e9b0'), solid('#A7F3D0'), solid('#DCFCE7')] },
+  // ── Shotox — the product's own signature template ──
+  {
+    id: 'shotox',
+    name: 'Shotox',
+    cat: 'AI',
+    style: 'neon',
+    font: 'Sora',
+    dev: 'titanium',
+    hc: '#FFFFFF',
+    sc: 'rgba(255,255,255,0.82)',
+    colors: [grad('#7C3AED', '#EC4899'), grad('#6366F1', '#F472B6'), solid('#0B0B12'), grad('#A855F7', '#FB7185')],
+    copy: {
+      h: ['Stunning app screenshots', 'AI does the heavy lifting', '3D device templates', 'Store-ready in minutes', 'Beautiful, by default', 'Export in a single tap', 'Your app, perfectly framed', 'From screen to store'],
+      s: ['App Store & Google Play ready in minutes', 'Pick a template, we handle the design', 'Realistic phones & tablets, instantly', 'No design skills needed, ever', 'High-converting layouts that sell', 'Download PNG, JPEG or a ZIP', 'Made for founders, makers & marketers', 'Drag, drop and ship the same day'],
+    },
+  },
 ];
 
 const tagsFor = (d) => {
@@ -293,7 +309,7 @@ export const TEMPLATES = D.map((d, di) => {
   perCat[d.cat] = perCat[d.cat] || 0;
   const off = perCat[d.cat]++;
   const pose = POSES[di % POSES.length];
-  const pool = COPY[d.cat];
+  const pool = d.copy ? d.copy : COPY[d.cat];
   const slides = [];
   for (let i = 0; i < 8; i++) {
     slides.push(
