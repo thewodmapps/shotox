@@ -31,22 +31,12 @@ const renderCanvas = async (el, device) => {
 
 const triggerDownload = (blob, filename) => {
   const url = URL.createObjectURL(blob);
-  const inFrame = (() => { try { return window.self !== window.top; } catch { return true; } })();
   const a = document.createElement('a');
   a.href = url;
   a.download = filename;
   document.body.appendChild(a);
   a.click();
   a.remove();
-  // Sandboxed builder-preview iframes silently block anchor downloads;
-  // fall back to opening the file in a new tab so it can still be saved.
-  if (inFrame) {
-    const win = window.open(url, '_blank');
-    if (!win) {
-      setTimeout(() => URL.revokeObjectURL(url), 30000);
-      return;
-    }
-  }
   setTimeout(() => URL.revokeObjectURL(url), 2000);
 };
 
