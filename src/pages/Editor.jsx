@@ -15,6 +15,7 @@ import EditorStage from '@/components/editor/EditorStage';
 import SlideCanvas from '@/components/editor/SlideCanvas';
 import UndoBar from '@/components/editor/UndoBar';
 import ShareModal from '@/components/projects/ShareModal';
+import DownloadResult from '@/components/editor/DownloadResult';
 
 export default function Editor() {
   const id = new URLSearchParams(window.location.search).get('id');
@@ -31,6 +32,7 @@ export default function Editor() {
   const [exportPct, setExportPct] = useState(0);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showShare, setShowShare] = useState(false);
+  const [downloadResult, setDownloadResult] = useState(null);
   const [undo, setUndo] = useState(null);
   const dirty = useRef(false);
   const exportRefs = useRef([]);
@@ -120,14 +122,18 @@ export default function Editor() {
     const device = resolveDevice(project);
     const base = project.name.replace(/\s+/g, '-');
     try {
-      if (which === 'all') {
-        const els = project.slides.map((_, i) => exportRefs.current[i]).filter(Boolean);
-        await exportAllSlides(els, device, base, format, onProgress);
-      } else {
-        await exportSlide(exportRefs.current[sel], device, String(sel + 1), format, onProgress);
-      }
+      const res = which === 'all'
+        ? await exportAllSlides(project.slides.map((_, i) => exportRefs.current[i]).filter(Boolean), device, base, format, onProgress)
+        : await exportSlide(exportRefs.current[sel], device, String(sel + 1), format, onProgress);
       exportTarget.current = 100;
       await wait(400);
+      if (res) {
+        setDownloadResult({
+          ...res,
+          isZip: res.mime === 'application/zip',
+          url: URL.createObjectURL(res.blob),
+        });
+      }
     } finally {
       setExporting(false);
     }
@@ -167,6 +173,7 @@ export default function Editor() {
       {exporting && <ExportOverlay pct={exportPct} />}
       <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} onUpgrade={() => navigate('/#pricing')} />
       <ShareModal open={showShare} title={project.name} projectId={project.id} onClose={() => setShowShare(false)} />
+      <DownloadResult result={downloadResult} onClose={() => setDownloadResult(null)} />
     </div>
   );
 }
