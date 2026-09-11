@@ -45,8 +45,7 @@ export default function BottomTabBar() {
   return (
     <>
       <nav
-        className="md:hidden fixed bottom-0 inset-x-0 z-40 flex items-stretch bg-[#08080d]/90 backdrop-blur-xl border-t border-white/10 no-callout"
-        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        className="md:hidden fixed bottom-0 inset-x-0 z-40 flex items-stretch bg-[#08080d]/90 backdrop-blur-xl border-t border-white/10 no-callout safe-bottom"
         aria-label="Primary"
       >
         {TABS.map((t) => {
