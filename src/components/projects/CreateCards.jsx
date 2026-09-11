@@ -14,7 +14,7 @@ const OPTIONS = [
   { key: 'custom', title: 'Custom Size', sub: 'Any dimensions', form: 'custom', platform: 'ios', device: 'custom', icon: Settings, tpl: 'aurora' },
 ];
 
-export default function CreateCards({ onCreate, creating, isPro, onLocked, freeDevice, onFeature }) {
+export default function CreateCards({ onCreate, creating, isPro, onLocked, freeDevice }) {
   const [customOpen, setCustomOpen] = useState(false);
   const [custom, setCustom] = useState({ w: 1080, h: 1920 });
 
@@ -29,9 +29,7 @@ export default function CreateCards({ onCreate, creating, isPro, onLocked, freeD
           const locked = !isPro && !!freeDevice && freeDevice !== o.device;
           const handle = () => {
             if (locked) return onLocked?.();
-            if (o.form === 'custom') return setCustomOpen((v) => !v);
-            if (o.key === 'feature') return onFeature?.();
-            onCreate({ templateId: o.tpl, platform: o.platform, device: o.device });
+            o.form === 'custom' ? setCustomOpen((v) => !v) : onCreate({ templateId: o.tpl, platform: o.platform, device: o.device });
           };
           return (
           <button
