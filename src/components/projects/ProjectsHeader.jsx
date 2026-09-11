@@ -35,9 +35,9 @@ export default function ProjectsHeader() {
   const goPricing = () => navigate('/#pricing');
 
   return (
-    <header className="sticky top-0 z-30 min-h-16 safe-top bg-[#08080d]/70 backdrop-blur-xl text-white flex items-center justify-between px-4 sm:px-6 border-b border-white/10 no-callout">
+    <header className="sticky top-0 z-30 min-h-16 safe-top bg-[#08080d]/70 backdrop-blur-xl text-white flex items-center gap-2 sm:gap-3 px-4 sm:px-6 border-b border-white/10 no-callout">
       <Brand to="/" size={26} textClass="text-white" />
-      <div className="flex items-center gap-1.5 sm:gap-2">
+      <div className="ml-auto flex items-center gap-1 sm:gap-1.5">
         {badge ? (
           <button onClick={goPricing} title="View plans" className={`inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full ${badge.className} hover:opacity-90 transition-opacity`}>
             <badge.icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${badge.iconClass}`} /> <span className="hidden sm:inline">{badge.label}</span>
