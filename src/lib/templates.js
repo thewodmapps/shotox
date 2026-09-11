@@ -30,6 +30,8 @@ export const FONTS = [
   'Plus Jakarta Sans', 'Outfit', 'Manrope', 'Bricolage Grotesque', 'Archivo',
   'Lexend', 'Nunito', 'Oswald', 'Bebas Neue', 'Playfair Display', 'Fraunces',
   'Lora', 'Instrument Serif',
+  'Roboto', 'Open Sans', 'Raleway', 'Work Sans', 'Quicksand', 'Rubik',
+  'Barlow', 'Anton', 'Jost', 'Figtree', 'Cabin', 'Karla', 'Mulish', 'Titillium Web',
 ];
 export const LAYOUTS = [
   { id: 'phone-bottom', name: 'Phone below' },

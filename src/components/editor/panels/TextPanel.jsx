@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
 import { FONTS } from '@/lib/templates';
 import ColorField from './ColorField';
 
@@ -49,8 +50,12 @@ export default function TextPanel({ slide, updateSlide, updateTextStyle }) {
         </div>
       </div>
       <div className="space-y-2">
-        <Label className="text-white/70 text-xs">Text position · {slide.textY ?? 0}</Label>
+        <Label className="text-white/70 text-xs">Text position Y · {slide.textY ?? 0}</Label>
         <Slider value={[slide.textY ?? 0]} min={-30} max={30} step={1} onValueChange={([v]) => updateSlide({ textY: v })} />
+      </div>
+      <div className="space-y-2">
+        <Label className="text-white/70 text-xs">Text position X · {slide.textX ?? 0}</Label>
+        <Slider value={[slide.textX ?? 0]} min={-40} max={40} step={1} onValueChange={([v]) => updateSlide({ textX: v })} />
       </div>
       <div className="space-y-2">
         <Label className="text-white/70 text-xs">Headline size · {Math.round((slide.headingScale ?? 1) * 100)}%</Label>
@@ -59,6 +64,18 @@ export default function TextPanel({ slide, updateSlide, updateTextStyle }) {
       <div className="space-y-2">
         <Label className="text-white/70 text-xs">Subheadline size · {Math.round((slide.subScale ?? 1) * 100)}%</Label>
         <Slider value={[Math.round((slide.subScale ?? 1) * 100)]} min={50} max={200} step={5} onValueChange={([v]) => updateSlide({ subScale: v / 100 })} />
+      </div>
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label className="text-white/70 text-xs">Text shadow</Label>
+          <Switch checked={!!slide.shadow} onCheckedChange={(v) => updateSlide({ shadow: v })} />
+        </div>
+        {slide.shadow && (
+          <div className="space-y-2 pt-1">
+            <Label className="text-white/70 text-xs">Shadow blur · {slide.shadowBlur ?? 8}</Label>
+            <Slider value={[slide.shadowBlur ?? 8]} min={2} max={30} step={1} onValueChange={([v]) => updateSlide({ shadowBlur: v })} />
+          </div>
+        )}
       </div>
       <div className="grid grid-cols-2 gap-3">
         <ColorField label="Headline color" value={slide.headingColor} onChange={(headingColor) => updateSlide({ headingColor })} />

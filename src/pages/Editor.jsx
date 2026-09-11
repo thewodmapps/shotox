@@ -36,11 +36,75 @@ export default function Editor() {
   const exportRefs = useRef([]);
   const exportTarget = useRef(0);
   const undoTimer = useRef(null);
+  const [canUndo, setCanUndo] = useState(false);
+  const [canRedo, setCanRedo] = useState(false);
+  const history = useRef([]);
+  const hPtr = useRef(-1);
+  const histTimer = useRef(null);
+  const skipHistory = useRef(false);
+  const firstProject = useRef(true);
+
+  const snapshot = (proj) => JSON.parse(JSON.stringify({
+    name: proj.name, slides: proj.slides, platform: proj.platform,
+    device: proj.device, template_id: proj.template_id,
+    custom_w: proj.custom_w, custom_h: proj.custom_h, uploads: proj.uploads,
+  }));
+
+  const queueHistory = (proj) => {
+    clearTimeout(histTimer.current);
+    histTimer.current = setTimeout(() => {
+      const snap = snapshot(proj);
+      const top = history.current[hPtr.current];
+      if (top && JSON.stringify(top) === JSON.stringify(snap)) return;
+      history.current = history.current.slice(0, hPtr.current + 1);
+      history.current.push(snap);
+      if (history.current.length > 50) history.current.shift();
+      hPtr.current = history.current.length - 1;
+      setCanUndo(hPtr.current > 0);
+      setCanRedo(false);
+    }, 350);
+  };
+
+  const undoEdit = () => {
+    if (hPtr.current <= 0) return;
+    hPtr.current--;
+    skipHistory.current = true;
+    const snap = JSON.parse(JSON.stringify(history.current[hPtr.current]));
+    setProject((p) => ({ ...p, ...snap }));
+    setCanUndo(hPtr.current > 0);
+    setCanRedo(hPtr.current < history.current.length - 1);
+    dirty.current = true;
+  };
+
+  const redoEdit = () => {
+    if (hPtr.current >= history.current.length - 1) return;
+    hPtr.current++;
+    skipHistory.current = true;
+    const snap = JSON.parse(JSON.stringify(history.current[hPtr.current]));
+    setProject((p) => ({ ...p, ...snap }));
+    setCanUndo(hPtr.current > 0);
+    setCanRedo(hPtr.current < history.current.length - 1);
+    dirty.current = true;
+  };
 
   useEffect(() => {
     if (!id) return setMissing(true);
-    base44.entities.Project.get(id).then((p) => (p ? setProject(p) : setMissing(true)));
+    base44.entities.Project.get(id).then((p) => {
+      if (!p) return setMissing(true);
+      setProject(p);
+      history.current = [snapshot(p)];
+      hPtr.current = 0;
+      setCanUndo(false);
+      setCanRedo(false);
+    });
   }, [id]);
+
+  useEffect(() => {
+    if (!project) return;
+    if (firstProject.current) { firstProject.current = false; return; }
+    if (skipHistory.current) { skipHistory.current = false; return; }
+    queueHistory(project);
+  }, [project]);
 
   useEffect(() => {
     if (!project || !dirty.current) return;
@@ -156,7 +220,7 @@ export default function Editor() {
           }}
         />
         <EditorPanel active={panel} mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} {...panelProps} />
-        <EditorStage project={project} selected={sel} onSelect={setSel} onAdd={addSlide} onDuplicate={duplicate} onDelete={remove} onMove={move} watermark={!pro} />
+        <EditorStage project={project} selected={sel} onSelect={setSel} onAdd={addSlide} onDuplicate={duplicate} onDelete={remove} onMove={move} watermark={!pro} onUndo={undoEdit} onRedo={redoEdit} canUndo={canUndo} canRedo={canRedo} />
       </div>
       <UndoBar undo={undo} onUndo={restoreSlide} />
       <div className="fixed -left-[5000px] top-0 pointer-events-none" aria-hidden>

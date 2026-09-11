@@ -5,7 +5,7 @@ import { resolveDevice, slideHeight, BASE_W } from '@/lib/templates';
 import SlideCanvas from './SlideCanvas';
 import SlideToolbar from './SlideToolbar';
 
-export default function EditorStage({ project, selected, onSelect, onAdd, onDuplicate, onDelete, onMove, watermark }) {
+export default function EditorStage({ project, selected, onSelect, onAdd, onDuplicate, onDelete, onMove, watermark, onUndo, onRedo, canUndo, canRedo }) {
   const device = resolveDevice(project);
   const sH = slideHeight(device);
   const wrapRef = useRef(null);
@@ -43,7 +43,7 @@ export default function EditorStage({ project, selected, onSelect, onAdd, onDupl
                 }`}
               />
               <div className={`absolute -bottom-12 left-1/2 -translate-x-1/2 transition-opacity ${selected === i ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                <SlideToolbar index={i} count={project.slides.length} onDuplicate={onDuplicate} onDelete={onDelete} onMove={onMove} />
+                <SlideToolbar index={i} count={project.slides.length} onDuplicate={onDuplicate} onDelete={onDelete} onMove={onMove} onUndo={onUndo} onRedo={onRedo} canUndo={canUndo} canRedo={canRedo} />
               </div>
               <span className="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-full bg-black/50 text-white/80">{i + 1}</span>
             </motion.div>
@@ -85,7 +85,7 @@ export default function EditorStage({ project, selected, onSelect, onAdd, onDupl
           )}
         </div>
         <div className="flex items-center gap-2">
-          <SlideToolbar index={selected} count={project.slides.length} onDuplicate={onDuplicate} onDelete={onDelete} onMove={onMove} />
+          <SlideToolbar index={selected} count={project.slides.length} onDuplicate={onDuplicate} onDelete={onDelete} onMove={onMove} onUndo={onUndo} onRedo={onRedo} canUndo={canUndo} canRedo={canRedo} />
           <button onClick={onAdd} className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20" aria-label="Add slide">
             <Plus className="w-4 h-4" />
           </button>
