@@ -171,6 +171,10 @@
 /* ===== Android WebView / mobile hardening (additive — light mode untouched) ===== */
 .safe-top { padding-top: env(safe-area-inset-top); }
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+/* Android WebView often reports 0 for safe-area-inset-top; guarantee status-bar clearance on phones & tablets */
+@media (max-width: 1024px) {
+  .safe-top { padding-top: max(env(safe-area-inset-top), 1.75rem); }
+}
 .app-shell { overscroll-behavior: contain; }
 .scroll-contain { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 .no-callout { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }

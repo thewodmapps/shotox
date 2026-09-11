@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -13,6 +13,7 @@ const PLAN_INFO = {
 
 export default function WelcomeModal() {
   const [params, setParams] = useSearchParams();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const plan = params.get('plan');
   const info = PLAN_INFO[plan];
@@ -82,8 +83,8 @@ export default function WelcomeModal() {
                   ))}
                 </ul>
               </div>
-              <Button onClick={close} className="mt-6 w-full h-12 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 hover:opacity-90 text-white border-0">
-                Start creating
+              <Button onClick={() => { close(); navigate('/projects'); }} className="mt-6 w-full h-12 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 hover:opacity-90 text-white border-0">
+                Start exploring
               </Button>
             </div>
           </motion.div>

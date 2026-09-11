@@ -7,6 +7,8 @@ import { useAuth } from '@/lib/AuthContext';
 import CheckoutNoticeModal from '@/components/landing/CheckoutNoticeModal';
 
 const PLAN_KEY = { 'Pro Monthly': 'monthly', 'Pro Yearly': 'yearly', 'Lifetime': 'lifetime' };
+const PLAN_ID = { 'Free': 'free', 'Pro Monthly': 'monthly', 'Pro Yearly': 'yearly', 'Lifetime': 'lifetime' };
+const RANK = { free: 0, monthly: 1, yearly: 2, lifetime: 3 };
 
 const PLANS = [
   {
@@ -48,6 +50,7 @@ export default function Pricing() {
   const [showNotice, setShowNotice] = useState(false);
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
+  const currentRank = RANK[user?.plan] ?? 0;
 
   async function handleCheckout(name) {
     if (window.self !== window.top) {
@@ -89,10 +92,14 @@ export default function Pricing() {
           {PLANS.map((p) => {
             const isHero = p.featured;
             const isAmber = p.accent === 'amber';
+            const planRank = RANK[PLAN_ID[p.name]] ?? 0;
+            const isCurrent = planRank === currentRank;
+            const isDowngrade = planRank < currentRank;
+            const isOwned = isCurrent || isDowngrade;
             return (
               <div
                 key={p.name}
-                className={`relative rounded-3xl p-6 flex flex-col transition-all duration-300 hover:-translate-y-1 ${
+                className={`relative rounded-3xl p-6 flex flex-col transition-all duration-300 ${isOwned ? 'opacity-60' : 'hover:-translate-y-1'} ${
                   isHero
                     ? 'bg-gradient-to-b from-violet-600 to-fuchsia-600 border border-transparent shadow-[0_40px_80px_-30px_rgba(217,70,239,0.5)] lg:-my-2'
                     : 'bg-white/[0.04] border border-white/10 hover:border-white/20 backdrop-blur-sm'
@@ -132,16 +139,22 @@ export default function Pricing() {
                   ))}
                 </ul>
                 {p.name === 'Free' ? (
-                  <Button asChild className={`mt-7 rounded-xl h-11 ${isHero ? 'bg-white text-[#0B0B12] hover:bg-white/90' : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'}`}>
-                    <Link to="/projects">{p.cta}</Link>
-                  </Button>
+                  isOwned ? (
+                    <Button disabled className="mt-7 rounded-xl h-11 bg-white/5 text-white/40 border border-white/10 cursor-not-allowed">
+                      Included
+                    </Button>
+                  ) : (
+                    <Button asChild className={`mt-7 rounded-xl h-11 ${isHero ? 'bg-white text-[#0B0B12] hover:bg-white/90' : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'}`}>
+                      <Link to="/projects">{p.cta}</Link>
+                    </Button>
+                  )
                 ) : (
                   <Button
-                    disabled={loadingPlan === p.name}
+                    disabled={isOwned || loadingPlan === p.name}
                     onClick={() => handleCheckout(p.name)}
-                    className={`mt-7 rounded-xl h-11 ${isHero ? 'bg-white text-[#0B0B12] hover:bg-white/90' : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'}`}
+                    className={`mt-7 rounded-xl h-11 ${isOwned ? 'bg-white/5 text-white/40 border border-white/10 cursor-not-allowed' : isHero ? 'bg-white text-[#0B0B12] hover:bg-white/90' : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'}`}
                   >
-                    {loadingPlan === p.name ? 'Redirecting…' : p.cta}
+                    {loadingPlan === p.name ? 'Redirecting…' : isCurrent ? 'Current plan' : isDowngrade ? 'Included' : p.cta}
                   </Button>
                 )}
               </div>
