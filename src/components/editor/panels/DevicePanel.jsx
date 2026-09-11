@@ -2,7 +2,7 @@ import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
-import { DEVICES, LAYOUTS, DEVICE_STYLES } from '@/lib/templates';
+import { DEVICES, LAYOUTS, DEVICE_STYLES, resolveDevice } from '@/lib/templates';
 import { Lock } from 'lucide-react';
 
 const Option = ({ active, onClick, children, locked }) => (
@@ -22,6 +22,7 @@ const GROUPS = [
 
 export default function DevicePanel({ slide, updateSlide, project, updateProject, isPro, onLocked, freeDevice }) {
   const isCustom = project.device === 'custom';
+  const isFeature = resolveDevice(project).form === 'feature';
   return (
     <div className="space-y-5">
       <div className="space-y-3">
@@ -57,12 +58,14 @@ export default function DevicePanel({ slide, updateSlide, project, updateProject
           )}
         </div>
       </div>
+      {!isFeature && (
       <div className="space-y-2">
         <Label className="text-white/70 text-sm">Layout</Label>
         <div className="grid grid-cols-2 gap-2">
           {LAYOUTS.map((l) => <Option key={l.id} active={slide.layout === l.id} onClick={() => updateSlide({ layout: l.id })}>{l.name}</Option>)}
         </div>
       </div>
+      )}
       <div className="space-y-2">
         <Label className="text-white/70 text-sm">Frame finish</Label>
         <div className="grid grid-cols-3 gap-2">

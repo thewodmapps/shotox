@@ -90,6 +90,26 @@ export const makeSlide = (o = {}) => ({
   ...o,
 });
 
+// A feature graphic is a single independent landscape slide — never part of the
+// phone `slides` array — so editing it cannot bleed into the phone screenshots.
+export const makeFeatureSlide = (src = {}) =>
+  makeSlide({
+    heading: 'Beautiful app screenshots, in seconds',
+    subheading: 'AI-powered templates for App Store & Google Play',
+    headingColor: '#FFFFFF',
+    subColor: 'rgba(255,255,255,0.8)',
+    bg: grad('#7C3AED', '#EC4899'),
+    font: 'Sora',
+    style: 'swipe',
+    mock: 'hero',
+    deviceStyle: 'titanium',
+    align: 'left',
+    headingAlign: 'left',
+    subAlign: 'left',
+    ...src,
+    id: makeId(),
+  });
+
 const L8 = ['phone-bottom', 'tilted', 'phone-top', 'text-only', 'phone-bottom', 'tilted', 'phone-top', 'text-only'];
 
 const isLight = (hex) => {
