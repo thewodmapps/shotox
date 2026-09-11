@@ -30,6 +30,14 @@ const renderCanvas = async (el, device) => {
       backgroundColor: null,
       width: BASE_W,
       height: h,
+      // html2canvas defaults scrollX/scrollY to the window's current scroll, so a
+      // scrolled editor shifts the captured content down and leaves a blank band
+      // at the top (the "extra space upper side"). Pin the render origin to 0,0
+      // so the export matches the on-screen composition regardless of scroll.
+      scrollX: 0,
+      scrollY: 0,
+      x: 0,
+      y: 0,
       logging: false,
     });
   } finally {
