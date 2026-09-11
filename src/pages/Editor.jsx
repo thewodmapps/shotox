@@ -161,7 +161,7 @@ export default function Editor() {
       <UndoBar undo={undo} onUndo={restoreSlide} />
       <div className="fixed -left-[5000px] top-0 pointer-events-none" aria-hidden>
         {project.slides.map((s, i) => (
-          <SlideCanvas key={s.id} slide={s} device={device} watermark={!pro} width={device.w} ref={(el) => (exportRefs.current[i] = el)} />
+          <SlideCanvas key={s.id} slide={s} device={device} watermark={!pro} width={device.form === 'feature' ? device.w * 2 : device.w} ref={(el) => (exportRefs.current[i] = el)} />
         ))}
       </div>
       {exporting && <ExportOverlay pct={exportPct} />}
