@@ -79,6 +79,10 @@ export default function DevicePanel({ slide, updateSlide, project, updateProject
             <Label className="text-white/70 text-sm">Phone position · up ↕ down · {slide.phoneY ?? 0}</Label>
             <Slider value={[slide.phoneY ?? 0]} min={-30} max={30} step={1} onValueChange={([v]) => updateSlide({ phoneY: v })} />
           </div>
+          <div className="space-y-2">
+            <Label className="text-white/70 text-sm">Phone size · small ↔ large · {Math.round((slide.phoneScale ?? 1) * 100)}%</Label>
+            <Slider value={[(slide.phoneScale ?? 1) * 100]} min={60} max={140} step={5} onValueChange={([v]) => updateSlide({ phoneScale: v / 100 })} />
+          </div>
         </div>
       )}
     </div>

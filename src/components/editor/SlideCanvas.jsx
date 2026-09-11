@@ -138,7 +138,8 @@ const SlideCanvas = forwardRef(function SlideCanvas({ slide, device, deviceId, w
   const k = h / H_REF;
   const pScale = slide.pose?.scale ?? 1;
   const phoneW = landscape ? (h * 0.82) / 2.1 : (DEVICE_FILL * h) / ratio;
-  const pW = landscape ? phoneW : phoneW * pScale;
+  const userScale = slide.phoneScale ?? 1;
+  const pW = landscape ? phoneW : phoneW * pScale * userScale;
 
   const accent = slide.headingColor && slide.headingColor.startsWith('#') ? slide.headingColor : (isLight(slide.bg.from || slide.bg.color) ? '#0B0B12' : '#FFFFFF');
   const theme = slide.style || 'swipe';
