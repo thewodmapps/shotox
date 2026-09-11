@@ -11,14 +11,13 @@ export const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 // the lookup path trivial and stable.
 const renderCanvas = async (el, device) => {
   const h = slideHeight(device);
+  // Render on-screen at the origin, behind the export overlay (z-50). html2canvas
+  // letterboxes/off-sets content captured from off-screen (negative-left) holders
+  // and from a scrolled window — placing the holder at 0,0 with a pinned zero
+  // scroll origin makes the export match the editor composition exactly.
   const holder = document.createElement('div');
-  holder.style.cssText = `position:fixed;left:-99999px;top:0;width:${BASE_W}px;height:${h}px;overflow:hidden;pointer-events:none;`;
+  holder.style.cssText = `position:fixed;left:0;top:0;width:${BASE_W}px;height:${h}px;overflow:hidden;pointer-events:none;z-index:-1;`;
   const clone = el.cloneNode(true);
-  // The live node carries `transform: scale(...)` so it shrinks inside the editor
-  // preview. The export node is already at BASE_W (scale 1), but html2canvas
-  // mis-honours an identity transform on the captured root and offsets/letterboxes
-  // the output (extra top space, shifted spacing). Strip it so the render matches
-  // the on-screen composition exactly.
   clone.style.transform = 'none';
   clone.style.transformOrigin = 'top left';
   holder.appendChild(clone);
@@ -30,14 +29,8 @@ const renderCanvas = async (el, device) => {
       backgroundColor: null,
       width: BASE_W,
       height: h,
-      // html2canvas defaults scrollX/scrollY to the window's current scroll, so a
-      // scrolled editor shifts the captured content down and leaves a blank band
-      // at the top (the "extra space upper side"). Pin the render origin to 0,0
-      // so the export matches the on-screen composition regardless of scroll.
       scrollX: 0,
       scrollY: 0,
-      x: 0,
-      y: 0,
       logging: false,
     });
   } finally {
