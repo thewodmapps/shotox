@@ -16,6 +16,10 @@ export default async function (req: Request): Promise<Response> {
 
     const userId = (body.user_id as string) || "";
     const email = (body.email as string) || "";
+    // Return the user to the exact origin the app is running in so the post-purchase
+    // redirect lands back inside the app (and triggers the welcome popup), not on a
+    // different domain that would open in the external browser.
+    const origin = (body.origin as string) || "https://shotox.in";
 
     const key = secrets.get("STRIPE_SECRET_KEY");
     const appId = secrets.get("BASE44_APP_ID") || "";
@@ -26,8 +30,8 @@ export default async function (req: Request): Promise<Response> {
     params.set("line_items[0][quantity]", "1");
     if (userId) params.set("client_reference_id", userId);
     if (email) params.set("customer_email", email);
-    params.set("success_url", `https://shotox.in/projects?upgraded=1&plan=${body.plan}`);
-    params.set("cancel_url", "https://shotox.in/#pricing");
+    params.set("success_url", `${origin}/projects?upgraded=1&plan=${body.plan}`);
+    params.set("cancel_url", `${origin}/#pricing`);
     params.set("metadata[base44_app_id]", appId);
     if (userId) params.set("metadata[user_id]", userId);
     params.set("metadata[plan]", body.plan);
