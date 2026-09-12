@@ -13,6 +13,7 @@ const BTN_BASE = 'grid place-items-center w-11 h-11 rounded-lg backdrop-blur tra
 
 export default function ProjectCard({ project, onDelete, onRename }) {
   const p = project;
+  const device = resolveDevice(p);
   const navigate = useNavigate();
   const [shareOpen, setShareOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -78,8 +79,8 @@ export default function ProjectCard({ project, onDelete, onRename }) {
         <Link to={`/editor?id=${p.id}`} className="block">
           <div className="flex gap-1 p-2 bg-[#0B0B12]">
             {(p.slides || []).slice(0, 3).map((s) => (
-              <div key={s.id} className="flex-1 aspect-[1290/2796] relative overflow-hidden rounded-md">
-                <ScaledSlide slide={s} device={resolveDevice(p)} />
+              <div key={s.id} className="flex-1 relative overflow-hidden rounded-md" style={{ aspectRatio: `${device.w} / ${device.h}` }}>
+                <ScaledSlide slide={s} device={device} />
               </div>
             ))}
           </div>
