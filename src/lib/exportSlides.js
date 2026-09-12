@@ -68,7 +68,7 @@ const renderCanvas = async (el, device) => {
   }
 };
 
-export const triggerDownload = (blob, filename) => {
+const triggerDownload = (blob, filename) => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -79,37 +79,21 @@ export const triggerDownload = (blob, filename) => {
   setTimeout(() => URL.revokeObjectURL(url), 2000);
 };
 
-// On mobile WebViews, an <a download>.click() on a blob: URL does not trigger
-// the native download pipeline, so the file never saves. The Web Share API
-// (navigator.share with files) is the reliable path on Android — but it needs
-// a fresh user gesture, so the caller must invoke it from a tap (see the
-// "Save to phone" sheet in the editor). Returns false if sharing isn't
-// available so the caller can fall back to a direct download.
-export const shareBlob = async (blob, filename) => {
-  try {
-    const file = new File([blob], filename, { type: blob.type || 'application/octet-stream' });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file] });
-      return true;
-    }
-  } catch {}
-  return false;
-};
-
 const canvasToBlob = (canvas, mime) =>
   new Promise((resolve, reject) => {
     canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), mime, 0.95);
   });
 
 export async function exportSlide(el, device, filename, format = 'png', onProgress) {
-  if (!el) return null;
+  if (!el) return;
   const mime = format === 'jpeg' ? 'image/jpeg' : 'image/png';
   onProgress?.(5);
   const canvas = await renderCanvas(el, device);
   onProgress?.(85);
   const blob = await canvasToBlob(canvas, mime);
+  onProgress?.(95);
+  triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`);
   onProgress?.(100);
-  return { blob, filename: `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}` };
 }
 
 export async function exportAllSlides(els, device, baseName, format = 'png', onProgress) {
@@ -127,6 +111,6 @@ export async function exportAllSlides(els, device, baseName, format = 'png', onP
   }
   onProgress?.(95);
   const blob = await zip.generateAsync({ type: 'blob' });
+  triggerDownload(blob, `${baseName}-screenshots.zip`);
   onProgress?.(100);
-  return { blob, filename: `${baseName}-screenshots.zip` };
 }
