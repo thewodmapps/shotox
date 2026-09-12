@@ -315,8 +315,9 @@ const D = [
     dev: 'titanium',
     hc: '#FFFFFF',
     sc: 'rgba(255,255,255,0.82)',
-    hScale: 1.22,
-    sScale: 1.06,
+    hScale: 1.1,
+    sScale: 1.0,
+    pose: { x: 0, rot: 0, scale: 1, topDelta: 0 },
     colors: [grad('#4C1D95', '#9D174D'), grad('#6D28D9', '#BE185D'), solid('#0B0B12'), grad('#831843', '#7C2D12')],
     copy: {
       h: ['Screenshots that sell', 'From idea to App Store', 'AI designs every slide', '3D devices that pop', 'Your brand, perfectly placed', 'Built to convert', 'Export in one tap', 'Launch worldwide today'],
@@ -338,7 +339,7 @@ const perCat = {};
 export const TEMPLATES = D.map((d, di) => {
   perCat[d.cat] = perCat[d.cat] || 0;
   const off = perCat[d.cat]++;
-  const pose = POSES[di % POSES.length];
+  const pose = d.pose || POSES[di % POSES.length];
   const pool = d.copy ? d.copy : COPY[d.cat];
   const slides = [];
   for (let i = 0; i < 8; i++) {
