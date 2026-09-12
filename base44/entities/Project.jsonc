@@ -35,6 +35,11 @@
         "additionalProperties": true
       }
     },
+    "deviceSlides": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Per-device independent slide arrays keyed by device id"
+    },
     "uploads": {
       "type": "array",
       "items": {

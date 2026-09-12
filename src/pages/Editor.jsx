@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
-import { makeId, resolveDevice } from '@/lib/templates';
-import { resolveSlide, applyDevicePatch } from '@/lib/deviceOverrides';
+import { makeId, resolveDevice, getTemplate, makeSlide, solid } from '@/lib/templates';
 import { exportSlide, exportAllSlides, wait } from '@/lib/exportSlides';
 import { useAuth } from '@/lib/AuthContext';
 import { isPro } from '@/lib/entitlements';
@@ -118,7 +117,16 @@ export default function Editor() {
     if (!id) return setMissing(true);
     base44.entities.Project.get(id).then((p) => {
       if (!p) return setMissing(true);
-      setProject(p);
+      // Per-device slide store. `slides` is the authoritative state of the
+      // currently-active device; deviceSlides holds the other devices. On
+      // load we refresh the active device's entry from `slides` so it never
+      // goes stale, and generate a fresh template set for any empty device.
+      const ds = { ...(p.deviceSlides || {}) };
+      let active = (p.slides && p.slides.length)
+        ? p.slides
+        : (ds[p.device] && ds[p.device].length ? ds[p.device] : freshSlidesFor(p));
+      ds[p.device] = active;
+      setProject({ ...p, deviceSlides: ds, slides: active });
       history.current = [];
       hPtr.current = -1;
       pendingRef.current = null;
@@ -132,9 +140,9 @@ export default function Editor() {
     setStatus('dirty');
     const tm = setTimeout(async () => {
       setStatus('saving');
-      const { name, platform, device, template_id, slides, uploads, custom_w, custom_h } = project;
+      const { name, platform, device, template_id, slides, uploads, custom_w, custom_h, deviceSlides } = project;
       try {
-        await base44.entities.Project.update(project.id, { name, platform, device, template_id, slides, uploads, custom_w, custom_h });
+        await base44.entities.Project.update(project.id, { name, platform, device, template_id, slides, uploads, custom_w, custom_h, deviceSlides: { ...deviceSlides, [device]: slides } });
         setStatus('saved');
       } catch (e) {
         setStatus('error');
@@ -146,9 +154,9 @@ export default function Editor() {
   const retrySave = async () => {
     if (!project) return;
     setStatus('saving');
-    const { name, platform, device, template_id, slides, uploads, custom_w, custom_h } = project;
+    const { name, platform, device, template_id, slides, uploads, custom_w, custom_h, deviceSlides } = project;
     try {
-      await base44.entities.Project.update(project.id, { name, platform, device, template_id, slides, uploads, custom_w, custom_h });
+      await base44.entities.Project.update(project.id, { name, platform, device, template_id, slides, uploads, custom_w, custom_h, deviceSlides: { ...deviceSlides, [device]: slides } });
       setStatus('saved');
     } catch (e) {
       setStatus('error');
@@ -171,7 +179,7 @@ export default function Editor() {
   const updateProject = (patch) => { dirty.current = true; setProject((p) => ({ ...p, ...patch })); };
   const updateSlide = (patch) => {
     const before = project.slides[sel];
-    const after = applyDevicePatch(before, project.device, patch);
+    const after = { ...before, ...patch };
     queueHistory({ type: 'slide', idx: sel, before, after });
     updateProject({ slides: project.slides.map((s, i) => (i === sel ? after : s)) });
   };
@@ -181,6 +189,42 @@ export default function Editor() {
     const after = project.slides.map((s) => ({ ...s, ...patch }));
     queueHistory({ type: 'all', before, after });
     updateProject({ slides: after });
+  };
+
+  // Fresh, unedited slide set from the project's template — used when the user
+  // opens a device they haven't customized yet. Each device is an independent
+  // editing session, so a new device starts from the template, never a copy of
+  // another device's edits.
+  const freshSlidesFor = (p) => {
+    if (p.template_id) {
+      const tpl = getTemplate(p.template_id);
+      return tpl.slides.map((s) => ({ ...s, id: makeId() }));
+    }
+    return [makeSlide({ bg: solid('#0B0B12') }), makeSlide({ bg: solid('#0B0B12'), layout: 'phone-top' })];
+  };
+
+  // Switching device is a full context switch: park the current device's slides
+  // under their key in deviceSlides, then load (or create) the target device's
+  // own slide set. Undo history is reset so undo never crosses devices.
+  const switchDevice = (newDevice, platform) => {
+    setProject((p) => {
+      if (newDevice === p.device) return p;
+      const ds = { ...(p.deviceSlides || {}) };
+      ds[p.device] = p.slides;
+      let next = ds[newDevice];
+      if (!next || !next.length) {
+        next = freshSlidesFor(p);
+        ds[newDevice] = next;
+      }
+      return { ...p, device: newDevice, platform: platform ?? p.platform, slides: next, deviceSlides: ds };
+    });
+    setSel(0);
+    dirty.current = true;
+    history.current = [];
+    hPtr.current = -1;
+    pendingRef.current = null;
+    setCanUndo(false);
+    setCanRedo(false);
   };
   const addSlide = () => {
     const before = project.slides;
@@ -256,10 +300,8 @@ export default function Editor() {
   if (!project) return <div className="min-h-screen grid place-items-center bg-[#0B0B12]"><Loader2 className="w-6 h-6 text-white/60 animate-spin" /></div>;
 
   const device = resolveDevice(project);
-  const rSlides = project.slides.map((s) => resolveSlide(s, project.device));
-  const rProject = { ...project, slides: rSlides };
-  const slide = rSlides[sel] || rSlides[0];
-  const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject, isPro: pro, onLocked: () => setShowUpgrade(true), freeDevice: !pro ? user?.free_device || null : null };
+  const slide = project.slides[sel] || project.slides[0];
+  const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject, switchDevice, isPro: pro, onLocked: () => setShowUpgrade(true), freeDevice: !pro ? user?.free_device || null : null };
   return (
     <div className="h-screen flex flex-col bg-[#08080d]">
       <EditorTopbar project={project} status={status} exporting={exporting} onRename={(name) => updateProject({ name })} onExport={onExport} onShare={() => setShowShare(true)} onRetry={retrySave} />
@@ -273,11 +315,11 @@ export default function Editor() {
           }}
         />
         <EditorPanel active={panel} mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} {...panelProps} />
-        <EditorStage project={rProject} selected={sel} onSelect={setSel} onAdd={addSlide} onDuplicate={duplicate} onDelete={remove} onMove={move} watermark={!pro} onUndo={undoEdit} onRedo={redoEdit} canUndo={canUndo} canRedo={canRedo} />
+        <EditorStage project={project} selected={sel} onSelect={setSel} onAdd={addSlide} onDuplicate={duplicate} onDelete={remove} onMove={move} watermark={!pro} onUndo={undoEdit} onRedo={redoEdit} canUndo={canUndo} canRedo={canRedo} />
       </div>
       <UndoBar undo={undo} onUndo={restoreSlide} />
       <div className="fixed -left-[5000px] top-0 pointer-events-none" aria-hidden>
-        {rSlides.map((s, i) => (
+        {project.slides.map((s, i) => (
           <SlideCanvas key={s.id} slide={s} device={device} watermark={!pro} width={device.w} ref={(el) => (exportRefs.current[i] = el)} />
         ))}
       </div>

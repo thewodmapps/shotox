@@ -42,6 +42,7 @@ export default function Projects() {
         device: devId,
         template_id: scratch ? '' : tpl.id,
         slides,
+        deviceSlides: { [devId]: slides },
         uploads: [],
         custom_w: devId === 'custom' ? customW : undefined,
         custom_h: devId === 'custom' ? customH : undefined,

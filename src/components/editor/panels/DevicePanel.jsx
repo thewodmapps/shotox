@@ -20,7 +20,7 @@ const GROUPS = [
   { label: 'Feature Graphic', items: DEVICES.filter((d) => d.form === 'feature') },
 ];
 
-export default function DevicePanel({ slide, updateSlide, project, updateProject, isPro, onLocked, freeDevice }) {
+export default function DevicePanel({ slide, updateSlide, project, updateProject, switchDevice, isPro, onLocked, freeDevice }) {
   const isCustom = project.device === 'custom';
   return (
     <div className="space-y-5">
@@ -32,7 +32,7 @@ export default function DevicePanel({ slide, updateSlide, project, updateProject
               {g.items.map((d) => {
                 const locked = !isPro && !!freeDevice && freeDevice !== d.id && project.device !== d.id;
                 return (
-                <Option key={d.id} active={project.device === d.id} locked={locked} onClick={locked ? onLocked : () => updateProject({ device: d.id, platform: d.platform })}>
+                <Option key={d.id} active={project.device === d.id} locked={locked} onClick={locked ? onLocked : () => switchDevice(d.id, d.platform)}>
                   <span className="flex justify-between gap-2"><span className="truncate">{d.name}</span><span className="opacity-50 shrink-0">{d.w}×{d.h}</span></span>
                 </Option>
                 );
@@ -42,7 +42,7 @@ export default function DevicePanel({ slide, updateSlide, project, updateProject
         ))}
         <div className="space-y-1.5">
           <Label className="text-white/60 text-sm uppercase tracking-wide">Custom</Label>
-          <Option active={isCustom} locked={!isPro} onClick={!isPro ? onLocked : () => updateProject({ device: 'custom' })}>Custom size</Option>
+          <Option active={isCustom} locked={!isPro} onClick={!isPro ? onLocked : () => switchDevice('custom')}>Custom size</Option>
           {isCustom && (
             <div className="grid grid-cols-2 gap-2 mt-1">
               <div className="space-y-1">

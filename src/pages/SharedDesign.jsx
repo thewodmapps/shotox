@@ -5,7 +5,6 @@ import { base44 } from '@/api/base44Client';
 import { resolveDevice } from '@/lib/templates';
 import { Brand } from '@/components/Logo';
 import ScaledSlide from '@/components/editor/ScaledSlide';
-import { resolveSlide } from '@/lib/deviceOverrides';
 import PullToRefresh from '@/components/PullToRefresh';
 
 export default function SharedDesign() {
@@ -66,7 +65,7 @@ export default function SharedDesign() {
           {(project.slides || []).map((s) => (
             <div key={s.id} className="rounded-2xl overflow-hidden border border-white/10 bg-white/[0.03] shadow-xl">
               <div className="relative w-full" style={{ aspectRatio: `${device.w} / ${device.h}` }}>
-                <ScaledSlide slide={resolveSlide(s, device?.id)} device={device} watermark={project.watermark !== false} />
+                <ScaledSlide slide={s} device={device} watermark={project.watermark !== false} />
               </div>
             </div>
           ))}
