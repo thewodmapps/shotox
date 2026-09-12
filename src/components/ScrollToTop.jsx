@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLocation, useNavigationType } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const getHashId = (hash) => {
   const rawId = hash.slice(1);
@@ -13,7 +13,14 @@ const getHashId = (hash) => {
 
 export default function ScrollToTop() {
   const { pathname, hash } = useLocation();
-  const navigationType = useNavigationType();
+
+  // Disable the browser's native scroll restoration so back/forward always
+  // land at the top instead of a slightly-off restored position.
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
 
   useEffect(() => {
     if (hash) {
@@ -33,9 +40,8 @@ export default function ScrollToTop() {
       return () => { cancelled = true; };
     }
 
-    if (navigationType === "POP") return;
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-  }, [pathname, hash, navigationType]);
+  }, [pathname, hash]);
 
   return null;
 }
