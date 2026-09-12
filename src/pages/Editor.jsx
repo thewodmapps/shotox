@@ -15,6 +15,7 @@ import EditorStage from '@/components/editor/EditorStage';
 import SlideCanvas from '@/components/editor/SlideCanvas';
 import UndoBar from '@/components/editor/UndoBar';
 import ShareModal from '@/components/projects/ShareModal';
+import ShareSaveOverlay from '@/components/editor/ShareSaveOverlay';
 
 export default function Editor() {
   const id = new URLSearchParams(window.location.search).get('id');
@@ -31,7 +32,7 @@ export default function Editor() {
   const [exportPct, setExportPct] = useState(0);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showShare, setShowShare] = useState(false);
-  const [dlDone, setDlDone] = useState(false);
+  const [shareReady, setShareReady] = useState(null);
   const [undo, setUndo] = useState(null);
   const dirty = useRef(false);
   const exportRefs = useRef([]);
@@ -308,7 +309,6 @@ export default function Editor() {
     exportTarget.current = 0;
     setExportPct(0);
     setExporting(true);
-    setDlDone(false);
     const onProgress = (p) => { exportTarget.current = p; };
     const device = resolveDevice(project);
     const base = project.name.replace(/\s+/g, '-');
@@ -321,26 +321,16 @@ export default function Editor() {
         result = await exportSlide(exportRefs.current[sel], device, String(sel + 1), format, onProgress);
       }
       exportTarget.current = 100;
-      setExportPct(100);
-      await wait(250);
-    } catch {
+      await wait(400);
+    } finally {
       setExporting(false);
-      return;
     }
-    if (!result || !result.blob) { setExporting(false); return; }
-    // On the native app, <a download> on a blob: URL doesn't save the file, so
-    // hand the blob to the OS share sheet (Save to Photos / Files). It's called
-    // right after the export so it stays within the click's user-gesture
-    // window; on the web a direct anchor download works.
+    if (!result || !result.blob) return;
+    // On the native app, <a download> on a blob: URL doesn't save the file —
+    // surface a "Save to phone" sheet that shares via the OS (a fresh tap).
     const isNative = typeof document !== 'undefined' && document.documentElement.classList && document.documentElement.classList.contains('native-app');
-    if (isNative) {
-      const saved = await shareBlob(result.blob, result.filename);
-      if (!saved) triggerDownload(result.blob, result.filename);
-    } else {
-      triggerDownload(result.blob, result.filename);
-    }
-    setExporting(false);
-    setDlDone(true);
+    if (isNative) setShareReady(result);
+    else triggerDownload(result.blob, result.filename);
   };
 
   if (missing) return (
@@ -374,9 +364,21 @@ export default function Editor() {
           <SlideCanvas key={s.id} slide={s} device={device} watermark={!pro} width={device.w} ref={(el) => (exportRefs.current[i] = el)} />
         ))}
       </div>
-      {(exporting || dlDone) && <ExportOverlay pct={exportPct} done={dlDone} onClose={() => setDlDone(false)} />}
+      {exporting && <ExportOverlay pct={exportPct} />}
       <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} onUpgrade={() => navigate('/#pricing')} />
       <ShareModal open={showShare} title={project.name} projectId={project.id} onClose={() => setShowShare(false)} />
+      <ShareSaveOverlay
+        open={!!shareReady}
+        filename={shareReady?.filename}
+        onClose={() => setShareReady(null)}
+        onSave={async () => {
+          if (!shareReady) return;
+          const ok = await shareBlob(shareReady.blob, shareReady.filename);
+          if (ok) { setShareReady(null); return; }
+          triggerDownload(shareReady.blob, shareReady.filename);
+          setShareReady(null);
+        }}
+      />
     </div>
   );
 }
