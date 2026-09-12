@@ -4,7 +4,7 @@ import { Trash2, Share2, Edit3 } from 'lucide-react';
 import { format } from 'date-fns';
 import { base44 } from '@/api/base44Client';
 import { resolveDevice } from '@/lib/templates';
-import ScaledSlide from '@/components/editor/ScaledSlide';
+import ProjectThumb from './ProjectThumb';
 import ShareModal from './ShareModal';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 
@@ -77,10 +77,10 @@ export default function ProjectCard({ project, onDelete, onRename }) {
     <>
       <div className="group relative rounded-2xl overflow-hidden border border-white/10 bg-white/[0.03] hover:border-white/25 hover:-translate-y-1 hover:shadow-2xl hover:shadow-violet-500/10 transition-all">
         <Link to={`/editor?id=${p.id}`} className="block">
-          <div className="flex gap-1 p-2 bg-[#0B0B12]">
+          <div className="flex gap-1 p-2 bg-[#0B0B12] items-start">
             {(p.slides || []).slice(0, 3).map((s) => (
-              <div key={s.id} className="flex-1 relative overflow-hidden rounded-md" style={{ aspectRatio: `${device.w} / ${device.h}` }}>
-                <ScaledSlide slide={s} device={device} />
+              <div key={s.id} className="flex-1 min-w-0">
+                <ProjectThumb slide={s} device={device} />
               </div>
             ))}
           </div>
