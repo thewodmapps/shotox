@@ -15,10 +15,12 @@ import EditorStage from '@/components/editor/EditorStage';
 import SlideCanvas from '@/components/editor/SlideCanvas';
 import UndoBar from '@/components/editor/UndoBar';
 import ShareModal from '@/components/projects/ShareModal';
+import { useToast } from '@/components/ui/use-toast';
 
 export default function Editor() {
   const id = new URLSearchParams(window.location.search).get('id');
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { user } = useAuth();
   const pro = isPro(user);
   const [project, setProject] = useState(null);
@@ -313,12 +315,16 @@ export default function Editor() {
     try {
       if (which === 'all') {
         const els = project.slides.map((_, i) => exportRefs.current[i]).filter(Boolean);
+        if (!els.length) throw new Error('Nothing to export yet.');
         await exportAllSlides(els, device, base, format, onProgress);
       } else {
+        if (!exportRefs.current[sel]) throw new Error('Nothing to export yet.');
         await exportSlide(exportRefs.current[sel], device, String(sel + 1), format, onProgress);
       }
       exportTarget.current = 100;
       await wait(400);
+    } catch (e) {
+      toast({ title: 'Export failed', description: e?.message || 'Could not render the screenshot. Please try again.', variant: 'destructive' });
     } finally {
       setExporting(false);
     }

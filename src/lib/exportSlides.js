@@ -19,7 +19,12 @@ const inlineImages = async (root) =>
       const src = img.getAttribute('src') || img.src;
       if (!src || src.startsWith('data:')) return;
       try {
-        const res = await fetch(src, { mode: 'cors' });
+        // Abort the fetch after 8s so a single unreachable image can never
+        // stall the whole export (that was what left the dialog "stuck").
+        const controller = new AbortController();
+        const t = setTimeout(() => controller.abort(), 8000);
+        const res = await fetch(src, { mode: 'cors', signal: controller.signal });
+        clearTimeout(t);
         const blob = await res.blob();
         img.src = await new Promise((resolve, reject) => {
           const r = new FileReader();
@@ -33,6 +38,9 @@ const inlineImages = async (root) =>
     })
   );
 
+const withTimeout = (p, ms, label) =>
+  Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error(label)), ms))]);
+
 const renderCanvas = async (el, device) => {
   // The hidden export instances are rendered at the device's exact native
   // dimensions (width = device.w) with NO css transform — every position
@@ -45,22 +53,21 @@ const renderCanvas = async (el, device) => {
   clone.style.left = '0';
   holder.appendChild(clone);
   document.body.appendChild(holder);
-  if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch {} }
-  await inlineImages(holder);
-  const baseOpts = { scale: 1, useCORS: true, backgroundColor: null, width: device.w, height: device.h, scrollX: 0, scrollY: 0, windowWidth: device.w, windowHeight: device.h, logging: false };
+  const baseOpts = { scale: 1, useCORS: true, backgroundColor: null, width: device.w, height: device.h, scrollX: 0, scrollY: 0, windowWidth: device.w, windowHeight: device.h, logging: false, imageTimeout: 10000 };
   try {
-    // foreignObjectRendering makes the browser render the slide itself, so text
-    // lands exactly where it does in the editor (html2canvas's own text renderer
-    // is what was pushing the heading down). The timeout guards against any
-    // pending-resource hang; on failure we fall back to the default renderer.
-    return await Promise.race([
-      html2canvas(holder, { ...baseOpts, foreignObjectRendering: true }),
-      new Promise((_, rej) => setTimeout(() => rej(new Error('fo-timeout')), 25000)),
-    ]);
-  } catch {
-    return await html2canvas(holder, baseOpts);
+    // Never let a render hang forever: cap font loading, image inlining and
+    // each renderer. foreignObjectRendering gives the truest text placement;
+    // if it stalls we fall back to html2canvas's default renderer, which is
+    // also capped so the dialog can never freeze on "stuck".
+    if (document.fonts && document.fonts.ready) { try { await withTimeout(document.fonts.ready, 3000, 'fonts'); } catch {} }
+    await withTimeout(inlineImages(holder), 15000, 'images');
+    try {
+      return await withTimeout(html2canvas(holder, { ...baseOpts, foreignObjectRendering: true }), 15000, 'fo-timeout');
+    } catch {
+      return await withTimeout(html2canvas(holder, baseOpts), 40000, 'render-timeout');
+    }
   } finally {
-    document.body.removeChild(holder);
+    if (holder.parentNode) document.body.removeChild(holder);
   }
 };
 
