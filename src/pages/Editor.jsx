@@ -328,24 +328,21 @@ export default function Editor() {
     }
     if (!result || !result.blob) { setExporting(false); return; }
     // On the native app, a blob: URL <a download> never reaches the download
-    // pipeline and a cross-origin link opens the external browser — so the
-    // file never saves. Upload the file, then navigate to a same-origin
-    // endpoint that returns it with Content-Disposition: attachment; the
-    // WebView's download handler saves it silently (under a Shotox subfolder
-    // where the wrapper supports path hints, otherwise in Downloads). On the
-    // web, a direct blob download works.
+    // pipeline (WebView ignores the `download` attribute) and a cross-origin
+    // link opens the external browser — so the file never saves. Upload the
+    // file, then do a PLAIN navigation (no `download` attribute) to a
+    // same-origin endpoint that returns it with Content-Disposition:
+    // attachment. That header is what WebView respects — it fires the
+    // DownloadManager, which saves to the Downloads folder (under a Shotox
+    // subpath where the wrapper supports it). The endpoint always returns an
+    // attachment, so the navigation never replaces this page. On the web, a
+    // direct blob download works.
     const isNative = typeof document !== 'undefined' && document.documentElement.classList && document.documentElement.classList.contains('native-app');
     if (isNative) {
       try {
         const file = new File([result.blob], result.filename, { type: result.blob.type || 'application/octet-stream' });
         const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
-        const dlUrl = `/functions/downloadExport?url=${encodeURIComponent(file_url)}&name=${encodeURIComponent(result.filename)}`;
-        const a = document.createElement('a');
-        a.href = dlUrl;
-        a.download = `Shotox/${result.filename}`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        window.location.href = `/functions/downloadExport?url=${encodeURIComponent(file_url)}&name=${encodeURIComponent(result.filename)}`;
       } catch {
         triggerDownload(result.blob, result.filename);
       }
