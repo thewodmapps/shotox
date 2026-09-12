@@ -10,6 +10,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
+import useExitOnBack from './hooks/useExitOnBack';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -30,6 +31,7 @@ const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
   const location = useLocation();
   const reduce = usePrefersReducedMotion();
+  useExitOnBack();
 
   // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
