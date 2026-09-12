@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense } from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
@@ -88,36 +88,6 @@ const AuthenticatedApp = () => {
 
 
 function App() {
-  // Native app only (Android/iOS WebView): pressing hardware back on the home
-  // screen closes the app. A sentinel history entry is pushed at root so the
-  // back press is interceptable; normal in-app back navigation is untouched.
-  useEffect(() => {
-    if (!document.documentElement.classList.contains('native-app')) return;
-    const isRoot = () => window.location.pathname === '/' && !window.location.hash;
-    const isSentinel = (s) => s && s.__shotoxBackSentinel;
-    const ensureSentinel = () => {
-      if (isRoot() && !isSentinel(window.history.state)) {
-        window.history.pushState({ __shotoxBackSentinel: true }, '', window.location.href);
-      }
-    };
-    const exitApp = () => {
-      const nav = window.navigator;
-      if (nav.app && typeof nav.app.exitApp === 'function') nav.app.exitApp();
-      else if (window.Android && typeof window.Android.close === 'function') window.Android.close();
-    };
-    ensureSentinel();
-    const onPopState = () => {
-      if (!isRoot()) return;
-      // Landed on the sentinel = just navigated back to home from a deeper page → no exit.
-      if (isSentinel(window.history.state)) return;
-      // Popped the sentinel while on home → close the app.
-      exitApp();
-      ensureSentinel(); // re-arm if the bridge didn't close, so the next back retries
-    };
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, []);
-
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
