@@ -328,19 +328,20 @@ export default function Editor() {
     }
     if (!result || !result.blob) { setExporting(false); return; }
     // On the native app, a blob: URL <a download> never reaches the download
-    // pipeline and navigator.share loses its user-gesture window during the
-    // async export — so the file never saves. Upload it to get an https URL,
-    // then trigger the native DownloadManager via an anchor. The "Shotox/"
-    // path in the download attribute requests a Shotox subfolder where the
-    // WebView supports it; otherwise the file lands in Downloads. On the web,
-    // a direct blob download works.
+    // pipeline and a cross-origin link opens the external browser — so the
+    // file never saves. Upload the file, then navigate to a same-origin
+    // endpoint that returns it with Content-Disposition: attachment; the
+    // WebView's download handler saves it silently (under a Shotox subfolder
+    // where the wrapper supports path hints, otherwise in Downloads). On the
+    // web, a direct blob download works.
     const isNative = typeof document !== 'undefined' && document.documentElement.classList && document.documentElement.classList.contains('native-app');
     if (isNative) {
       try {
         const file = new File([result.blob], result.filename, { type: result.blob.type || 'application/octet-stream' });
         const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
+        const dlUrl = `/functions/downloadExport?url=${encodeURIComponent(file_url)}&name=${encodeURIComponent(result.filename)}`;
         const a = document.createElement('a');
-        a.href = file_url;
+        a.href = dlUrl;
         a.download = `Shotox/${result.filename}`;
         document.body.appendChild(a);
         a.click();
