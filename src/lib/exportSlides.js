@@ -48,15 +48,11 @@ const renderCanvas = async (el, device) => {
   if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch {} }
   await inlineImages(holder);
   const baseOpts = { scale: 1, useCORS: true, backgroundColor: null, width: device.w, height: device.h, scrollX: 0, scrollY: 0, windowWidth: device.w, windowHeight: device.h, logging: false };
-  // In the native app WebView, SVG foreignObject rendering stalls and never
-  // resolves, which freezes the export. Use html2canvas's default renderer
-  // there (reliable in WebViews); keep foreignObjectRendering on the web where
-  // text lands pixel-perfect.
-  const isNative = typeof document !== 'undefined' && document.documentElement.classList && document.documentElement.classList.contains('native-app');
   try {
-    if (isNative) {
-      return await html2canvas(holder, baseOpts);
-    }
+    // foreignObjectRendering makes the browser render the slide itself, so text
+    // lands exactly where it does in the editor (html2canvas's own text renderer
+    // is what was pushing the heading down). The timeout guards against any
+    // pending-resource hang; on failure we fall back to the default renderer.
     return await Promise.race([
       html2canvas(holder, { ...baseOpts, foreignObjectRendering: true }),
       new Promise((_, rej) => setTimeout(() => rej(new Error('fo-timeout')), 25000)),
