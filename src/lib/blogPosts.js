@@ -5,6 +5,7 @@ import {
 import { EXTRA_POSTS } from './blogPostsExtra';
 import { MORE_POSTS } from './blogPostsMore';
 import { MORE_POSTS_2 } from './blogPostsMore2';
+import { NEW_POSTS } from './blogPostsMore3';
 
 // Base set of SEO-optimized blog posts. 35 more live in blogPostsExtra.js and 50 more across blogPostsMore.js / blogPostsMore2.js (100 total).
 const BASE_POSTS = [
@@ -782,7 +783,21 @@ If your domestic growth has flattened, your next wave of users is waiting in ano
   },
 ];
 
-export const BLOG_POSTS = [...BASE_POSTS, ...EXTRA_POSTS, ...MORE_POSTS, ...MORE_POSTS_2];
+// All posts are dated within the Shotox launch window (Sep 9–12, 2026).
+// The newest posts (added today, Sep 12) come first; older batches follow.
+const ALL_POSTS = [...NEW_POSTS, ...BASE_POSTS, ...EXTRA_POSTS, ...MORE_POSTS, ...MORE_POSTS_2];
+
+// Spread every post across the four launch days. The first quarter lands on Sep 12
+// (today), the next on Sep 11, then Sep 10, then Sep 9 — newest first.
+const LAUNCH_DAY_FOR_INDEX = (i, total) => {
+  const per = Math.ceil(total / 4);
+  const bucket = Math.min(3, Math.floor(i / per));
+  return `Sep ${12 - bucket}, 2026`;
+};
+
+const BLOG_POSTS = ALL_POSTS.map((p, i) => ({ ...p, date: LAUNCH_DAY_FOR_INDEX(i, ALL_POSTS.length) }));
+
+export { BLOG_POSTS };
 
 export function getPostBySlug(slug) {
   return BLOG_POSTS.find((p) => p.slug === slug);
