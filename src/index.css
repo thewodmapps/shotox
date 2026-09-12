@@ -172,13 +172,10 @@
 /* ===== Android WebView / mobile hardening (additive — light mode untouched) ===== */
 .safe-top { padding-top: env(safe-area-inset-top); }
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
-/* Android WebView often reports 0 for safe-area-inset-top; guarantee status-bar clearance on phones & tablets */
-@media (max-width: 1024px) {
-  .safe-top { padding-top: max(env(safe-area-inset-top), 1.75rem); }
-}
-/* Builder preview runs in a desktop iframe where env(safe-area-inset-top) is 0;
-   suppress the forced mobile clearance so the navbar stays flush there.
-   Real devices (top window) keep the status-bar clearance above. */
+/* Native app WebView (Android APK/AAB & iOS): env() often reports 0, so guarantee status-bar clearance.
+   Detected via the WebView user-agent so the website in any browser (desktop or mobile) stays flush. */
+.native-app .safe-top { padding-top: max(env(safe-area-inset-top), 1.75rem); }
+/* Builder preview runs in a desktop iframe where env(safe-area-inset-top) is 0; keep the navbar flush. */
 .in-frame .safe-top { padding-top: env(safe-area-inset-top); }
 .app-shell { overscroll-behavior: contain; }
 .scroll-contain { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }

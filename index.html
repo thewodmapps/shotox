@@ -5,7 +5,17 @@
     <link rel="icon" type="image/png" href="https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/b3e63b968_shotox.png" />
     <link rel="apple-touch-icon" href="https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/b3e63b968_shotox.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <script>if (window.self !== window.top) document.documentElement.classList.add('in-frame');</script>
+    <script>
+      (function () {
+        try {
+          if (window.self !== window.top) document.documentElement.classList.add('in-frame');
+          var ua = navigator.userAgent || '';
+          var androidWV = /Android/i.test(ua) && /; wv\)/i.test(ua);
+          var iosWV = /iPhone|iPad|iPod/i.test(ua) && /AppleWebKit/i.test(ua) && !/Safari\//i.test(ua);
+          if (androidWV || iosWV) document.documentElement.classList.add('native-app');
+        } catch (e) {}
+      })();
+    </script>
     <meta name="theme-color" content="#0B0B12" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
