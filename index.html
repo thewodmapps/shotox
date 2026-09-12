@@ -1,104 +1,145 @@
-import { lazy, Suspense } from 'react';
-import { Toaster } from "@/components/ui/toaster"
-import { QueryClientProvider } from '@tanstack/react-query'
-import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { routeVariants, routeTransition } from '@/lib/routeVariants';
-import PageNotFound from './lib/PageNotFound';
-import { AuthProvider, useAuth } from '@/lib/AuthContext';
-import UserNotRegisteredError from '@/components/UserNotRegisteredError';
-import ScrollToTop from './components/ScrollToTop';
-import Home from './pages/Home';
-import Projects from './pages/Projects';
-import ProtectedRoute from '@/components/ProtectedRoute';
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
-import ForgotPassword from '@/pages/ForgotPassword';
-import ResetPassword from '@/pages/ResetPassword';
-import LogoDownload from '@/pages/LogoDownload';
-import Privacy from '@/pages/Privacy';
-import Terms from '@/pages/Terms';
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/b3e63b968_shotox.png" />
+    <link rel="apple-touch-icon" href="https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/b3e63b968_shotox.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <script>if (window.self !== window.top) document.documentElement.classList.add('in-frame');</script>
+    <meta name="theme-color" content="#0B0B12" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="google-site-verification" content="u9rAYTAvxsfgtgX0B309zzW0zMrOqiPbGdWAYSKwySo" />
+    <link rel="manifest" href="/manifest.json" />
 
-const Editor = lazy(() => import('@/pages/Editor'));
-const Blog = lazy(() => import('@/pages/Blog'));
-const BlogPost = lazy(() => import('@/pages/BlogPost'));
-const SharedDesign = lazy(() => import('@/pages/SharedDesign'));
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9GFF9P9NEX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9GFF9P9NEX');
+    </script>
 
-const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
-  const location = useLocation();
-  const reduce = usePrefersReducedMotion();
+    <!-- Primary Meta Tags -->
+    <title>Shotox — AI App Screenshot Generator for App Store & Google Play</title>
+    <meta name="title" content="Shotox — AI App Screenshot Generator for App Store & Google Play" />
+    <meta name="description" content="Create stunning, high-converting app screenshots for the App Store and Google Play with AI-powered 3D templates. iPhone, iPad, Android & tablet sizes — export pixel-perfect PNGs in minutes." />
+    <meta name="keywords" content="app screenshot generator, app store screenshots, google play screenshots, ios screenshots, android screenshots, app mockup, screenshot design, aso, app store optimization, 3d mockup, app screenshot maker, screenshot templates, mobile app screenshots, app store assets, play store feature graphic" />
+    <meta name="author" content="Shotox" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <link rel="canonical" href="https://shotox.in/" />
+    <link rel="alternate" hreflang="en" href="https://shotox.in/" />
+    <link rel="alternate" hreflang="en-US" href="https://shotox.in/" />
+    <link rel="alternate" hreflang="x-default" href="https://shotox.in/" />
 
-  // Show loading spinner while checking app public settings or auth
-  if (isLoadingPublicSettings || isLoadingAuth) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
-      </div>
-    );
-  }
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Shotox" />
+    <meta property="og:url" content="https://shotox.in/" />
+    <meta property="og:title" content="Shotox — AI App Screenshot Generator for App Store & Google Play" />
+    <meta property="og:description" content="Create stunning, high-converting app screenshots for the App Store and Google Play with AI-powered 3D templates. Store-ready sizes for every device — export in minutes." />
+    <meta property="og:image" content="https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/b3e63b968_shotox.png" />
+    <meta property="og:image:alt" content="Shotox — AI app screenshot generator for App Store and Google Play" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="en_GB" />
+    <meta property="og:locale:alternate" content="en_IN" />
 
-  // Handle authentication errors
-  if (authError) {
-    if (authError.type === 'user_not_registered') {
-      return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
-      navigateToLogin();
-      return null;
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Shotox — AI App Screenshot Generator for App Store & Google Play" />
+    <meta name="twitter:description" content="Create stunning, high-converting app screenshots for the App Store and Google Play with AI-powered 3D templates. Export in minutes." />
+    <meta name="twitter:image" content="https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/b3e63b968_shotox.png" />
+    <meta name="twitter:image:alt" content="Shotox app screenshot generator" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=Poppins:wght@400;500;600;700;800&family=Montserrat:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Archivo:wght@400;600;700;800&family=Lexend:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue:wght@400&family=Playfair+Display:wght@600;700&family=Fraunces:wght@600;700&family=Lora:wght@400;500;600;700&family=Instrument+Serif:wght@400;600&family=Roboto:wght@400;500;700;900&family=Open+Sans:wght@400;500;600;700;800&family=Raleway:wght@400;500;600;700;800;900&family=Work+Sans:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&family=Rubik:wght@400;500;600;700;800;900&family=Barlow:wght@400;500;600;700;800;900&family=Anton:wght@400&family=Jost:wght@400;500;600;700;800&family=Figtree:wght@400;500;600;700;800&family=Cabin:wght@400;500;600;700&family=Karla:wght@400;500;600;700;800&family=Mulish:wght@400;500;600;700;800&family=Titillium+Web:wght@400;600;700;900&display=swap" rel="stylesheet" />
+
+    <!-- Structured Data: WebApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Shotox",
+      "alternateName": "Shotox App Screenshot Generator",
+      "url": "https://shotox.in/",
+      "description": "AI-powered app screenshot generator for the App Store and Google Play. Create stunning, high-converting screenshots with 3D templates and instant customization.",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "Web",
+      "browserRequirements": "Requires JavaScript",
+      "image": "https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/b3e63b968_shotox.png",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Free tier available; Pro plans from $9/month"
+      },
+      "featureList": [
+        "100 designer templates",
+        "iPhone, iPad, Android phone & tablet store-ready sizes",
+        "AI-generated slide copy",
+        "3D device mockups",
+        "Pixel-perfect PNG & JPEG export",
+        "Custom fonts, colors and backgrounds"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "128",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Shotox"
+      }
     }
-  }
+    </script>
 
-  // Render the main app
-  return (
-    <Suspense fallback={<div className="fixed inset-0 grid place-items-center"><div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin" /></div>}>
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={location.pathname}
-          initial={reduce ? false : routeVariants.initial}
-          animate={reduce ? { opacity: 1 } : routeVariants.animate}
-          exit={reduce ? { opacity: 0 } : routeVariants.exit}
-          transition={reduce ? { duration: 0 } : routeTransition}
-        >
-          <Routes location={location}>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/logo-download" element={<LogoDownload />} />
-      <Route path="/blog" element={<Blog />} />
-      <Route path="/blog/:slug" element={<BlogPost />} />
-      <Route path="/privacy" element={<Privacy />} />
-      <Route path="/terms" element={<Terms />} />
-      <Route path="/:slug" element={<SharedDesign />} />
-      <Route element={<ProtectedRoute />}>
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/editor" element={<Editor />} />
-      </Route>
-      <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </motion.div>
-      </AnimatePresence>
-    </Suspense>
-  );
-};
+    <!-- Structured Data: Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Shotox",
+      "url": "https://shotox.in/",
+      "logo": "https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/b3e63b968_shotox.png",
+      "description": "AI-powered app screenshot generator for the App Store and Google Play.",
+      "sameAs": []
+    }
+    </script>
 
-
-function App() {
-  return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClientInstance}>
-        <Router>
-          <ScrollToTop />
-          <AuthenticatedApp />
-        </Router>
-        <Toaster />
-      </QueryClientProvider>
-    </AuthProvider>
-  )
-}
-
-export default App
+    <!-- Structured Data: FAQ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "Is Shotox free to use?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The free plan lets you pick one device of your choice, three starter templates, and up to 3 projects with a watermark — no credit card required. Upgrade any time for all devices, all templates, and watermark-free export." } },
+        { "@type": "Question", "name": "Which device sizes are supported?", "acceptedAnswer": { "@type": "Answer", "text": "Shotox supports every store-required size: iPhone 6.7\", 6.5\", 5.5\", iPad 13\", iPad 11\", Android phone, Android tablet, and the 1024x500 Google Play feature graphic." } },
+        { "@type": "Question", "name": "Can I export images at the exact store resolution?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every export is pixel-perfect at the resolution the Apple App Store and Google Play require, so your listing never gets rejected for wrong dimensions. Export single slides or the full set as PNG or JPEG." } },
+        { "@type": "Question", "name": "Does Shotox include AI features?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The built-in AI copywriter drafts high-converting headlines and subheadings tailored to your app category, so you never start from a blank page. Generate copy, tweak it, and drop it straight into your template." } },
+        { "@type": "Question", "name": "Do I own the screenshots I create?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. The designs you create are yours to use in your app listings, ads, and marketing — no attribution, no watermark on paid plans." } },
+        { "@type": "Question", "name": "Is the Lifetime plan really one payment?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The Lifetime plan is a single one-time purchase — no recurring subscription, no cancellation needed. You keep access forever, including all future templates and devices." } },
+        { "@type": "Question", "name": "What is your cancellation and refund policy?", "acceptedAnswer": { "@type": "Answer", "text": "All purchases are final. We do not offer cancellations or refunds once a subscription or Lifetime plan is purchased. Monthly and yearly plans stay active until the end of their paid billing period, and Lifetime access never expires." } },
+        { "@type": "Question", "name": "What payment methods do you accept?", "acceptedAnswer": { "@type": "Answer", "text": "Payments are processed securely by Stripe. We accept all major credit and debit cards (Visa, Mastercard, Amex, Discover) and, where available, Apple Pay and Google Pay." } },
+        { "@type": "Question", "name": "Is there a watermark?", "acceptedAnswer": { "@type": "Answer", "text": "The free plan adds a small Shotox watermark. All paid plans — Pro Monthly, Pro Yearly, and Lifetime — remove the watermark completely and include commercial-use rights." } },
+        { "@type": "Question", "name": "Can I use the screenshots commercially?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Paid plans include a commercial-use license, so you can use your screenshots in Apple App Store and Google Play listings, ads, websites, and press kits." } },
+        { "@type": "Question", "name": "Do my projects sync across devices?", "acceptedAnswer": { "@type": "Answer", "text": "Shotox is a web app that works in any modern browser. Your projects are saved to your account, so you can start on desktop and continue on a tablet or phone." } },
+        { "@type": "Question", "name": "Do I need design skills?", "acceptedAnswer": { "@type": "Answer", "text": "No. Pick a template, upload your screenshot, customize the text, and export. If you can upload an image, you can ship beautiful store screenshots." } }
+      ]
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Shotox is an AI app screenshot generator for the App Store and Google Play. Please enable JavaScript to create stunning, high-converting app screenshots with 3D templates.</noscript>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
