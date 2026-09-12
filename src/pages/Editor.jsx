@@ -176,7 +176,18 @@ export default function Editor() {
     return () => clearInterval(id);
   }, [exporting]);
 
-  const updateProject = (patch) => { dirty.current = true; setProject((p) => ({ ...p, ...patch })); };
+  // Every slides mutation also writes the active device's entry in deviceSlides
+  // so the per-device store is always authoritative — never stale between
+  // edits and a device switch. This guarantees each device's slides stay fully
+  // independent (iPhone 5.5 edits never bleed into Android phone or vice versa).
+  const updateProject = (patch) => {
+    dirty.current = true;
+    setProject((p) => {
+      const next = { ...p, ...patch };
+      if (patch.slides) next.deviceSlides = { ...(p.deviceSlides || {}), [p.device]: patch.slides };
+      return next;
+    });
+  };
   const updateSlide = (patch) => {
     const before = project.slides[sel];
     const after = { ...before, ...patch };
