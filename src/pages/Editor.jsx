@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { makeId, resolveDevice, getTemplate, makeSlide, solid, DEVICES } from '@/lib/templates';
-import { exportSlide, exportAllSlides, triggerDownload, shareBlob } from '@/lib/exportSlides';
+import { exportSlide, exportAllSlides, triggerDownload } from '@/lib/exportSlides';
 import { useAuth } from '@/lib/AuthContext';
 import { isPro } from '@/lib/entitlements';
 import ExportOverlay from '@/components/editor/ExportOverlay';
@@ -328,18 +328,25 @@ export default function Editor() {
       return;
     }
     if (!result || !result.blob) { setExporting(false); return; }
-    // The Base44 native WebView cannot save a blob: download and errors out
-    // on an attachment navigation (the WebView tries to render it as a page),
-    // and a cross-origin link opens the external browser. The only mechanism
-    // that saves to the phone is navigator.share — Android's native
-    // "Save to Photos / Save to Files" sheet — which requires a fresh user
-    // gesture, so on native we park the finished blob and let the popup's
-    // "Save to phone" tap open the share sheet. On the web, a direct blob
-    // download works and saves automatically.
+    // The Base44 native WebView has no download handler (blob: and attachment
+    // navigations are ignored or error out) and Android WebView does not
+    // expose navigator.share, so JS cannot save a file directly. We pre-upload
+    // the finished file here so its URL is ready, then on the "Save to phone"
+    // tap we (1) try navigator.share where the shell supports it, or (2) open
+    // the same-origin attachment endpoint in a new window — the Base44 shell
+    // launches the external browser for it, where Android downloads the
+    // attachment to the phone. Pre-uploading keeps the save tap's gesture
+    // intact for the window.open. On the web, a direct blob download works.
     const isNative = typeof document !== 'undefined' && document.documentElement.classList && document.documentElement.classList.contains('native-app');
     setExporting(false);
     if (isNative) {
-      setPendingBlob({ blob: result.blob, filename: result.filename });
+      let file_url = null;
+      try {
+        const file = new File([result.blob], result.filename, { type: result.blob.type || 'application/octet-stream' });
+        const uploaded = await base44.integrations.Core.UploadPublicFile({ file });
+        file_url = uploaded.file_url;
+      } catch {}
+      setPendingBlob({ blob: result.blob, filename: result.filename, file_url });
     } else {
       triggerDownload(result.blob, result.filename);
       setDlDone(true);
@@ -348,8 +355,23 @@ export default function Editor() {
 
   const handleSaveToPhone = async () => {
     if (!pendingBlob) return;
-    const ok = await shareBlob(pendingBlob.blob, pendingBlob.filename);
-    if (!ok) triggerDownload(pendingBlob.blob, pendingBlob.filename);
+    const file = new File([pendingBlob.blob], pendingBlob.filename, { type: pendingBlob.blob.type || 'application/octet-stream' });
+    // Sync check so the fallback window.open stays within the tap gesture.
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file] });
+        setDlDone(true); setPendingBlob(null); return;
+      } catch {}
+    }
+    // Fallback: open the attachment endpoint in a new window. The Base44
+    // native shell opens it in the external browser, where the
+    // Content-Disposition: attachment response downloads to the phone.
+    if (pendingBlob.file_url) {
+      const dlUrl = `https://shotox.base44.app/functions/downloadExport?url=${encodeURIComponent(pendingBlob.file_url)}&name=${encodeURIComponent(pendingBlob.filename)}`;
+      window.open(dlUrl, '_blank');
+    } else {
+      triggerDownload(pendingBlob.blob, pendingBlob.filename);
+    }
     setDlDone(true);
     setPendingBlob(null);
   };
