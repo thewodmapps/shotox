@@ -31,9 +31,13 @@ const AuthenticatedApp = () => {
   const location = useLocation();
   const reduce = usePrefersReducedMotion();
 
-  // Show loading state while checking app public settings or auth
+  // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
-    return <div className="fixed inset-0 bg-white" />;
+    return (
+      <div className="fixed inset-0 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   // Handle authentication errors
@@ -49,7 +53,7 @@ const AuthenticatedApp = () => {
 
   // Render the main app
   return (
-    <Suspense fallback={<div className="fixed inset-0 bg-white" />}>
+    <Suspense fallback={<div className="fixed inset-0 grid place-items-center"><div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin" /></div>}>
       <AnimatePresence mode="wait">
         <motion.div
           key={location.pathname}
@@ -59,22 +63,22 @@ const AuthenticatedApp = () => {
           transition={reduce ? { duration: 0 } : routeTransition}
         >
           <Routes location={location}>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/logo-download" element={<LogoDownload />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/:slug" element={<SharedDesign />} />
-            <Route element={<ProtectedRoute />}>
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/editor" element={<Editor />} />
-            </Route>
-            <Route path="*" element={<PageNotFound />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/logo-download" element={<LogoDownload />} />
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:slug" element={<BlogPost />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/:slug" element={<SharedDesign />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/editor" element={<Editor />} />
+      </Route>
+      <Route path="*" element={<PageNotFound />} />
           </Routes>
         </motion.div>
       </AnimatePresence>
