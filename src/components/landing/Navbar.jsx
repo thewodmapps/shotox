@@ -10,7 +10,7 @@ const LINKS = [
   { href: '#how-it-works', label: 'How it works' },
   { href: '#features', label: 'Features' },
   { href: '#templates', label: 'Templates' },
-  { href: '/blog', label: 'Blog' },
+  { href: '#blog', label: 'Blog' },
   { href: '#pricing', label: 'Pricing' },
   { href: '#faq', label: 'FAQs' },
 ];
