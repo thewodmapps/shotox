@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { makeId, resolveDevice, getTemplate, makeSlide, solid, DEVICES } from '@/lib/templates';
-import { exportSlide, exportAllSlides, wait, triggerDownload, shareBlob } from '@/lib/exportSlides';
+import { exportSlide, exportAllSlides, triggerDownload } from '@/lib/exportSlides';
 import { useAuth } from '@/lib/AuthContext';
 import { isPro } from '@/lib/entitlements';
 import ExportOverlay from '@/components/editor/ExportOverlay';
@@ -322,20 +322,32 @@ export default function Editor() {
       }
       exportTarget.current = 100;
       setExportPct(100);
-      await wait(250);
     } catch {
       setExporting(false);
       return;
     }
     if (!result || !result.blob) { setExporting(false); return; }
-    // On the native app, <a download> on a blob: URL doesn't save the file, so
-    // hand the blob to the OS share sheet (Save to Photos / Files). It's called
-    // right after the export so it stays within the click's user-gesture
-    // window; on the web a direct anchor download works.
+    // On the native app, a blob: URL <a download> never reaches the download
+    // pipeline and navigator.share loses its user-gesture window during the
+    // async export — so the file never saves. Upload it to get an https URL,
+    // then trigger the native DownloadManager via an anchor. The "Shotox/"
+    // path in the download attribute requests a Shotox subfolder where the
+    // WebView supports it; otherwise the file lands in Downloads. On the web,
+    // a direct blob download works.
     const isNative = typeof document !== 'undefined' && document.documentElement.classList && document.documentElement.classList.contains('native-app');
     if (isNative) {
-      const saved = await shareBlob(result.blob, result.filename);
-      if (!saved) triggerDownload(result.blob, result.filename);
+      try {
+        const file = new File([result.blob], result.filename, { type: result.blob.type || 'application/octet-stream' });
+        const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
+        const a = document.createElement('a');
+        a.href = file_url;
+        a.download = `Shotox/${result.filename}`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      } catch {
+        triggerDownload(result.blob, result.filename);
+      }
     } else {
       triggerDownload(result.blob, result.filename);
     }
