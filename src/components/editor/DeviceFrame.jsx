@@ -16,6 +16,13 @@ export default function DeviceFrame({ url, style = 'black', width = 232, form = 
   const h = width * ratio;
   const pad = width * (form === 'tablet' ? 0.022 : 0.03);
   const radius = width * (form === 'tablet' ? 0.05 : platform === 'android' ? 0.1 : 0.16);
+  // The bezel edge used to be a box-shadow spread ring (`0 0 0 Npx <edge>`).
+  // box-shadow does not render reliably inside an SVG foreignObject (the export
+  // path): it leaves white halos at the rounded corners of the phone. A real
+  // CSS border follows border-radius cleanly in both the live DOM and the SVG
+  // export, so the ring is painted as a border. Padding is reduced by the same
+  // border width so the screen size is unchanged.
+  const edge = Math.max(1.5, width * 0.008);
   return (
     <div
       className="relative"
@@ -24,8 +31,9 @@ export default function DeviceFrame({ url, style = 'black', width = 232, form = 
         height: h,
         borderRadius: radius,
         background: s.frame,
-        padding: pad,
-        boxShadow: `0 0 0 ${Math.max(1.5, width * 0.008)}px ${s.edge}, 0 40px 60px -24px rgba(0,0,0,0.55)`,
+        border: `${edge}px solid ${s.edge}`,
+        padding: Math.max(0, pad - edge),
+        boxShadow: '0 40px 60px -24px rgba(0,0,0,0.55)',
       }}
     >
       <div className="w-full h-full overflow-hidden bg-black relative" style={{ borderRadius: radius * 0.82 }}>
