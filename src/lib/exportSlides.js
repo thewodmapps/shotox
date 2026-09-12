@@ -16,6 +16,16 @@ const TRANSPARENT_PX = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAA
 const inlineImages = async (root) =>
   Promise.all(
     Array.from(root.querySelectorAll('img')).map(async (img) => {
+      // crossOrigin / srcset / referrerPolicy left on the <img> can force a CORS
+      // mode that taints the SVG render even after we swap src to a data: URL, and
+      // srcset would re-introduce external sources the browser could pick. Strip
+      // them before inlining.
+      img.removeAttribute('crossorigin');
+      img.removeAttribute('crossOrigin');
+      img.removeAttribute('srcset');
+      img.removeAttribute('srcset');
+      img.removeAttribute('loading');
+      img.removeAttribute('referrerpolicy');
       const src = img.getAttribute('src') || img.src;
       if (!src || src.startsWith('data:')) return;
       try {
@@ -112,10 +122,12 @@ const getInlinedCss = async () => {
   // the canvas when the SVG is drawn.
   css = css.replace(/@import[^;]*;/gi, '');
   // Any external url() we couldn't inline (a font fetch that failed) would
-  // taint the canvas. Replace every remaining http(s) url with a harmless
-  // transparent data URL so the SVG is fully self-contained — failed fonts
-  // just fall back to a system font instead of breaking the export.
-  css = css.replace(/url\(["']?(https?:\/\/[^"')]+)["']?\)/gi, `url(${TRANSPARENT_PX})`);
+  // taint the canvas — and that includes protocol-relative "//…" URLs which
+  // resolve to https at runtime. Replace every remaining external url (http,
+  // https, or //) with a harmless transparent data URL so the SVG is fully
+  // self-contained. Failed fonts just fall back to a system font instead of
+  // breaking the export. data: URLs are not matched and are preserved.
+  css = css.replace(/url\(["']?(?:(?:https?:)?\/\/[^"')]+)["']?\)/gi, `url(${TRANSPARENT_PX})`);
   _inlinedCssCache = css;
   return css;
 };
@@ -167,10 +179,18 @@ const renderCanvas = async (el, device, format = 'png') => {
       const ctx = canvas.getContext('2d');
       if (format === 'jpeg') { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, width, height); }
       ctx.drawImage(img, 0, 0, width, height);
+      // If an external resource slipped past inlining, the canvas is tainted and
+      // toBlob would throw "Tainted canvases may not be exported". Detect it now
+      // and fall through to the html2canvas fallback, which re-renders the clone
+      // whose images are already data: URLs → it cannot taint.
+      try { ctx.getImageData(0, 0, 1, 1); }
+      catch { throw new Error('tainted'); }
       return canvas;
     } catch (svgErr) {
-      // Rare fallback only if the SVG path fails. Capped so it can't hang.
-      const baseOpts = { scale: 1, useCORS: true, backgroundColor: null, width, height, scrollX: 0, scrollY: 0, windowWidth: width, windowHeight: height, logging: false, imageTimeout: 10000 };
+      // Fallback if the SVG path fails OR produces a tainted canvas. The clone
+      // is already fully inlined (every image is a data: URL), so html2canvas
+      // can't taint or hang on cross-origin image loading. Capped so it can't hang.
+      const baseOpts = { scale: 1, useCORS: false, allowTaint: false, backgroundColor: null, width, height, scrollX: 0, scrollY: 0, windowWidth: width, windowHeight: height, logging: false, imageTimeout: 10000 };
       return await withTimeout(html2canvas(holder, baseOpts), 25000, 'render-timeout');
     }
   } finally {
