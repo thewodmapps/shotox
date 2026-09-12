@@ -26,11 +26,9 @@ export default function EditorTopbar({ project, status, onRename, onExport, onSh
   ];
   const choose = (o) => {
     setPicked(o.key);
-    setTimeout(() => {
-      setDlOpen(false);
-      onExport(o.which, o.format);
-      setTimeout(() => setPicked(null), 300);
-    }, 260);
+    setDlOpen(false);
+    onExport(o.which, o.format);
+    setTimeout(() => setPicked(null), 300);
   };
   return (
     <header className="shrink-0 bg-[#0B0B12] border-b border-white/10 text-white no-callout">
