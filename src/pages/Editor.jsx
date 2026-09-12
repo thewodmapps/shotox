@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
-import { makeId, resolveDevice, getTemplate, makeSlide, solid } from '@/lib/templates';
+import { makeId, resolveDevice, getTemplate, makeSlide, solid, DEVICES } from '@/lib/templates';
 import { exportSlide, exportAllSlides, wait } from '@/lib/exportSlides';
 import { useAuth } from '@/lib/AuthContext';
 import { isPro } from '@/lib/entitlements';
@@ -226,6 +226,27 @@ export default function Editor() {
     setCanUndo(false);
     setCanRedo(false);
   };
+
+  // AI copy is common across devices: generating copy writes the headlines to
+  // every device's slides (visited or not), so all devices share the same copy
+  // while keeping their own layout, screenshot and color edits.
+  const applyAICopy = (copySlides) => {
+    const apply = (arr) => (arr || []).map((s, i) => ({
+      ...s,
+      heading: copySlides[i]?.heading || s.heading,
+      subheading: copySlides[i]?.subheading || s.subheading,
+    }));
+    setProject((p) => {
+      const newSlides = apply(p.slides);
+      const ds = { ...(p.deviceSlides || {}) };
+      ds[p.device] = newSlides;
+      Object.keys(ds).forEach((k) => { if (k !== p.device) ds[k] = apply(ds[k]); });
+      DEVICES.forEach((d) => { if (!ds[d.id]) ds[d.id] = apply(freshSlidesFor(p)); });
+      if (!ds['custom']) ds['custom'] = apply(freshSlidesFor(p));
+      return { ...p, slides: newSlides, deviceSlides: ds };
+    });
+    dirty.current = true;
+  };
   const addSlide = () => {
     const before = project.slides;
     const after = [...project.slides, { ...project.slides[sel], id: makeId(), screenshotUrl: '' }];
@@ -301,7 +322,7 @@ export default function Editor() {
 
   const device = resolveDevice(project);
   const slide = project.slides[sel] || project.slides[0];
-  const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject, switchDevice, isPro: pro, onLocked: () => setShowUpgrade(true), freeDevice: !pro ? user?.free_device || null : null };
+  const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject, switchDevice, applyAICopy, isPro: pro, onLocked: () => setShowUpgrade(true), freeDevice: !pro ? user?.free_device || null : null };
   return (
     <div className="h-screen flex flex-col bg-[#08080d]">
       <EditorTopbar project={project} status={status} exporting={exporting} onRename={(name) => updateProject({ name })} onExport={onExport} onShare={() => setShowShare(true)} onRetry={retrySave} />

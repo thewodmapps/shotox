@@ -8,7 +8,7 @@ import { base44 } from '@/api/base44Client';
 import { CATEGORIES } from '@/lib/templates';
 import { useToast } from '@/components/ui/use-toast';
 
-export default function AIPanel({ project, updateProject }) {
+export default function AIPanel({ project, applyAICopy }) {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [loading, setLoading] = useState(false);
@@ -26,14 +26,8 @@ export default function AIPanel({ project, updateProject }) {
       if (data?.error) throw new Error(data.error);
       const slides = data?.slides || [];
       if (!slides.length) throw new Error('No copy generated. Try again.');
-      updateProject({
-        slides: project.slides.map((s, i) => ({
-          ...s,
-          heading: slides[i]?.heading || s.heading,
-          subheading: slides[i]?.subheading || s.subheading,
-        })),
-      });
-      toast({ title: 'Copy generated', description: `Updated ${Math.min(slides.length, project.slides.length)} slides.` });
+      applyAICopy(slides);
+      toast({ title: 'Copy generated', description: `Copy applied to all devices.` });
     } catch (e) {
       toast({ title: 'Generation failed', description: e.message, variant: 'destructive' });
     } finally {
