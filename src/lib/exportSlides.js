@@ -41,30 +41,126 @@ const inlineImages = async (root) =>
 const withTimeout = (p, ms, label) =>
   Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error(label)), ms))]);
 
-const renderCanvas = async (el, device) => {
-  // The hidden export instances are rendered at the device's exact native
-  // dimensions (width = device.w) with NO css transform — every position
-  // constant is already scaled to that size, so we capture 1:1 at scale 1.
+// Collect every stylesheet's CSS text. Same-origin sheets are read via
+// cssRules; cross-origin sheets (Google Fonts @import) throw a SecurityError
+// on cssRules, so we fetch them by href instead — otherwise the @font-face
+// rules for Sora/Inter would be missing and the export would lose its fonts.
+const collectCssText = async () => {
+  let css = '';
+  const sheets = Array.from(document.styleSheets);
+  await Promise.all(
+    sheets.map(async (sheet) => {
+      let text = '';
+      try {
+        const rules = sheet.cssRules;
+        if (rules) for (const r of rules) text += r.cssText + '\n';
+      } catch {
+        if (sheet.href) {
+          try {
+            const controller = new AbortController();
+            const t = setTimeout(() => controller.abort(), 8000);
+            const res = await fetch(sheet.href, { mode: 'cors', signal: controller.signal });
+            clearTimeout(t);
+            text = await res.text();
+          } catch { /* skip unreachable sheet */ }
+        }
+      }
+      css += text + '\n';
+    })
+  );
+  return css;
+};
+
+// Browsers render an SVG loaded via <img> in "secure" mode: external resources
+// (fonts, images) are NOT fetched. Our slide text uses Sora/Inter from Google
+// Fonts, so without inlining the @font-face url()s as data URLs the text would
+// fall back to a system font and the export would lose its typography.
+const inlineFontUrls = async (css) => {
+  const urls = [...css.matchAll(/url\(["']?(https?:\/\/[^"')]+)["']?\)/g)].map((m) => m[1]);
+  const unique = [...new Set(urls)];
+  if (!unique.length) return css;
+  const map = {};
+  await Promise.all(
+    unique.map(async (u) => {
+      try {
+        const controller = new AbortController();
+        const t = setTimeout(() => controller.abort(), 8000);
+        const res = await fetch(u, { mode: 'cors', signal: controller.signal });
+        clearTimeout(t);
+        const blob = await res.blob();
+        map[u] = await new Promise((resolve, reject) => {
+          const r = new FileReader();
+          r.onload = () => resolve(r.result);
+          r.onerror = reject;
+          r.readAsDataURL(blob);
+        });
+      } catch { /* leave as original url */ }
+    })
+  );
+  return css.replace(/url\(["']?(https?:\/\/[^"')]+)["']?\)/g, (m, u) => (map[u] ? `url(${map[u]})` : m));
+};
+
+// Computed once and cached for the session — font files are fetched a single
+// time and reused across every slide in the batch.
+let _inlinedCssCache = null;
+const getInlinedCss = async () => {
+  if (_inlinedCssCache) return _inlinedCssCache;
+  _inlinedCssCache = await inlineFontUrls(await collectCssText());
+  return _inlinedCssCache;
+};
+
+const renderCanvas = async (el, device, format = 'png') => {
+  const width = device.w;
+  const height = device.h;
   const holder = document.createElement('div');
-  holder.style.cssText = `position:fixed;left:0;top:0;width:${device.w}px;height:${device.h}px;overflow:hidden;pointer-events:none;z-index:-1;`;
+  holder.style.cssText = `position:fixed;left:-99999px;top:0;width:${width}px;height:${height}px;overflow:hidden;pointer-events:none;`;
   const clone = el.cloneNode(true);
-  clone.style.position = 'absolute';
+  clone.style.position = 'relative';
   clone.style.top = '0';
   clone.style.left = '0';
+  clone.style.width = `${width}px`;
+  clone.style.height = `${height}px`;
+  clone.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
   holder.appendChild(clone);
   document.body.appendChild(holder);
-  const baseOpts = { scale: 1, useCORS: true, backgroundColor: null, width: device.w, height: device.h, scrollX: 0, scrollY: 0, windowWidth: device.w, windowHeight: device.h, logging: false, imageTimeout: 10000 };
   try {
-    // Never let a render hang forever: cap font loading, image inlining and
-    // each renderer. foreignObjectRendering gives the truest text placement;
-    // if it stalls we fall back to html2canvas's default renderer, which is
-    // also capped so the dialog can never freeze on "stuck".
     if (document.fonts && document.fonts.ready) { try { await withTimeout(document.fonts.ready, 3000, 'fonts'); } catch {} }
     await withTimeout(inlineImages(holder), 15000, 'images');
+
+    // Inject the live document CSS into the clone so the foreignObject renders
+    // with the same Tailwind classes / CSS variables it has on screen.
+    const styleEl = document.createElement('style');
+    styleEl.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+    styleEl.textContent = await getInlinedCss();
+    clone.insertBefore(styleEl, clone.firstChild);
+
+    // Serialize → SVG foreignObject → Image → Canvas. The browser renders the
+    // SVG (and the foreignObject HTML inside it) asynchronously during image
+    // decode, OFF the main thread — so the page never freezes. The only
+    // main-thread work is serializeToString (a few ms) and drawImage (a few ms).
+    const xml = new XMLSerializer().serializeToString(clone);
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><foreignObject width="100%" height="100%">${xml}</foreignObject></svg>`;
+    const svgBlob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
     try {
-      return await withTimeout(html2canvas(holder, { ...baseOpts, foreignObjectRendering: true }), 15000, 'fo-timeout');
-    } catch {
-      return await withTimeout(html2canvas(holder, baseOpts), 40000, 'render-timeout');
+      const img = await withTimeout(new Promise((resolve, reject) => {
+        const image = new Image();
+        image.decoding = 'async';
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error('Render failed'));
+        image.src = url;
+      }), 20000, 'svg-decode');
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (format === 'jpeg') { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, width, height); }
+      ctx.drawImage(img, 0, 0, width, height);
+      return canvas;
+    } catch (svgErr) {
+      // Rare fallback only if the SVG path fails. Capped so it can't hang.
+      const baseOpts = { scale: 1, useCORS: true, backgroundColor: null, width, height, scrollX: 0, scrollY: 0, windowWidth: width, windowHeight: height, logging: false, imageTimeout: 10000 };
+      return await withTimeout(html2canvas(holder, baseOpts), 25000, 'render-timeout');
     }
   } finally {
     if (holder.parentNode) document.body.removeChild(holder);
@@ -91,7 +187,7 @@ export async function exportSlide(el, device, filename, format = 'png', onProgre
   if (!el) return;
   const mime = format === 'jpeg' ? 'image/jpeg' : 'image/png';
   onProgress?.(5);
-  const canvas = await renderCanvas(el, device);
+  const canvas = await renderCanvas(el, device, format);
   onProgress?.(85);
   const blob = await canvasToBlob(canvas, mime);
   onProgress?.(95);
@@ -108,9 +204,12 @@ export async function exportAllSlides(els, device, baseName, format = 'png', onP
     const el = els[i];
     if (!el) continue;
     onProgress?.((i / total) * 100);
-    const canvas = await renderCanvas(el, device);
+    const canvas = await renderCanvas(el, device, format);
     const blob = await canvasToBlob(canvas, mime);
     zip.file(`${i + 1}.${ext}`, blob);
+    // Yield to the event loop between slides so the UI stays responsive across
+    // the whole batch (progress bar animates, buttons stay clickable).
+    await wait(0);
   }
   onProgress?.(95);
   const blob = await zip.generateAsync({ type: 'blob' });

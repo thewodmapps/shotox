@@ -309,9 +309,19 @@ export default function Editor() {
     exportTarget.current = 0;
     setExportPct(0);
     setExporting(true);
-    const onProgress = (p) => { exportTarget.current = p; };
+    // Only move the target forward so late low values never rewind the bar.
+    const onProgress = (p) => { if (p > exportTarget.current) exportTarget.current = p; };
     const device = resolveDevice(project);
     const base = project.name.replace(/\s+/g, '-');
+    // Single slide: the whole render is one async image-decode, so creep the bar
+    // upward while it runs — otherwise it sits at 5% the entire time and looks
+    // frozen even though the page is responsive.
+    let creepTimer = null;
+    if (which !== 'all') {
+      creepTimer = setInterval(() => {
+        exportTarget.current = Math.min(exportTarget.current + 1.5, 88);
+      }, 250);
+    }
     try {
       if (which === 'all') {
         const els = project.slides.map((_, i) => exportRefs.current[i]).filter(Boolean);
@@ -326,6 +336,7 @@ export default function Editor() {
     } catch (e) {
       toast({ title: 'Export failed', description: e?.message || 'Could not render the screenshot. Please try again.', variant: 'destructive' });
     } finally {
+      if (creepTimer) clearInterval(creepTimer);
       setExporting(false);
     }
   };
