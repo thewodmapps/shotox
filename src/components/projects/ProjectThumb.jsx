@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import SlideCanvas from '@/components/editor/SlideCanvas';
+import { resolveSlide } from '@/lib/deviceOverrides';
 
 // In-flow thumbnail: the slide defines its own height from its device aspect
 // ratio (SlideCanvas renders at width × width·h/w), so the preview always fits
@@ -16,7 +17,7 @@ export default function ProjectThumb({ slide, device }) {
   }, []);
   return (
     <div ref={ref} className="w-full overflow-hidden rounded-md">
-      {w > 0 && <SlideCanvas slide={slide} device={device} width={w} />}
+      {w > 0 && <SlideCanvas slide={resolveSlide(slide, device?.id)} device={device} width={w} />}
     </div>
   );
 }

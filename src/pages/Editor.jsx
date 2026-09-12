@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { makeId, resolveDevice } from '@/lib/templates';
+import { resolveSlide, applyDevicePatch } from '@/lib/deviceOverrides';
 import { exportSlide, exportAllSlides, wait } from '@/lib/exportSlides';
 import { useAuth } from '@/lib/AuthContext';
 import { isPro } from '@/lib/entitlements';
@@ -170,7 +171,7 @@ export default function Editor() {
   const updateProject = (patch) => { dirty.current = true; setProject((p) => ({ ...p, ...patch })); };
   const updateSlide = (patch) => {
     const before = project.slides[sel];
-    const after = { ...before, ...patch };
+    const after = applyDevicePatch(before, project.device, patch);
     queueHistory({ type: 'slide', idx: sel, before, after });
     updateProject({ slides: project.slides.map((s, i) => (i === sel ? after : s)) });
   };
@@ -254,8 +255,10 @@ export default function Editor() {
   );
   if (!project) return <div className="min-h-screen grid place-items-center bg-[#0B0B12]"><Loader2 className="w-6 h-6 text-white/60 animate-spin" /></div>;
 
-  const slide = project.slides[sel] || project.slides[0];
   const device = resolveDevice(project);
+  const rSlides = project.slides.map((s) => resolveSlide(s, project.device));
+  const rProject = { ...project, slides: rSlides };
+  const slide = rSlides[sel] || rSlides[0];
   const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject, isPro: pro, onLocked: () => setShowUpgrade(true), freeDevice: !pro ? user?.free_device || null : null };
   return (
     <div className="h-screen flex flex-col bg-[#08080d]">
@@ -270,11 +273,11 @@ export default function Editor() {
           }}
         />
         <EditorPanel active={panel} mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} {...panelProps} />
-        <EditorStage project={project} selected={sel} onSelect={setSel} onAdd={addSlide} onDuplicate={duplicate} onDelete={remove} onMove={move} watermark={!pro} onUndo={undoEdit} onRedo={redoEdit} canUndo={canUndo} canRedo={canRedo} />
+        <EditorStage project={rProject} selected={sel} onSelect={setSel} onAdd={addSlide} onDuplicate={duplicate} onDelete={remove} onMove={move} watermark={!pro} onUndo={undoEdit} onRedo={redoEdit} canUndo={canUndo} canRedo={canRedo} />
       </div>
       <UndoBar undo={undo} onUndo={restoreSlide} />
       <div className="fixed -left-[5000px] top-0 pointer-events-none" aria-hidden>
-        {project.slides.map((s, i) => (
+        {rSlides.map((s, i) => (
           <SlideCanvas key={s.id} slide={s} device={device} watermark={!pro} width={device.w} ref={(el) => (exportRefs.current[i] = el)} />
         ))}
       </div>
