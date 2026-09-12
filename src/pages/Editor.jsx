@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { makeId, resolveDevice, getTemplate, makeSlide, solid, DEVICES } from '@/lib/templates';
-import { exportSlide, exportAllSlides, triggerDownload } from '@/lib/exportSlides';
+import { exportSlide, exportAllSlides, triggerDownload, shareBlob } from '@/lib/exportSlides';
 import { useAuth } from '@/lib/AuthContext';
 import { isPro } from '@/lib/entitlements';
 import ExportOverlay from '@/components/editor/ExportOverlay';
@@ -32,6 +32,7 @@ export default function Editor() {
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [dlDone, setDlDone] = useState(false);
+  const [pendingBlob, setPendingBlob] = useState(null);
   const [undo, setUndo] = useState(null);
   const dirty = useRef(false);
   const exportRefs = useRef([]);
@@ -327,30 +328,30 @@ export default function Editor() {
       return;
     }
     if (!result || !result.blob) { setExporting(false); return; }
-    // On the native app, a blob: URL <a download> never reaches the download
-    // pipeline (WebView ignores the `download` attribute) and a cross-origin
-    // link opens the external browser — so the file never saves. Upload the
-    // file, then do a PLAIN navigation (no `download` attribute) to a
-    // same-origin endpoint that returns it with Content-Disposition:
-    // attachment. That header is what WebView respects — it fires the
-    // DownloadManager, which saves to the Downloads folder (under a Shotox
-    // subpath where the wrapper supports it). The endpoint always returns an
-    // attachment, so the navigation never replaces this page. On the web, a
-    // direct blob download works.
+    // The Base44 native WebView cannot save a blob: download and errors out
+    // on an attachment navigation (the WebView tries to render it as a page),
+    // and a cross-origin link opens the external browser. The only mechanism
+    // that saves to the phone is navigator.share — Android's native
+    // "Save to Photos / Save to Files" sheet — which requires a fresh user
+    // gesture, so on native we park the finished blob and let the popup's
+    // "Save to phone" tap open the share sheet. On the web, a direct blob
+    // download works and saves automatically.
     const isNative = typeof document !== 'undefined' && document.documentElement.classList && document.documentElement.classList.contains('native-app');
+    setExporting(false);
     if (isNative) {
-      try {
-        const file = new File([result.blob], result.filename, { type: result.blob.type || 'application/octet-stream' });
-        const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
-        window.location.href = `/functions/downloadExport?url=${encodeURIComponent(file_url)}&name=${encodeURIComponent(result.filename)}`;
-      } catch {
-        triggerDownload(result.blob, result.filename);
-      }
+      setPendingBlob({ blob: result.blob, filename: result.filename });
     } else {
       triggerDownload(result.blob, result.filename);
+      setDlDone(true);
     }
-    setExporting(false);
+  };
+
+  const handleSaveToPhone = async () => {
+    if (!pendingBlob) return;
+    const ok = await shareBlob(pendingBlob.blob, pendingBlob.filename);
+    if (!ok) triggerDownload(pendingBlob.blob, pendingBlob.filename);
     setDlDone(true);
+    setPendingBlob(null);
   };
 
   if (missing) return (
@@ -384,7 +385,7 @@ export default function Editor() {
           <SlideCanvas key={s.id} slide={s} device={device} watermark={!pro} width={device.w} ref={(el) => (exportRefs.current[i] = el)} />
         ))}
       </div>
-      {(exporting || dlDone) && <ExportOverlay pct={exportPct} done={dlDone} onClose={() => setDlDone(false)} />}
+      {(exporting || pendingBlob || dlDone) && <ExportOverlay pct={exportPct} exporting={exporting} ready={!!pendingBlob && !dlDone} done={dlDone} onSave={handleSaveToPhone} onClose={() => { setDlDone(false); setPendingBlob(null); }} />}
       <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} onUpgrade={() => navigate('/#pricing')} />
       <ShareModal open={showShare} title={project.name} projectId={project.id} onClose={() => setShowShare(false)} />
     </div>

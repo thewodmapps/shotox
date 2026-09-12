@@ -1,10 +1,12 @@
 import React from 'react';
-import { Loader2, Check, X } from 'lucide-react';
+import { Loader2, Check, X, Download } from 'lucide-react';
 
-// Single download popup. Two phases:
+// Single download popup. Three phases:
 //  - exporting: spinner + progress %
+//  - ready: render finished, "Save to phone" button (native WebView only —
+//    Android only allows saving via the system share sheet, which needs a tap)
 //  - done: green check in a circle + "File saved" + close X (top right)
-export default function ExportOverlay({ pct, done, onClose }) {
+export default function ExportOverlay({ pct, exporting, ready, done, onSave, onClose }) {
   const value = Math.min(100, Math.max(0, Math.round(pct)));
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 backdrop-blur-sm">
@@ -23,6 +25,19 @@ export default function ExportOverlay({ pct, done, onClose }) {
               <div className="font-display text-xl font-bold text-white">File saved</div>
               <div className="text-xs text-white/50 mt-1">Saved to your phone</div>
             </div>
+          </>
+        ) : ready ? (
+          <>
+            <div className="grid place-items-center w-16 h-16 rounded-full bg-violet-500/15 border border-violet-400/30">
+              <Download className="w-8 h-8 text-violet-300" />
+            </div>
+            <div className="text-center">
+              <div className="font-display text-xl font-bold text-white">Ready to save</div>
+              <div className="text-xs text-white/50 mt-1">Tap below, then choose “Save to Photos”</div>
+            </div>
+            <button onClick={onSave} className="mt-1 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 text-white text-sm font-semibold shadow-lg shadow-pink-500/30">
+              <Download className="w-4 h-4" /> Save to phone
+            </button>
           </>
         ) : (
           <>
