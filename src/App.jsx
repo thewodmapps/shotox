@@ -1,3 +1,4 @@
+```jsx
 import { lazy, Suspense } from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -31,13 +32,9 @@ const AuthenticatedApp = () => {
   const location = useLocation();
   const reduce = usePrefersReducedMotion();
 
-  // Show loading spinner while checking app public settings or auth
+  // Show loading state while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
-      </div>
-    );
+    return <div className="fixed inset-0 bg-white" />;
   }
 
   // Handle authentication errors
@@ -53,7 +50,7 @@ const AuthenticatedApp = () => {
 
   // Render the main app
   return (
-    <Suspense fallback={<div className="fixed inset-0 grid place-items-center"><div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin" /></div>}>
+    <Suspense fallback={<div className="fixed inset-0 bg-white" />}>
       <AnimatePresence mode="wait">
         <motion.div
           key={location.pathname}
@@ -102,3 +99,4 @@ function App() {
 }
 
 export default App
+```
