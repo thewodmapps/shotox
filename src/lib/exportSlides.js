@@ -105,8 +105,19 @@ const inlineFontUrls = async (css) => {
 let _inlinedCssCache = null;
 const getInlinedCss = async () => {
   if (_inlinedCssCache) return _inlinedCssCache;
-  _inlinedCssCache = await inlineFontUrls(await collectCssText());
-  return _inlinedCssCache;
+  let css = await collectCssText();
+  css = await inlineFontUrls(css);
+  // Drop @import rules — the @font-face rules are already inlined above, and an
+  // @import url(https://…) left in the SVG is an external reference that taints
+  // the canvas when the SVG is drawn.
+  css = css.replace(/@import[^;]*;/gi, '');
+  // Any external url() we couldn't inline (a font fetch that failed) would
+  // taint the canvas. Replace every remaining http(s) url with a harmless
+  // transparent data URL so the SVG is fully self-contained — failed fonts
+  // just fall back to a system font instead of breaking the export.
+  css = css.replace(/url\(["']?(https?:\/\/[^"')]+)["']?\)/gi, `url(${TRANSPARENT_PX})`);
+  _inlinedCssCache = css;
+  return css;
 };
 
 const renderCanvas = async (el, device, format = 'png') => {
