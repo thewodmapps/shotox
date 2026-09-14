@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
 import { useAuth } from '@/lib/AuthContext';
 import CheckoutNoticeModal from '@/components/landing/CheckoutNoticeModal';
+import { openRazorpaySubscription } from '@/lib/razorpayCheckout';
 
 const PLAN_KEY = { 'Pro Monthly': 'monthly', 'Pro Yearly': 'yearly', 'Lifetime': 'lifetime' };
 const PLAN_ID = { 'Free': 'free', 'Pro Monthly': 'monthly', 'Pro Yearly': 'yearly', 'Lifetime': 'lifetime' };
@@ -63,16 +64,28 @@ export default function Pricing() {
     }
     try {
       setLoadingPlan(name);
-      const res = await base44.functions.invoke('createCheckoutSession', {
+      const res = await base44.functions.invoke('createRazorpaySubscription', {
         plan: PLAN_KEY[name],
         origin: window.location.origin,
         user_id: user?.id,
         email: user?.email,
       });
-      if (res.data?.url) window.location.href = res.data.url;
-      else throw new Error(res.data?.error || 'No checkout URL returned');
+      const d = res.data;
+      if (d?.error) throw new Error(d.error);
+      if (!d?.subscription_id) throw new Error('No subscription created');
+      await openRazorpaySubscription({
+        keyId: d.key_id,
+        subscriptionId: d.subscription_id,
+        name: d.name,
+        description: d.description,
+        email: user?.email,
+        userId: user?.id,
+        plan: PLAN_KEY[name],
+      });
+      // Payment succeeded — the webhook grants the entitlement. Redirect back.
+      window.location.href = `${window.location.origin}/projects?upgraded=1&plan=${PLAN_KEY[name]}`;
     } catch (e) {
-      alert(e.message || 'Checkout failed. Please try again.');
+      if (e?.message !== 'dismissed') alert(e?.message || 'Checkout failed. Please try again.');
     } finally {
       setLoadingPlan(null);
     }
