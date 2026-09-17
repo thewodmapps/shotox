@@ -11,7 +11,6 @@ const LINKS = [
   { href: '#features', label: 'Features' },
   { href: '#templates', label: 'Templates' },
   { href: '#blog', label: 'Blog' },
-  { href: '#pricing', label: 'Pricing' },
   { href: '#faq', label: 'FAQs' },
 ];
 

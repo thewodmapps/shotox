@@ -10,7 +10,6 @@ const COLS = [
       { label: 'How it works', to: '/#how-it-works' },
       { label: 'Features', to: '/#features' },
       { label: 'Templates', to: '/#templates' },
-      { label: 'Pricing', to: '/#pricing' },
       { label: 'FAQs', to: '/#faq' },
     ],
   },

@@ -18,7 +18,7 @@ export default function Hero() {
 
       <div className="relative max-w-6xl mx-auto text-center">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-lime-300 text-[#0B0B12] text-xs font-semibold">
-          <Sparkles className="w-3.5 h-3.5" /> iPhone • iPad • Android • Tablet — Store-ready sizes
+          <Sparkles className="w-3.5 h-3.5" /> Free forever • No watermark • No credit card
         </motion.div>
         <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="font-display font-bold tracking-[-0.04em] leading-[0.95] text-6xl sm:text-7xl lg:text-8xl mt-7">
           App Screenshot<br /><span className="shotox-gradient-text">Generator</span>
@@ -32,6 +32,9 @@ export default function Hero() {
           </Button>
           <a href="#how-it-works" className="text-sm text-white/60 hover:text-white transition-colors px-4 py-3">See how it works</a>
         </motion.div>
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="mt-5 text-sm text-white/50">
+          ✓ Every device & template unlocked · PNG/JPEG export · No watermark
+        </motion.p>
 
         <motion.div initial={{ opacity: 0, y: 60, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }} className="relative mt-14 max-w-5xl mx-auto">
           <HeroShowcase />
