@@ -17,10 +17,7 @@ export default function Privacy() {
           <p>When you create an account we collect your email address. When you create projects we store the designs, uploaded screenshots, and export settings you provide. We do not sell your data to third parties.</p>
 
           <h2>How we use your information</h2>
-          <p>We use your information to provide the service, authenticate your account, process payments through our payment provider Stripe, and send transactional emails related to your account.</p>
-
-          <h2>Payment processing</h2>
-          <p>Payments are processed by Stripe. We do not store your full card number on our servers. Stripe handles all card data in accordance with PCI-DSS standards.</p>
+          <p>We use your information to provide the service, authenticate your account, and send transactional emails related to your account.</p>
 
           <h2>Data retention</h2>
           <p>Your designs remain stored while your account is active. You can delete a project at any time, which permanently removes it. You can request account deletion by contacting us.</p>
@@ -29,7 +26,7 @@ export default function Privacy() {
           <p>We use essential cookies to keep you signed in and remember your session. We do not use advertising cookies.</p>
 
           <h2>Third-party services</h2>
-          <p>We rely on Stripe for payments and our hosting provider for infrastructure. These providers process data under their own privacy policies.</p>
+          <p>We rely on our hosting provider for infrastructure, which processes data under its own privacy policy.</p>
 
           <h2>Your rights</h2>
           <p>You can access, export, or delete your personal data at any time. To exercise these rights, contact us using the details below.</p>

@@ -22,8 +22,8 @@ export default function Terms() {
           <h2>Acceptable use</h2>
           <p>You agree not to upload unlawful, infringing, or malicious content, and not to attempt to disrupt or reverse-engineer the service.</p>
 
-          <h2>Subscriptions and refunds</h2>
-          <p>Pro plans are billed monthly or yearly through Stripe. The Lifetime plan is a one-time purchase. All purchases are final — we do not offer cancellations or refunds. Subscriptions remain active until the end of their paid billing period, and Lifetime access never expires.</p>
+          <h2>Free service</h2>
+          <p>Shotox is free to use. Every device, template, and export is available at no cost, with no watermark. We may introduce optional advertising in the future to support the service, but no payment is ever required to use Shotox.</p>
 
           <h2>Service availability</h2>
           <p>We strive for high availability but do not guarantee uninterrupted service. We may modify or discontinue features with reasonable notice.</p>
