@@ -28,7 +28,7 @@ export default function Hero() {
         </motion.p>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Button asChild size="lg" className="rounded-full h-12 px-7 bg-white text-[#0B0B12] hover:bg-white/90 text-base shadow-[0_20px_50px_-15px_rgba(255,255,255,0.4)]">
-            <Link to="/projects">{isAuthenticated ? 'Dashboard' : 'Create your first screenshot free'} <ArrowRight className="w-4 h-4 ml-2" /></Link>
+            <Link to="/projects">{isAuthenticated ? 'Dashboard' : 'Create your screenshot free'} <ArrowRight className="w-4 h-4 ml-2" /></Link>
           </Button>
           <a href="#how-it-works" className="text-sm text-white/60 hover:text-white transition-colors px-4 py-3">See how it works</a>
         </motion.div>
