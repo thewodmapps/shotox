@@ -1,13 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { makeId, resolveDevice, getTemplate, makeSlide, solid, DEVICES } from '@/lib/templates';
 import { exportSlide, exportAllSlides, wait } from '@/lib/exportSlides';
-import { useAuth } from '@/lib/AuthContext';
-import { isPro } from '@/lib/entitlements';
 import ExportOverlay from '@/components/editor/ExportOverlay';
-import UpgradeModal from '@/components/editor/UpgradeModal';
 import EditorTopbar from '@/components/editor/EditorTopbar';
 import EditorRail from '@/components/editor/EditorRail';
 import EditorPanel from '@/components/editor/EditorPanel';
@@ -19,10 +16,7 @@ import { useToast } from '@/components/ui/use-toast';
 
 export default function Editor() {
   const id = new URLSearchParams(window.location.search).get('id');
-  const navigate = useNavigate();
   const { toast } = useToast();
-  const { user } = useAuth();
-  const pro = isPro(user);
   const [project, setProject] = useState(null);
   const [missing, setMissing] = useState(false);
   const [sel, setSel] = useState(0);
@@ -31,7 +25,6 @@ export default function Editor() {
   const [status, setStatus] = useState('saved');
   const [exporting, setExporting] = useState(false);
   const [exportPct, setExportPct] = useState(0);
-  const [showUpgrade, setShowUpgrade] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [undo, setUndo] = useState(null);
   const dirty = useRef(false);
@@ -350,7 +343,7 @@ export default function Editor() {
 
   const device = resolveDevice(project);
   const slide = project.slides[sel] || project.slides[0];
-  const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject, switchDevice, applyAICopy, isPro: pro, onLocked: () => setShowUpgrade(true), freeDevice: !pro ? user?.free_device || null : null };
+  const panelProps = { slide, updateSlide, updateTextStyle, project, updateProject, switchDevice, applyAICopy };
   return (
     <div className="h-screen flex flex-col bg-[#08080d]">
       <EditorTopbar project={project} status={status} exporting={exporting} onRename={(name) => updateProject({ name })} onExport={onExport} onShare={() => setShowShare(true)} onRetry={retrySave} />
@@ -364,16 +357,15 @@ export default function Editor() {
           }}
         />
         <EditorPanel active={panel} mobileOpen={mobileOpen} onCloseMobile={() => setMobileOpen(false)} {...panelProps} />
-        <EditorStage project={project} selected={sel} onSelect={setSel} onAdd={addSlide} onDuplicate={duplicate} onDelete={remove} onMove={move} watermark={!pro} onUndo={undoEdit} onRedo={redoEdit} canUndo={canUndo} canRedo={canRedo} />
+        <EditorStage project={project} selected={sel} onSelect={setSel} onAdd={addSlide} onDuplicate={duplicate} onDelete={remove} onMove={move} onUndo={undoEdit} onRedo={redoEdit} canUndo={canUndo} canRedo={canRedo} />
       </div>
       <UndoBar undo={undo} onUndo={restoreSlide} />
       <div className="fixed -left-[5000px] top-0 pointer-events-none" aria-hidden>
         {project.slides.map((s, i) => (
-          <SlideCanvas key={s.id} slide={s} device={device} watermark={!pro} width={device.w} ref={(el) => (exportRefs.current[i] = el)} />
+          <SlideCanvas key={s.id} slide={s} device={device} width={device.w} ref={(el) => (exportRefs.current[i] = el)} />
         ))}
       </div>
       {exporting && <ExportOverlay pct={exportPct} />}
-      <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} onUpgrade={() => navigate('/#pricing')} />
       <ShareModal open={showShare} title={project.name} projectId={project.id} onClose={() => setShowShare(false)} />
     </div>
   );
