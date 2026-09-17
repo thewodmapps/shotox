@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Brand } from '@/components/Logo';
 import { useAuth } from '@/lib/AuthContext';
@@ -55,6 +55,15 @@ export default function Navbar() {
           {LINKS.map(renderLink)}
         </div>
         <div className="flex items-center gap-1">
+          <a
+            href="https://play.google.com/store/apps/details?id=com.base6aa0ad9172db932d1d29336b.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden lg:inline-flex items-center gap-2 rounded-xl border border-black/10 bg-white px-3.5 h-9 text-sm font-medium text-[#0B0B12] hover:bg-black/5 transition-colors"
+          >
+            <Play className="w-3.5 h-3.5 fill-current" />
+            Google Play
+          </a>
           <Button asChild className="rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white px-5 hidden lg:inline-flex">
             <Link to="/projects">{isAuthenticated ? 'Dashboard' : 'Get started'}</Link>
           </Button>
@@ -87,7 +96,16 @@ export default function Navbar() {
                 </a>
               );
             })}
-            <Button asChild className="mt-2 rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white">
+            <a
+              href="https://play.google.com/store/apps/details?id=com.base6aa0ad9172db932d1d29336b.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl border border-black/10 bg-white px-3.5 h-10 text-sm font-medium text-[#0B0B12] hover:bg-black/5 transition-colors"
+            >
+              <Play className="w-4 h-4 fill-current" />
+              Get it on Google Play
+            </a>
+            <Button asChild className="rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white">
               <Link to="/projects" onClick={() => setOpen(false)}>{isAuthenticated ? 'Dashboard' : 'Get started'}</Link>
             </Button>
           </div>
