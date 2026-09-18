@@ -180,6 +180,8 @@
 .app-shell { overscroll-behavior: contain; }
 .scroll-contain { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 .no-callout { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+/* Hide elements that only make sense on the website (e.g. "Get it on Google Play") when running inside the native app WebView */
+.native-app .hide-in-native-app { display: none !important; }
 .selectable-text { -webkit-user-select: text; user-select: text; }
 
 @media (prefers-reduced-motion: reduce) {

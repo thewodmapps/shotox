@@ -36,7 +36,7 @@ export default function Hero() {
             href={PLAY_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full h-12 px-6 bg-white/10 border border-white/20 text-white text-base font-medium hover:bg-white/15 transition-colors"
+            className="hide-in-native-app inline-flex items-center gap-2 rounded-full h-12 px-6 bg-white/10 border border-white/20 text-white text-base font-medium hover:bg-white/15 transition-colors"
           >
             <Play className="w-4 h-4 fill-current" />
             Get it on Google Play

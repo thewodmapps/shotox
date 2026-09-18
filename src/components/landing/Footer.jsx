@@ -44,7 +44,7 @@ export default function Footer() {
               href={PLAY_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl bg-white text-[#0B0B12] px-4 h-11 text-sm font-semibold hover:bg-white/90 transition-colors mt-5 w-fit"
+              className="hide-in-native-app inline-flex items-center gap-2 rounded-xl bg-white text-[#0B0B12] px-4 h-11 text-sm font-semibold hover:bg-white/90 transition-colors mt-5 w-fit"
             >
               <Play className="w-4 h-4 fill-current" />
               Get it on Google Play
