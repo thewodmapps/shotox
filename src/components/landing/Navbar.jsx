@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Brand } from '@/components/Logo';
 import { useAuth } from '@/lib/AuthContext';
+import { base44 } from '@/api/base44Client';
 
 const LINKS = [
   { href: '/', label: 'Home' },
@@ -58,6 +59,16 @@ export default function Navbar() {
           <Button asChild className="rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white px-5 hidden lg:inline-flex">
             <Link to="/projects">{isAuthenticated ? 'Dashboard' : 'Get started'}</Link>
           </Button>
+          {isAuthenticated && (
+            <button
+              onClick={() => base44.auth.logout('/')}
+              aria-label="Sign out"
+              title="Sign out"
+              className="hidden lg:inline-flex items-center justify-center w-10 h-10 rounded-xl text-[#0B0B12]/70 hover:bg-black/5 hover:text-[#0B0B12] transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          )}
           <button
             aria-label="Toggle menu"
             onClick={() => setOpen((v) => !v)}
@@ -90,6 +101,14 @@ export default function Navbar() {
             <Button asChild className="mt-2 rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white">
               <Link to="/projects" onClick={() => setOpen(false)}>{isAuthenticated ? 'Dashboard' : 'Get started'}</Link>
             </Button>
+            {isAuthenticated && (
+              <button
+                onClick={() => base44.auth.logout('/')}
+                className="mt-1 flex items-center gap-2 px-3 py-3 rounded-xl text-sm text-[#0B0B12]/80 hover:bg-black/5 transition-colors"
+              >
+                <LogOut className="w-4 h-4" /> Sign out
+              </button>
+            )}
           </div>
         </div>
       )}
