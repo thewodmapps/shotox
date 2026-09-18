@@ -41,7 +41,6 @@ export default function Hero() {
             <Play className="w-4 h-4 fill-current" />
             Get it on Google Play
           </a>
-          <a href="#how-it-works" className="text-sm text-white/60 hover:text-white transition-colors px-4 py-3">See how it works</a>
         </motion.div>
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="mt-5 text-sm text-white/50">
           ✓ Every device & template unlocked · PNG/JPEG export · No watermark
