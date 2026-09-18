@@ -104,7 +104,7 @@ export default function Navbar() {
             {isAuthenticated && (
               <button
                 onClick={() => base44.auth.logout('/')}
-                className="mt-2 w-full h-10 rounded-xl bg-[#0B0B12] hover:bg-[#0B0B12]/90 text-white text-sm font-medium inline-flex items-center justify-center gap-2"
+                className="mt-2 w-full h-10 rounded-xl bg-black/5 hover:bg-black/10 text-[#0B0B12]/80 text-sm font-medium inline-flex items-center justify-center gap-2 border border-black/10"
               >
                 <LogOut className="w-4 h-4" /> Sign out
               </button>
