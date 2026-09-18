@@ -102,12 +102,15 @@ export default function Navbar() {
               <Link to="/projects" onClick={() => setOpen(false)}>{isAuthenticated ? 'Dashboard' : 'Get started'}</Link>
             </Button>
             {isAuthenticated && (
-              <button
-                onClick={() => base44.auth.logout('/')}
-                className="mt-1 flex items-center gap-2 px-3 py-3 rounded-xl text-sm text-[#0B0B12]/80 hover:bg-black/5 transition-colors"
-              >
-                <LogOut className="w-4 h-4" /> Sign out
-              </button>
+              <>
+                <div className="my-2 h-px bg-black/5" />
+                <button
+                  onClick={() => base44.auth.logout('/')}
+                  className="flex items-center gap-2 px-3 py-3 rounded-xl text-sm text-red-500 hover:bg-red-50 transition-colors"
+                >
+                  <LogOut className="w-4 h-4" /> Sign out
+                </button>
+              </>
             )}
           </div>
         </div>
