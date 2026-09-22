@@ -209,72 +209,28 @@ const triggerDownload = (blob, filename) => {
   setTimeout(() => URL.revokeObjectURL(url), 2000);
 };
 
-// Android/iOS WebViews cannot download blob: URLs — the WebView's download
-// handler receives a fake URL and saves a 0-byte file (or nothing). When running
-// inside the native app we instead render each slide to a data URL and hand the
-// result back to the editor, which shows an on-screen image the user can
-// press-and-hold → "Save image" (the WebView's own save, which writes to the
-// gallery via MediaStore).
-const isNativeApp = () => document.documentElement.classList.contains('native-app');
-
-const blobToDataUrl = (blob) =>
-  new Promise((resolve, reject) => {
-    const r = new FileReader();
-    r.onload = () => resolve(r.result);
-    r.onerror = reject;
-    r.readAsDataURL(blob);
-  });
-
 const canvasToBlob = (canvas, mime) =>
   new Promise((resolve, reject) => {
     canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), mime, 0.95);
   });
 
-// Returns null in the browser (download triggered directly), or
-// { images: [{ dataUrl, filename }] } when inside the native app so the editor
-// can open the save overlay.
 export async function exportSlide(el, device, filename, format = 'png', onProgress) {
-  if (!el) return null;
+  if (!el) return;
   const mime = format === 'jpeg' ? 'image/jpeg' : 'image/png';
   onProgress?.(5);
   const canvas = await renderCanvas(el, device, format);
   onProgress?.(85);
   const blob = await canvasToBlob(canvas, mime);
   onProgress?.(95);
-  const fname = `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`;
-  if (isNativeApp()) {
-    const dataUrl = await blobToDataUrl(blob);
-    onProgress?.(100);
-    return { images: [{ dataUrl, filename: fname }] };
-  }
-  triggerDownload(blob, fname);
+  triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`);
   onProgress?.(100);
-  return null;
 }
 
-// Returns null in the browser (zip downloaded directly), or
-// { images: [{ dataUrl, filename }] } when inside the native app.
 export async function exportAllSlides(els, device, baseName, format = 'png', onProgress) {
   const ext = format === 'jpeg' ? 'jpg' : 'png';
   const mime = format === 'jpeg' ? 'image/jpeg' : 'image/png';
-  const total = els.length;
-
-  if (isNativeApp()) {
-    const images = [];
-    for (let i = 0; i < total; i++) {
-      const el = els[i];
-      if (!el) continue;
-      onProgress?.((i / total) * 100);
-      const canvas = await renderCanvas(el, device, format);
-      const blob = await canvasToBlob(canvas, mime);
-      images.push({ dataUrl: await blobToDataUrl(blob), filename: `${i + 1}.${ext}` });
-      await wait(0);
-    }
-    onProgress?.(100);
-    return { images };
-  }
-
   const zip = new JSZip();
+  const total = els.length;
   for (let i = 0; i < total; i++) {
     const el = els[i];
     if (!el) continue;
@@ -290,5 +246,4 @@ export async function exportAllSlides(els, device, baseName, format = 'png', onP
   const blob = await zip.generateAsync({ type: 'blob' });
   triggerDownload(blob, `${baseName}-screenshots.zip`);
   onProgress?.(100);
-  return null;
 }
