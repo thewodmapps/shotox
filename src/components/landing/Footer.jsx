@@ -28,7 +28,7 @@ const COLS = [
 const SOCIAL = [
   { icon: Linkedin, href: 'https://www.linkedin.com/in/atravellerguy/', label: 'LinkedIn' },
   { icon: Youtube, href: 'https://www.youtube.com/@thewodmapps', label: 'YouTube' },
-  { icon: Globe, href: 'https://apps.thewodm.com/', label: 'Website' },
+  { icon: Globe, href: 'https://shotox.in/', label: 'Website' },
 ];
 
 export default function Footer() {
