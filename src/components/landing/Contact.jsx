@@ -20,7 +20,7 @@ export default function Contact() {
       <div className="mx-auto max-w-5xl px-4">
         <SectionHeading align="center" eyebrow="Contact" title={<>Let's talk <span className="shotox-gradient-text">Shotox</span></>} subtitle="Questions, feedback, or a template request? Drop a message — we read everything." />
 
-        <div className="mt-12 flex flex-col items-center gap-8">
+        <div className="mt-8 flex flex-col items-center gap-6">
           <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
             <a href="mailto:thewodmapps@gmail.com" className="glass-card bg-[#0B0B12]/[0.03] border-black/10 text-[#0B0B12] hover:bg-[#0B0B12]/[0.06]">
               <Mail className="w-4 h-4" /> thewodmapps@gmail.com
