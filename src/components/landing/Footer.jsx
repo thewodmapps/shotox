@@ -17,6 +17,7 @@ const COLS = [
     title: 'Resources',
     links: [
       { label: 'Blog', to: '/blog' },
+      { label: 'Contact', to: '/#contact' },
       { label: 'Privacy Policy', to: '/privacy' },
       { label: 'Terms of Service', to: '/terms' },
       { label: 'Support', to: 'mailto:thewodmapps@gmail.com' },
