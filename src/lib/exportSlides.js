@@ -1,6 +1,5 @@
 import html2canvas from 'html2canvas';
 import JSZip from 'jszip';
-import { base44 } from '@/api/base44Client';
 
 export const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -199,24 +198,15 @@ const renderCanvas = async (el, device, format = 'png') => {
   }
 };
 
-// In the native Android WebView, a blob: URL + `download` attribute is handled
-// by the wrapper's download handler, which saves to the app's private directory
-// instead of public Downloads/MediaStore — so exported files never show in the
-// Files app or Gallery. Instead of a local blob URL, upload the blob to storage
-// and open the resulting real https URL with target="_blank" + rel="noopener
-// noreferrer". The native system then hands the navigation to the device's
-// default browser, whose download manager saves to public Downloads and
-// registers the file with MediaStore (so it appears in Files and Gallery).
-const triggerDownload = async (blob, filename, mime) => {
-  const file = new File([blob], filename, { type: mime });
-  const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
+const triggerDownload = (blob, filename) => {
+  const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = file_url;
-  a.target = '_blank';
-  a.rel = 'noopener noreferrer';
+  a.href = url;
+  a.download = filename;
   document.body.appendChild(a);
   a.click();
   a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
 };
 
 const canvasToBlob = (canvas, mime) =>
@@ -232,7 +222,7 @@ export async function exportSlide(el, device, filename, format = 'png', onProgre
   onProgress?.(85);
   const blob = await canvasToBlob(canvas, mime);
   onProgress?.(95);
-  await triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`, mime);
+  triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`);
   onProgress?.(100);
 }
 
@@ -254,6 +244,6 @@ export async function exportAllSlides(els, device, baseName, format = 'png', onP
   }
   onProgress?.(95);
   const blob = await zip.generateAsync({ type: 'blob' });
-  await triggerDownload(blob, `${baseName}-screenshots.zip`, 'application/zip');
+  triggerDownload(blob, `${baseName}-screenshots.zip`);
   onProgress?.(100);
 }
