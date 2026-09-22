@@ -198,7 +198,27 @@ const renderCanvas = async (el, device, format = 'png') => {
   }
 };
 
-const triggerDownload = (blob, filename) => {
+const triggerDownload = async (blob, filename, mime) => {
+  // Inside the native Android/iOS app WebView, the <a download> approach saves
+  // the blob to the app's PRIVATE storage — it never reaches the Files app or
+  // Gallery because it isn't registered with MediaStore. Routing the file
+  // through Android's native share sheet (Web Share API with files) lets the
+  // user pick "Save image" / "Save to device", which writes to PUBLIC storage
+  // and scans it into the Gallery. Falls back to the anchor download on the
+  // website (where it already works) or if sharing isn't available/cancelled.
+  const isNativeApp = document.documentElement.classList.contains('native-app');
+  if (isNativeApp && navigator.canShare) {
+    try {
+      const file = new File([blob], filename, { type: mime || blob.type });
+      if (navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file] });
+        return;
+      }
+    } catch {
+      // share unsupported, not shareable, or the user dismissed the sheet —
+      // fall through to the standard anchor download below.
+    }
+  }
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -222,7 +242,7 @@ export async function exportSlide(el, device, filename, format = 'png', onProgre
   onProgress?.(85);
   const blob = await canvasToBlob(canvas, mime);
   onProgress?.(95);
-  triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`);
+  await triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`, mime);
   onProgress?.(100);
 }
 
@@ -244,6 +264,6 @@ export async function exportAllSlides(els, device, baseName, format = 'png', onP
   }
   onProgress?.(95);
   const blob = await zip.generateAsync({ type: 'blob' });
-  triggerDownload(blob, `${baseName}-screenshots.zip`);
+  await triggerDownload(blob, `${baseName}-screenshots.zip`, 'application/zip');
   onProgress?.(100);
 }
