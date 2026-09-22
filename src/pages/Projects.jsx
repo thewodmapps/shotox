@@ -6,7 +6,6 @@ import ProjectsHeader from '@/components/projects/ProjectsHeader';
 import CreateCards from '@/components/projects/CreateCards';
 import TemplateGallery from '@/components/projects/TemplateGallery';
 import SavedDesigns from '@/components/projects/SavedDesigns';
-import WelcomeModal from '@/components/projects/WelcomeModal';
 import PullToRefresh from '@/components/PullToRefresh';
 
 export default function Projects() {
@@ -69,7 +68,6 @@ export default function Projects() {
         </div>
       </div>
       <PullToRefresh onRefresh={reloadProjects} />
-      <WelcomeModal />
     </div>
   );
 }
