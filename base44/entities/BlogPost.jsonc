@@ -1,0 +1,69 @@
+{
+  "name": "BlogPost",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Post title"
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL slug (unique)"
+    },
+    "excerpt": {
+      "type": "string",
+      "description": "Short summary for cards and meta description"
+    },
+    "content": {
+      "type": "string",
+      "description": "Full post body in Markdown"
+    },
+    "category": {
+      "type": "string",
+      "description": "e.g. ASO, App Store, Design Tools"
+    },
+    "keywords": {
+      "type": "string",
+      "description": "Comma-separated SEO keywords"
+    },
+    "cover_url": {
+      "type": "string",
+      "description": "AI-generated cover image URL (empty if generation failed)"
+    },
+    "color": {
+      "type": "string",
+      "description": "Accent hex color used as fallback cover background"
+    },
+    "read_time": {
+      "type": "string",
+      "description": "e.g. '8 minute read'"
+    },
+    "published": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "title",
+    "slug",
+    "content"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

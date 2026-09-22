@@ -6,27 +6,61 @@ import Navbar from '@/components/landing/Navbar';
 import Footer from '@/components/landing/Footer';
 import BlogCover from '@/components/blog/BlogCover';
 import BlogCard from '@/components/blog/BlogCard';
-import { getPostBySlug, getRelatedPosts } from '@/lib/blogPosts';
+import { getPostBySlug, getRelatedPosts, BLOG_POSTS } from '@/lib/blogPosts';
+import { base44 } from '@/api/base44Client';
+import { format, parseISO } from 'date-fns';
 import { Button } from '@/components/ui/button';
 
 export default function BlogPost() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const post = getPostBySlug(slug);
-  const [notFound, setNotFound] = useState(false);
+  const staticPost = getPostBySlug(slug);
+  const [post, setPost] = useState(staticPost || null);
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    if (!post) {
-      setNotFound(true);
+    let active = true;
+    setChecked(false);
+    base44.entities.BlogPost.filter({ slug, published: true }, '-created_date', 1)
+      .then((res) => {
+        if (!active) return;
+        const items = Array.isArray(res) ? res : res.items || [];
+        if (items.length) {
+          const p = items[0];
+          setPost({
+            slug: p.slug,
+            title: p.title,
+            excerpt: p.excerpt || '',
+            category: p.category || 'App Marketing',
+            date: p.created_date ? format(parseISO(p.created_date), 'MMM d, yyyy') : '',
+            readTime: p.read_time || '8 minute read',
+            color: p.color || '#7C3AED',
+            keywords: p.keywords || '',
+            content: p.content || '',
+            cover_url: p.cover_url || '',
+          });
+        } else {
+          setPost(staticPost || null);
+        }
+      })
+      .catch(() => { if (active) setPost(staticPost || null); })
+      .finally(() => { if (active) setChecked(true); });
+    return () => { active = false; };
+  }, [slug]);
+
+  const notFound = checked && !post;
+
+  useEffect(() => {
+    if (notFound) {
       document.title = 'Post Not Found — Shotox';
       return;
     }
+    if (!post) return;
     document.title = `${post.title} — Shotox Blog`;
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.setAttribute('content', post.excerpt);
     const kw = document.querySelector('meta[name="keywords"]');
     if (kw) kw.setAttribute('content', post.keywords);
-    // BlogPosting structured data for SEO
     let ld = document.getElementById('post-jsonld');
     if (!ld) {
       ld = document.createElement('script');
@@ -46,7 +80,7 @@ export default function BlogPost() {
       mainEntityOfPage: { '@type': 'WebPage', '@id': window.location.href },
     });
     window.scrollTo(0, 0);
-  }, [slug, post]);
+  }, [post, notFound]);
 
   if (notFound) {
     return (
@@ -64,7 +98,9 @@ export default function BlogPost() {
   }
 
   if (!post) return null;
-  const related = getRelatedPosts(slug, 3);
+  const related = getRelatedPosts(slug, 3).filter((p) => p.slug !== post.slug).slice(0, 3);
+  const relatedFallback = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3);
+  const relatedPosts = related.length ? related : relatedFallback;
 
   return (
     <div className="font-body bg-white">
@@ -87,7 +123,7 @@ export default function BlogPost() {
           <p className="mt-4 text-lg text-[#6b7280] leading-relaxed">{post.excerpt}</p>
 
           <div className="mt-8 rounded-2xl overflow-hidden border border-[#e5e7eb]">
-            <BlogCover color={post.color} icon={post.icon} title={post.title} />
+            <BlogCover color={post.color} icon={post.icon} title={post.title} coverUrl={post.cover_url} />
           </div>
 
           <div className="article-body mt-10 selectable-text">
@@ -103,12 +139,12 @@ export default function BlogPost() {
         </div>
       </article>
 
-      {related.length > 0 && (
+      {relatedPosts.length > 0 && (
         <section className="px-6 pb-24">
           <div className="max-w-6xl mx-auto">
             <h2 className="font-display font-bold text-[#111827] text-2xl mb-6">Keep reading</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {related.map((p, i) => (
+              {relatedPosts.map((p, i) => (
                 <BlogCard key={p.slug} post={p} index={i} />
               ))}
             </div>

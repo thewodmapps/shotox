@@ -1,0 +1,44 @@
+{
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "auto_blog_post",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "generate": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "generateBlogPost"
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Generate blog post",
+            "description": "AI writes & publishes one post"
+          }
+        }
+      }
+    ]
+  },
+  "description": "Auto-generates and publishes one SEO blog post twice a week (Monday & Thursday at 9:00 AM IST). AI picks a fresh long-tail topic, writes the article, generates a cover, and saves a published BlogPost.",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 9 * * 1,4",
+      "one_time_date": null,
+      "timezone": "Asia/Calcutta",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "name": "Auto Blog Post"
+}

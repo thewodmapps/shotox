@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Image } from '@/components/ui/image';
 
 /**
  * AppLaunchpad-style cover graphic: solid color background, white grid overlay,
@@ -8,8 +9,26 @@ import { motion } from 'framer-motion';
  */
 const TILES = ['A', 'F', 'PS', 'Ui', '<>', 'ASO', '★', '⚙', '◎', '✦'];
 
-export default function BlogCover({ color = '#7C3AED', icon: Icon, title, className = '' }) {
+export default function BlogCover({ color = '#7C3AED', icon: Icon, title, coverUrl, className = '' }) {
   const gridId = `grid-${color.replace('#', '')}`;
+
+  if (coverUrl) {
+    return (
+      <div className={`relative w-full aspect-[16/9] overflow-hidden ${className}`} style={{ background: color }}>
+        <Image src={coverUrl} alt={title || ''} fittingType="fill" className="absolute inset-0 w-full h-full" />
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
+        <div className="absolute top-3 left-3 flex items-center gap-1.5">
+          <div className="w-6 h-6 rounded-md bg-white/95 flex items-center justify-center text-[11px] font-extrabold" style={{ color }}>S</div>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 p-5">
+          <div className="text-white font-display font-bold leading-tight text-lg sm:text-xl line-clamp-3 drop-shadow-sm">
+            {title}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`relative w-full aspect-[16/9] overflow-hidden ${className}`} style={{ background: color }}>
       {/* grid overlay */}

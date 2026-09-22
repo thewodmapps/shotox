@@ -15,7 +15,7 @@ export default function BlogCard({ post, index = 0 }) {
         to={`/blog/${post.slug}`}
         className="group block bg-white rounded-2xl border border-[#e5e7eb] overflow-hidden hover:shadow-[0_20px_50px_-20px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-300"
       >
-        <BlogCover color={post.color} icon={post.icon} title={post.title} />
+        <BlogCover color={post.color} icon={post.icon} title={post.title} coverUrl={post.cover_url} />
         <div className="p-5">
           <div className="flex items-center justify-between text-xs text-[#6b7280]">
             <span className="font-medium">{post.category}</span>
