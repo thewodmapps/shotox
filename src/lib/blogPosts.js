@@ -6,6 +6,7 @@ import { EXTRA_POSTS } from './blogPostsExtra';
 import { MORE_POSTS } from './blogPostsMore';
 import { MORE_POSTS_2 } from './blogPostsMore2';
 import { NEW_POSTS } from './blogPostsMore3';
+import { DAILY_POSTS } from './blogPostsDaily';
 
 // Base set of SEO-optimized blog posts. 35 more live in blogPostsExtra.js and 50 more across blogPostsMore.js / blogPostsMore2.js (100 total).
 const BASE_POSTS = [
@@ -795,7 +796,7 @@ const LAUNCH_DAY_FOR_INDEX = (i, total) => {
   return `Sep ${12 - bucket}, 2026`;
 };
 
-const BLOG_POSTS = ALL_POSTS.map((p, i) => ({ ...p, date: LAUNCH_DAY_FOR_INDEX(i, ALL_POSTS.length) }));
+const BLOG_POSTS = [...DAILY_POSTS, ...ALL_POSTS.map((p, i) => ({ ...p, date: LAUNCH_DAY_FOR_INDEX(i, ALL_POSTS.length) }))];
 
 export { BLOG_POSTS };
 
