@@ -201,40 +201,25 @@ const renderCanvas = async (el, device, format = 'png') => {
 
 const isNativeApp = () => document.documentElement.classList.contains('native-app');
 
-// Builds a tiny self-contained preview page that Shotox uploads to public
-// storage (media.base44.com) and opens in the phone's default browser from the
-// native app. Because the page is served from the same origin as the exported
-// file, the Save button can fetch the file and trigger a real download to the
-// device's gallery — something the in-WebView download handler can't do (it
-// saves to the app's private sandbox instead of public Downloads/MediaStore).
-const buildSavePage = (fileUrl, filename, mime) => {
-  const isImage = mime.startsWith('image/');
-  const preview = isImage
-    ? `<img id="img" src=${JSON.stringify(fileUrl)} alt="screenshot">`
-    : `<div class="zip">📦<div class="zt">Your file is ready</div></div>`;
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Save ${filename}</title><style>*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}html,body{height:100%;background:#0B0B12;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}.bar{position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:flex-end;padding:6px 12px;padding-top:max(env(safe-area-inset-top),12px);background:rgba(11,11,18,.92);backdrop-filter:blur(8px);z-index:10;border-bottom:1px solid rgba(255,255,255,.08)}.save{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 20px;border-radius:12px;background:#fff;color:#0B0B12;font-weight:700;font-size:15px;border:none;cursor:pointer}.save:disabled{opacity:.7}.stage{min-height:100%;display:flex;align-items:center;justify-content:center;padding:68px 14px 28px}img{max-width:100%;max-height:76vh;border-radius:14px;box-shadow:0 12px 44px rgba(0,0,0,.55)}.zip{display:flex;flex-direction:column;align-items:center;gap:14px;font-size:46px}.zt{font-size:16px;color:rgba(255,255,255,.85)}.hint{text-align:center;color:rgba(255,255,255,.55);font-size:13px;margin-top:16px}</style></head><body><div class="bar"><button id="save" class="save">⬇ Save</button></div><div class="stage"><div>${preview}<div class="hint">Tap Save to download to your gallery.</div></div></div><script>const b=document.getElementById('save');b.addEventListener('click',async()=>{b.disabled=true;const t=b.textContent;b.textContent='Saving…';try{const r=await fetch(${JSON.stringify(fileUrl)});if(!r.ok)throw 0;const bl=await r.blob();const u=URL.createObjectURL(bl);const a=document.createElement('a');a.href=u;a.download=${JSON.stringify(filename)};document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),5000);b.textContent='Saved ✓';setTimeout(()=>{b.disabled=false;b.textContent=t;},1500);}catch(e){b.disabled=false;b.textContent=t;alert('Could not save automatically. Long-press the image and choose Save image.');}});</script></body></html>`;
-};
-
 // Website (real browser): a blob URL + `download` attribute saves directly to the
 // user's Downloads folder via the browser's download manager.
 //
 // Native Android/iOS WebView: the `download` attribute + blob URL is handled by
 // the wrapper, which saves to the app's private directory (not visible in Files
-// or Gallery). So instead we upload the file, build a small preview page hosted on
-// the same origin, and return that page's URL — the in-app modal opens it in the
-// phone's default browser, where its Save button fetches the file (same-origin)
-// and downloads it to public Downloads / Gallery.
+// or Gallery). So instead we upload the blob to storage and navigate the page to
+// the real https URL. A top-level navigation to an external URL is intercepted by
+// the native system and handed to the device's default browser, whose download
+// manager saves to public Downloads and registers the file with MediaStore (so it
+// appears in Files and Gallery).
 const triggerDownload = async (blob, filename, mime) => {
   if (isNativeApp()) {
     const file = new File([blob], filename, { type: mime });
     const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
-    // Build + upload a preview page (same origin as the file) whose Save button
-    // forces a real download to the gallery, then return that page's URL.
-    const html = buildSavePage(file_url, filename, mime);
-    const { file_url: pageUrl } = await base44.integrations.Core.UploadPublicFile({
-      file: new File([new Blob([html], { type: 'text/html' })], 'save.html', { type: 'text/html' })
-    });
-    return pageUrl;
+    // Native: return the public URL so the UI can show an "open in browser"
+    // prompt the user taps (a real user gesture) — the native system then hands
+    // the navigation to the phone's default browser, which downloads to public
+    // Downloads / Gallery.
+    return file_url;
   }
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
