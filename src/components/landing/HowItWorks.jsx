@@ -38,9 +38,9 @@ export default function HowItWorks() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-violet-200/40 blur-[120px] pointer-events-none" />
       <div className="max-w-6xl mx-auto relative">
         <SectionHeading align="center" eyebrow="How it works" title="From screenshot to store in four steps" subtitle="No design skills, no Photoshop, no friction — just a clean path from raw screenshot to store-ready artwork." className="mb-16" />
-        <div className="relative grid md:grid-cols-4 gap-6">
+        <div className="relative grid md:grid-cols-4 gap-10 md:gap-6">
           {/* connecting line on desktop */}
-          <div className="hidden md:block absolute top-[2.75rem] left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-200 to-transparent" />
+          <div className="hidden md:block absolute top-6 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-300 to-transparent" />
           {STEPS.map((s, i) => (
             <motion.div
               key={s.n}
@@ -48,16 +48,19 @@ export default function HowItWorks() {
               whileInView={reduce ? {} : { opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="relative rounded-3xl p-6 bg-gradient-to-br from-violet-50 to-pink-50 border border-violet-100/60"
+              className="relative text-center md:text-left"
             >
-              <div className="flex items-center justify-between mb-5">
-                <div className="w-12 h-12 rounded-2xl grid place-items-center bg-[#0B0B12] text-white shadow-[0_14px_30px_-12px_rgba(11,11,18,0.5)]">
-                  <s.icon className="w-6 h-6" />
+              <div className="relative inline-flex md:flex items-center justify-center mb-5">
+                <div className="w-12 h-12 rounded-full grid place-items-center bg-white border border-violet-200 text-violet-600 shadow-[0_8px_24px_-12px_rgba(124,58,237,0.4)]">
+                  <s.icon className="w-5 h-5" />
                 </div>
-                <span className="font-display text-3xl font-bold text-violet-200">{s.n}</span>
+                <span className="absolute -top-3 -right-3 md:relative md:top-auto md:right-auto md:ml-auto font-display text-xs font-bold text-white bg-violet-600 rounded-full px-2 py-0.5 md:hidden">{s.n}</span>
               </div>
-              <h3 className="font-display font-semibold text-lg mb-2 text-[#0B0B12]">{s.title}</h3>
-              <p className="text-sm text-[#0B0B12]/60 leading-relaxed">{s.text}</p>
+              <div className="flex items-center gap-2 justify-center md:justify-start mb-1.5">
+                <span className="font-display text-xs font-bold text-violet-500 tracking-widest hidden md:inline">{s.n}</span>
+                <h3 className="font-display font-semibold text-lg text-[#0B0B12]">{s.title}</h3>
+              </div>
+              <p className="text-sm text-[#0B0B12]/60 leading-relaxed max-w-[15rem] mx-auto md:mx-0">{s.text}</p>
             </motion.div>
           ))}
         </div>
