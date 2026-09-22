@@ -245,7 +245,7 @@ export async function exportSlide(el, device, filename, format = 'png', onProgre
   if (isNativeApp()) {
     const dataUrl = await blobToDataUrl(blob);
     onProgress?.(100);
-    return { images: [{ dataUrl, filename: fname }] };
+    return { images: [{ dataUrl, filename: fname, mime }] };
   }
   triggerDownload(blob, fname);
   onProgress?.(100);
@@ -267,7 +267,7 @@ export async function exportAllSlides(els, device, baseName, format = 'png', onP
       onProgress?.((i / total) * 100);
       const canvas = await renderCanvas(el, device, format);
       const blob = await canvasToBlob(canvas, mime);
-      images.push({ dataUrl: await blobToDataUrl(blob), filename: `${i + 1}.${ext}` });
+      images.push({ dataUrl: await blobToDataUrl(blob), filename: `${i + 1}.${ext}`, mime });
       await wait(0);
     }
     onProgress?.(100);
