@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { LayoutTemplate, CloudUpload, SlidersHorizontal, Download } from 'lucide-react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import SectionHeading from './SectionHeading';
 
 const STEPS = [
   {
@@ -36,11 +37,7 @@ export default function HowItWorks() {
     <section id="how-it-works" className="py-24 px-6 bg-white relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-violet-200/40 blur-[120px] pointer-events-none" />
       <div className="max-w-6xl mx-auto relative">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="text-sm font-medium text-violet-600 mb-3">How it works</p>
-          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-[#0B0B12]">From screenshot to store in four steps</h2>
-          <p className="mt-4 text-[#0B0B12]/60 leading-relaxed">No design skills, no Photoshop, no friction — just a clean path from raw screenshot to store-ready artwork.</p>
-        </div>
+        <SectionHeading align="center" eyebrow="How it works" title="From screenshot to store in four steps" subtitle="No design skills, no Photoshop, no friction — just a clean path from raw screenshot to store-ready artwork." className="mb-16" />
         <div className="relative grid md:grid-cols-4 gap-6">
           {/* connecting line on desktop */}
           <div className="hidden md:block absolute top-[2.75rem] left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-200 to-transparent" />

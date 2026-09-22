@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, MessageCircle, MapPin, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import SectionHeading from './SectionHeading';
 
 export default function Contact() {
   const [name, setName] = useState('');
@@ -17,15 +18,7 @@ export default function Contact() {
   return (
     <section id="contact" className="relative py-20 sm:py-28 bg-white">
       <div className="mx-auto max-w-5xl px-4">
-        <div className="text-center max-w-2xl mx-auto">
-          <span className="inline-block rounded-full bg-[#0B0B12]/5 px-3 py-1 text-xs font-medium text-[#0B0B12]/70">Contact</span>
-          <h2 className="mt-4 font-display text-3xl sm:text-5xl font-bold tracking-tight text-[#0B0B12]">
-            Let's talk <span className="shotox-gradient-text">Shotox</span>
-          </h2>
-          <p className="mt-4 text-[#0B0B12]/60 text-base sm:text-lg">
-            Questions, feedback, or a template request? Drop a message — we read everything.
-          </p>
-        </div>
+        <SectionHeading align="center" eyebrow="Contact" title={<>Let's talk <span className="shotox-gradient-text">Shotox</span></>} subtitle="Questions, feedback, or a template request? Drop a message — we read everything." />
 
         <div className="mt-12 flex flex-col items-center gap-8">
           <div className="flex flex-wrap justify-center gap-3 sm:gap-4">

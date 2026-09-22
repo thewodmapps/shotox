@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import SectionHeading from './SectionHeading';
 
 const FAQS = [
   { q: 'Is Shotox really free?', a: 'Yes — Shotox is completely free right now. Every device size, every template, AI copywriting, and watermark-free export are all unlocked at no cost. No credit card, no subscription, no hidden fees.' },
@@ -17,10 +18,9 @@ const FAQS = [
 export default function FaqSection() {
   const [open, setOpen] = useState(0);
   return (
-    <section id="faq" className="bg-white py-24 px-6">
+    <section id="faq" className="bg-[#FAFAFC] py-24 px-6">
       <div className="max-w-3xl mx-auto">
-        <h2 className="font-display font-bold tracking-[-0.03em] text-[#111827] text-3xl sm:text-4xl text-center">Frequently asked questions</h2>
-        <p className="mt-3 text-[#6b7280] text-center">Everything you need to know about creating app screenshots with Shotox.</p>
+        <SectionHeading align="center" eyebrow="FAQs" title="Frequently asked questions" subtitle="Everything you need to know about creating app screenshots with Shotox." />
         <div className="mt-10 space-y-3">
           {FAQS.map((f, i) => (
             <div key={i} className="border border-[#e5e7eb] rounded-2xl overflow-hidden bg-white">

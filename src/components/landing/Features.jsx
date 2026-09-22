@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Smartphone, LayoutTemplate, Download, Palette, Layers, Wand2 } from 'lucide-react';
+import SectionHeading from './SectionHeading';
 
 const FEATURES = [
   { icon: Wand2, title: 'AI copywriting', text: 'AI writes high-converting headlines & subheadings tailored to your app category — never start from a blank page.', ai: true },
@@ -15,11 +16,7 @@ export default function Features() {
   return (
     <section id="features" className="py-24 px-6 bg-[#FAFAFC]">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <p className="text-sm font-medium text-violet-600 mb-3">Everything you need</p>
-          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-[#0B0B12]">From raw screenshot to store-ready in minutes</h2>
-          <p className="mt-4 text-[#0B0B12]/60 leading-relaxed">Shotox pairs AI with designer-grade templates — describe your app and let AI draft the marketing copy, then fine-tune every detail and export pixel-perfect screenshots.</p>
-        </div>
+        <SectionHeading align="center" eyebrow="Everything you need" title="From raw screenshot to store-ready in minutes" subtitle="Shotox pairs AI with designer-grade templates — describe your app and let AI draft the marketing copy, then fine-tune every detail and export pixel-perfect screenshots." className="mb-14" />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {FEATURES.map((f, i) => (
             <motion.div key={f.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06, duration: 0.5 }} className={`group rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1 ${f.ai ? 'bg-gradient-to-br from-violet-600 to-pink-600 text-white border border-transparent shadow-[0_30px_70px_-25px_rgba(236,72,153,0.5)]' : 'bg-white border border-black/5 hover:shadow-[0_20px_60px_-20px_rgba(124,58,237,0.25)]'}`}>
