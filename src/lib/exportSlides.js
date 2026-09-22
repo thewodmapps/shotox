@@ -199,24 +199,33 @@ const renderCanvas = async (el, device, format = 'png') => {
   }
 };
 
-// In the native Android WebView, a blob: URL + `download` attribute is handled
-// by the wrapper's download handler, which saves to the app's private directory
-// instead of public Downloads/MediaStore — so exported files never show in the
-// Files app or Gallery. Instead of a local blob URL, upload the blob to storage
-// and open the resulting real https URL with target="_blank" + rel="noopener
-// noreferrer". The native system then hands the navigation to the device's
-// default browser, whose download manager saves to public Downloads and
-// registers the file with MediaStore (so it appears in Files and Gallery).
+const isNativeApp = () => document.documentElement.classList.contains('native-app');
+
+// Website (real browser): a blob URL + `download` attribute saves directly to the
+// user's Downloads folder via the browser's download manager.
+//
+// Native Android/iOS WebView: the `download` attribute + blob URL is handled by
+// the wrapper, which saves to the app's private directory (not visible in Files
+// or Gallery). So instead we upload the blob to storage and navigate the page to
+// the real https URL. A top-level navigation to an external URL is intercepted by
+// the native system and handed to the device's default browser, whose download
+// manager saves to public Downloads and registers the file with MediaStore (so it
+// appears in Files and Gallery).
 const triggerDownload = async (blob, filename, mime) => {
-  const file = new File([blob], filename, { type: mime });
-  const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
+  if (isNativeApp()) {
+    const file = new File([blob], filename, { type: mime });
+    const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
+    window.location.href = file_url;
+    return;
+  }
+  const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = file_url;
-  a.target = '_blank';
-  a.rel = 'noopener noreferrer';
+  a.href = url;
+  a.download = filename;
   document.body.appendChild(a);
   a.click();
   a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
 };
 
 const canvasToBlob = (canvas, mime) =>
