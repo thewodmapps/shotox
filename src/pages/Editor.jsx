@@ -5,6 +5,7 @@ import { base44 } from '@/api/base44Client';
 import { makeId, resolveDevice, getTemplate, makeSlide, solid, DEVICES } from '@/lib/templates';
 import { exportSlide, exportAllSlides, wait } from '@/lib/exportSlides';
 import ExportOverlay from '@/components/editor/ExportOverlay';
+import NativeDownloadModal from '@/components/editor/NativeDownloadModal';
 import EditorTopbar from '@/components/editor/EditorTopbar';
 import EditorRail from '@/components/editor/EditorRail';
 import EditorPanel from '@/components/editor/EditorPanel';
@@ -26,6 +27,7 @@ export default function Editor() {
   const [exporting, setExporting] = useState(false);
   const [exportPct, setExportPct] = useState(0);
   const [showShare, setShowShare] = useState(false);
+  const [downloadUrl, setDownloadUrl] = useState(null);
   const [undo, setUndo] = useState(null);
   const dirty = useRef(false);
   const exportRefs = useRef([]);
@@ -316,16 +318,20 @@ export default function Editor() {
       }, 250);
     }
     try {
+      let result = null;
       if (which === 'all') {
         const els = project.slides.map((_, i) => exportRefs.current[i]).filter(Boolean);
         if (!els.length) throw new Error('Nothing to export yet.');
-        await exportAllSlides(els, device, base, format, onProgress);
+        result = await exportAllSlides(els, device, base, format, onProgress);
       } else {
         if (!exportRefs.current[sel]) throw new Error('Nothing to export yet.');
-        await exportSlide(exportRefs.current[sel], device, String(sel + 1), format, onProgress);
+        result = await exportSlide(exportRefs.current[sel], device, String(sel + 1), format, onProgress);
       }
       exportTarget.current = 100;
       await wait(400);
+      // Native WebView: the export was uploaded to storage — surface a prompt the
+      // user taps to open the file in their phone's default browser.
+      if (result) setDownloadUrl(result);
     } catch (e) {
       toast({ title: 'Export failed', description: e?.message || 'Could not render the screenshot. Please try again.', variant: 'destructive' });
     } finally {
@@ -366,6 +372,7 @@ export default function Editor() {
         ))}
       </div>
       {exporting && <ExportOverlay pct={exportPct} />}
+      <NativeDownloadModal url={downloadUrl} onClose={() => setDownloadUrl(null)} />
       <ShareModal open={showShare} title={project.name} projectId={project.id} onClose={() => setShowShare(false)} />
     </div>
   );

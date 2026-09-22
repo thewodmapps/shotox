@@ -215,8 +215,11 @@ const triggerDownload = async (blob, filename, mime) => {
   if (isNativeApp()) {
     const file = new File([blob], filename, { type: mime });
     const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
-    window.location.href = file_url;
-    return;
+    // Native: return the public URL so the UI can show an "open in browser"
+    // prompt the user taps (a real user gesture) — the native system then hands
+    // the navigation to the phone's default browser, which downloads to public
+    // Downloads / Gallery.
+    return file_url;
   }
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -226,6 +229,7 @@ const triggerDownload = async (blob, filename, mime) => {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 2000);
+  return null; // website: download already triggered
 };
 
 const canvasToBlob = (canvas, mime) =>
@@ -241,8 +245,9 @@ export async function exportSlide(el, device, filename, format = 'png', onProgre
   onProgress?.(85);
   const blob = await canvasToBlob(canvas, mime);
   onProgress?.(95);
-  await triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`, mime);
+  const result = await triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`, mime);
   onProgress?.(100);
+  return result;
 }
 
 export async function exportAllSlides(els, device, baseName, format = 'png', onProgress) {
@@ -263,6 +268,7 @@ export async function exportAllSlides(els, device, baseName, format = 'png', onP
   }
   onProgress?.(95);
   const blob = await zip.generateAsync({ type: 'blob' });
-  await triggerDownload(blob, `${baseName}-screenshots.zip`, 'application/zip');
+  const result = await triggerDownload(blob, `${baseName}-screenshots.zip`, 'application/zip');
   onProgress?.(100);
+  return result;
 }
