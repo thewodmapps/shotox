@@ -6,6 +6,7 @@ import Features from '@/components/landing/Features';
 import TemplateShowcase from '@/components/landing/TemplateShowcase';
 import BlogSection from '@/components/landing/BlogSection';
 import FaqSection from '@/components/landing/FaqSection';
+import Contact from '@/components/landing/Contact';
 import Footer from '@/components/landing/Footer';
 import PullToRefresh from '@/components/PullToRefresh';
 
@@ -20,6 +21,7 @@ export default function Home() {
       <TemplateShowcase />
       <BlogSection />
       <FaqSection />
+      <Contact />
       <Footer />
     </div>
   );
