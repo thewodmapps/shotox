@@ -198,22 +198,7 @@ const renderCanvas = async (el, device, format = 'png') => {
   }
 };
 
-// Mobile OS security silently blocks direct blob downloads via <a download>.
-// When the Web Share API can share the file (mobile browsers/WebViews), open the
-// native share sheet so the user can "Save Image" to their gallery / "Save to
-// Files". On desktop (no canShare support) fall back to createObjectURL + anchor.
-const triggerDownload = async (blob, filename) => {
-  const file = new File([blob], filename, { type: blob.type || 'application/octet-stream' });
-  if (typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({ files: [file] });
-      return;
-    } catch (err) {
-      // User dismissed the share sheet — nothing more to do; a silent anchor
-      // download would fail on mobile anyway.
-      if (err && err.name === 'AbortError') return;
-    }
-  }
+const triggerDownload = (blob, filename) => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -237,7 +222,7 @@ export async function exportSlide(el, device, filename, format = 'png', onProgre
   onProgress?.(85);
   const blob = await canvasToBlob(canvas, mime);
   onProgress?.(95);
-  await triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`);
+  triggerDownload(blob, `${filename}.${format === 'jpeg' ? 'jpg' : 'png'}`);
   onProgress?.(100);
 }
 
@@ -259,6 +244,6 @@ export async function exportAllSlides(els, device, baseName, format = 'png', onP
   }
   onProgress?.(95);
   const blob = await zip.generateAsync({ type: 'blob' });
-  await triggerDownload(blob, `${baseName}-screenshots.zip`);
+  triggerDownload(blob, `${baseName}-screenshots.zip`);
   onProgress?.(100);
 }
