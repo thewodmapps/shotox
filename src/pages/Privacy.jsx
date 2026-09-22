@@ -11,7 +11,7 @@ export default function Privacy() {
         <p className="mt-3 text-sm text-[#0B0B12]/45">Last updated September 22, 2026</p>
 
         <div className="article-body max-w-none mt-8">
-          <p>Shotox ("we", "us", "our") operates the free app screenshot generator at <a href="https://shotox.base44.app">shotox.base44.app</a>. This Privacy Policy explains what information we collect and how we use it.</p>
+          <p>Shotox ("we", "us", "our") operates the free app screenshot generator at <a href="https://shotox.in">shotox.in</a>. This Privacy Policy explains what information we collect and how we use it.</p>
 
           <h2>Information we collect</h2>
           <p>When you create an account we collect your email address. When you create projects we store the designs, uploaded screenshots, and export settings you provide. We do not sell your data to third parties.</p>

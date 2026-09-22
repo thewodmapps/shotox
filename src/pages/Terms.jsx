@@ -11,7 +11,7 @@ export default function Terms() {
         <p className="mt-3 text-sm text-[#0B0B12]/45">Last updated September 22, 2026</p>
 
         <div className="article-body max-w-none mt-8">
-          <p>By using Shotox, the free app screenshot generator at <a href="https://shotox.base44.app">shotox.base44.app</a>, you agree to these Terms. If you do not agree, do not use the service.</p>
+          <p>By using Shotox, the free app screenshot generator at <a href="https://shotox.in">shotox.in</a>, you agree to these Terms. If you do not agree, do not use the service.</p>
 
           <h2>Your account</h2>
           <p>You are responsible for keeping your account credentials secure and for all activity under your account. You must be at least 13 years old to use the service.</p>
