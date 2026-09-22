@@ -69,7 +69,7 @@ export default function BlogPost() {
   return (
     <div className="font-body bg-white">
       <Navbar />
-      <article className="pt-36 pb-16 px-6">
+      <article className="pt-28 pb-16 px-6">
         <div className="max-w-3xl mx-auto">
           <button onClick={() => navigate('/blog')} className="inline-flex items-center gap-1.5 text-sm text-[#6b7280] hover:text-[#7C3AED] transition-colors mb-10 selectable-text">
             <ArrowLeft className="w-4 h-4" /> All posts
