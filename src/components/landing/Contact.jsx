@@ -27,8 +27,8 @@ export default function Contact() {
           </p>
         </div>
 
-        <div className="mt-12 grid lg:grid-cols-5 gap-8">
-          <div className="lg:col-span-2 flex flex-col gap-4">
+        <div className="mt-12 flex flex-col items-center gap-8">
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
             <a href="mailto:thewodmapps@gmail.com" className="glass-card bg-[#0B0B12]/[0.03] border-black/10 text-[#0B0B12] hover:bg-[#0B0B12]/[0.06]">
               <Mail className="w-4 h-4" /> thewodmapps@gmail.com
             </a>
@@ -40,7 +40,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="lg:col-span-3 rounded-3xl bg-[#0B0B12]/[0.03] border border-black/10 p-6 sm:p-8 flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="w-full max-w-2xl rounded-3xl bg-[#0B0B12]/[0.03] border border-black/10 p-6 sm:p-8 flex flex-col gap-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <input
                 value={name}

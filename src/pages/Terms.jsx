@@ -8,10 +8,10 @@ export default function Terms() {
       <Navbar />
       <div className="max-w-3xl mx-auto px-6 pt-32 pb-20">
         <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#0B0B12]">Terms of Service</h1>
-        <p className="mt-3 text-sm text-[#0B0B12]/45">Last updated September 10, 2026</p>
+        <p className="mt-3 text-sm text-[#0B0B12]/45">Last updated September 22, 2026</p>
 
         <div className="article-body max-w-none mt-8">
-          <p>By using Shotox you agree to these Terms. If you do not agree, do not use the service.</p>
+          <p>By using Shotox, the free app screenshot generator at <a href="https://shotox.base44.app">shotox.base44.app</a>, you agree to these Terms. If you do not agree, do not use the service.</p>
 
           <h2>Your account</h2>
           <p>You are responsible for keeping your account credentials secure and for all activity under your account. You must be at least 13 years old to use the service.</p>
@@ -35,7 +35,7 @@ export default function Terms() {
           <p>We may update these Terms from time to time. Material changes will be communicated through the app or by email.</p>
 
           <h2>Contact</h2>
-          <p>For questions about these Terms, contact us at <a href="mailto:thewodmapps@gmail.com">thewodmapps@gmail.com</a>.</p>
+          <p>For questions about these Terms, email us at <a href="mailto:thewodmapps@gmail.com">thewodmapps@gmail.com</a> or use the contact form on our home page.</p>
         </div>
       </div>
       <Footer />
