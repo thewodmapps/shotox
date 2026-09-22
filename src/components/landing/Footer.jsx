@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Linkedin, Youtube, Globe, Play } from 'lucide-react';
+import { Linkedin, Youtube, Globe } from 'lucide-react';
 import { Brand } from '@/components/Logo';
-
-const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.base6aa0ad9172db932d1d29336b.app';
 
 const COLS = [
   {
@@ -40,15 +38,6 @@ export default function Footer() {
           <div className="col-span-2">
             <Brand to="/" size={28} textClass="text-white" />
             <p className="mt-4 text-sm max-w-sm leading-relaxed">Create beautiful, customized app screenshots for the Apple App Store & Google Play — in minutes, not days.</p>
-            <a
-              href={PLAY_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hide-in-native-app inline-flex items-center gap-2 rounded-xl bg-white text-[#0B0B12] px-4 h-11 text-sm font-semibold hover:bg-white/90 transition-colors mt-5 w-fit"
-            >
-              <Play className="w-4 h-4 fill-current" />
-              Get it on Google Play
-            </a>
             <div className="flex items-center gap-3 mt-5">
               {SOCIAL.map((s) => (
                 <a key={s.label} href={s.href} target="_blank" rel="noreferrer" aria-label={s.label} className="w-11 h-11 rounded-xl grid place-items-center bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
