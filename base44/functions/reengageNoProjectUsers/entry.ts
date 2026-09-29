@@ -5,6 +5,8 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.52';
 // re-engagement email each. Runs as the service role (no user auth).
 const CAMPAIGN = 'no_project_d2';
 const DAY_MS = 24 * 60 * 60 * 1000;
+const LOGO_URL = 'https://media.base44.com/images/public/6aa0ad9172db932d1d29336b/b3e63b968_shotox.png';
+const YEAR = new Date().getFullYear();
 
 export default async function(req) {
   try {
@@ -47,29 +49,44 @@ export default async function(req) {
         const subject = `${first}, your first app screenshots are 2 minutes away`;
         const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#08080d;font-family:Inter,Arial,sans-serif;color:#0B0B12;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#08080d;padding:32px 16px;">
+<body style="margin:0;padding:0;background:#08080d;font-family:Inter,Segoe UI,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#08080d;padding:32px 16px 48px;">
     <tr><td align="center">
-      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:20px;overflow:hidden;">
-        <tr><td style="padding:40px 40px 8px 40px;">
-          <div style="font-size:22px;font-weight:800;color:#0B0B12;letter-spacing:-0.02em;">Shotox</div>
+      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:24px;overflow:hidden;box-shadow:0 20px 60px -20px rgba(0,0,0,0.5);">
+        <tr><td style="padding:28px 40px 18px;">
+          <table cellpadding="0" cellspacing="0"><tr>
+            <td style="vertical-align:middle;"><img src="${LOGO_URL}" width="36" height="36" alt="Shotox" style="display:block;border-radius:10px;"></td>
+            <td style="vertical-align:middle;padding-left:10px;font-size:20px;font-weight:800;color:#0B0B12;letter-spacing:-0.02em;">Shotox</td>
+          </tr></table>
         </td></tr>
-        <tr><td style="padding:8px 40px 0 40px;">
+        <tr><td style="padding:0 40px 20px;">
+          <table cellpadding="0" cellspacing="0" style="width:48px;border-collapse:separate;"><tr>
+            <td style="background:#c4b5fd;height:3px;width:16px;"></td>
+            <td style="background:#f472b6;height:3px;width:16px;"></td>
+            <td style="background:#fdba74;height:3px;width:16px;"></td>
+          </tr></table>
+        </td></tr>
+        <tr><td style="padding:4px 40px 0;">
           <h1 style="margin:0 0 12px;font-size:26px;font-weight:800;color:#0B0B12;letter-spacing:-0.02em;line-height:1.2;">You signed up but haven't made a screenshot yet</h1>
-          <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:rgba(11,11,18,0.7);">Hi ${first}, your Shotox account is ready and waiting. Turn a plain screenshot into store-ready artwork in under two minutes — 3D device frames, AI headlines, one-click export. Free, no watermarks.</p>
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:rgba(11,11,18,0.7);">Hi ${first}, your Shotox account is ready and waiting. Turn a plain screenshot into store-ready artwork in under two minutes — 3D device frames, AI headlines, one-click export. Free, no watermarks.</p>
         </td></tr>
-        <tr><td style="padding:8px 40px 24px 40px;">
+        <tr><td style="padding:8px 40px 24px;">
           <a href="https://shotox.in/projects" style="display:inline-block;background:#0B0B12;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;padding:14px 28px;border-radius:12px;">Start your first design →</a>
         </td></tr>
-        <tr><td style="padding:0 40px 16px 40px;">
+        <tr><td style="padding:0 40px 16px;">
           <p style="margin:0 0 6px;font-size:13px;font-weight:700;color:#0B0B12;">In a rush? Three taps:</p>
-          <p style="margin:0;font-size:14px;line-height:1.6;color:rgba(11,11,18,0.7);">1. Pick a template<br>2. Drop in your screenshot<br>3. Export PNG/JPEG</p>
+          <p style="margin:0;font-size:14px;line-height:1.7;color:rgba(11,11,18,0.7);">1. Pick a template<br>2. Drop in your screenshot<br>3. Export PNG/JPEG</p>
         </td></tr>
-        <tr><td style="padding:8px 40px 36px 40px;">
-          <p style="margin:0;font-size:13px;line-height:1.6;color:rgba(11,11,18,0.5);">Need ideas? Browse <a href="https://shotox.in/blog" style="color:#7c3aed;text-decoration:underline;">ASO & screenshot design tips</a> on our blog.</p>
+        <tr><td style="padding:8px 40px 32px;">
+          <p style="margin:0;font-size:13px;line-height:1.6;color:rgba(11,11,18,0.5);">Need ideas? Browse <a href="https://shotox.in/blog" style="color:#7c3aed;text-decoration:underline;">ASO &amp; screenshot design tips</a> on our blog.</p>
         </td></tr>
       </table>
-      <p style="margin:16px 0 0;font-size:12px;color:rgba(255,255,255,0.4);">© ${new Date().getFullYear()} Shotox · India · Worldwide</p>
+      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;margin-top:16px;">
+        <tr><td style="padding:0 8px;">
+          <p style="margin:0 0 8px;font-size:12px;color:rgba(255,255,255,0.5);">You received this email because you signed up for Shotox.</p>
+          <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.4);">© ${YEAR} Shotox · India · Worldwide · <a href="https://shotox.in" style="color:rgba(255,255,255,0.6);text-decoration:underline;">shotox.in</a></p>
+        </td></tr>
+      </table>
     </td></tr>
   </table>
 </body></html>`;
