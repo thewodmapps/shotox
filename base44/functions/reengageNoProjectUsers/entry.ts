@@ -49,10 +49,10 @@ export default async function(req) {
         const subject = `${first}, your first app screenshots are 2 minutes away`;
         const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#08080d;font-family:Inter,Segoe UI,Arial,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#08080d;padding:32px 16px 48px;">
+<body style="margin:0;padding:0;background:#f4f4f5;font-family:Inter,Segoe UI,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:32px 16px 48px;">
     <tr><td align="center">
-      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:24px;overflow:hidden;box-shadow:0 20px 60px -20px rgba(0,0,0,0.5);">
+      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:20px;overflow:hidden;border:1px solid rgba(0,0,0,0.06);box-shadow:0 12px 40px -16px rgba(0,0,0,0.18);">
         <tr><td style="padding:28px 40px 18px;">
           <table cellpadding="0" cellspacing="0"><tr>
             <td style="vertical-align:middle;"><img src="${LOGO_URL}" width="36" height="36" alt="Shotox" style="display:block;border-radius:10px;"></td>
@@ -83,8 +83,8 @@ export default async function(req) {
       </table>
       <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;margin-top:16px;">
         <tr><td style="padding:0 8px;">
-          <p style="margin:0 0 8px;font-size:12px;color:rgba(255,255,255,0.5);">You received this email because you signed up for Shotox.</p>
-          <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.4);">© ${YEAR} Shotox · India · Worldwide · <a href="https://shotox.in" style="color:rgba(255,255,255,0.6);text-decoration:underline;">shotox.in</a></p>
+          <p style="margin:0 0 8px;font-size:12px;color:rgba(11,11,18,0.5);">You received this email because you signed up for Shotox.</p>
+          <p style="margin:0;font-size:12px;color:rgba(11,11,18,0.4);">© ${YEAR} Shotox · India · Worldwide · <a href="https://shotox.in" style="color:rgba(11,11,18,0.7);text-decoration:underline;">shotox.in</a></p>
         </td></tr>
       </table>
     </td></tr>
