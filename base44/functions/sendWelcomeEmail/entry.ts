@@ -21,6 +21,19 @@ export default async function(req) {
     if (!users || users.length === 0) {
       return Response.json({ error: 'User not found' }, { status: 404 });
     }
+    const user = users[0];
+    const logKey = String(user.id || user_id || '');
+
+    // Idempotent: send the welcome exactly once per user.
+    if (logKey) {
+      const prior = await base44.asServiceRole.entities.EmailLog.filter({
+        user_id: logKey,
+        campaign: 'welcome'
+      });
+      if (prior && prior.length > 0) {
+        return Response.json({ ok: true, skipped: 'already_sent', user_id: logKey });
+      }
+    }
 
     const first = full_name ? full_name.split(' ')[0] : 'there';
 
@@ -79,7 +92,15 @@ Tips on our blog: https://shotox.in/blog
       text
     });
 
-    return Response.json({ ok: true, sent_to: email, user_id });
+    if (logKey) {
+      await base44.asServiceRole.entities.EmailLog.create({
+        user_id: logKey,
+        email,
+        campaign: 'welcome'
+      });
+    }
+
+    return Response.json({ ok: true, sent_to: email, user_id: logKey || user_id });
   } catch (error) {
     return Response.json({ error: error.message || String(error) }, { status: 500 });
   }

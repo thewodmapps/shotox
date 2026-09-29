@@ -1,14 +1,16 @@
 {
+  "name": "Welcome Email On Signup",
+  "description": "Sends a welcome email exactly once to each app user \u2014 fires on signup, and on login as a catch-up for users who signed up before the workflow existed. Dedup via EmailLog (campaign 'welcome').",
   "trigger": {
     "condition": null,
     "config": {
       "trigger_type": "app_user_auth",
       "events": [
-        "signup"
+        "signup",
+        "login"
       ]
     }
   },
-  "name": "Welcome Email On Signup",
   "definition": {
     "document": {
       "dsl": "1.0.0",
@@ -36,6 +38,5 @@
         }
       }
     ]
-  },
-  "description": "Sends a welcome email to every newly registered app user with a link to the editor and a quick-start guide"
+  }
 }
