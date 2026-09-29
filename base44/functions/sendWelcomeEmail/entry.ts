@@ -12,7 +12,7 @@ function emailShell(opts) {
 <body style="margin:0;padding:0;background:#f4f4f5;font-family:Inter,Segoe UI,Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:32px 16px 48px;">
     <tr><td align="center">
-      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:28px;overflow:hidden;border:1px solid rgba(0,0,0,0.06);box-shadow:0 12px 40px -16px rgba(0,0,0,0.18);">
+      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:20px;overflow:hidden;border:1px solid rgba(0,0,0,0.06);box-shadow:0 12px 40px -16px rgba(0,0,0,0.18);">
         <tr><td style="padding:28px 40px 18px;">
           <table cellpadding="0" cellspacing="0"><tr>
             <td style="vertical-align:middle;"><img src="${LOGO_URL}" width="36" height="36" alt="Shotox" style="display:block;border-radius:10px;"></td>
