@@ -1,0 +1,44 @@
+{
+  "name": "EmailLog",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "App user id the campaign email was sent to"
+    },
+    "email": {
+      "type": "string",
+      "description": "Recipient email (snapshot at send time)"
+    },
+    "campaign": {
+      "type": "string",
+      "description": "Campaign identifier, e.g. no_project_d2"
+    }
+  },
+  "required": [
+    "user_id",
+    "campaign"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

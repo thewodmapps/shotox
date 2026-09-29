@@ -1,0 +1,45 @@
+{
+  "name": "Re-engage No-Project Users",
+  "description": "Daily at 10:00 AM IST \u2014 emails users who signed up 2\u20134 days ago but never created a screenshot project. Each user is nudged at most once via the EmailLog dedup.",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 10 * * *",
+      "one_time_date": null,
+      "timezone": "Asia/Calcutta",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "reengage_no_project_users",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "reengage": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "reengageNoProjectUsers",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Re-engage inactive signups",
+            "description": "Email users with no project, 2\u20134 days after signup"
+          }
+        }
+      }
+    ]
+  }
+}
