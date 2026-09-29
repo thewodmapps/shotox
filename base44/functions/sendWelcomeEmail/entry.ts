@@ -9,12 +9,10 @@ const YEAR = new Date().getFullYear();
 function emailShell(opts) {
   return `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#ffffff;font-family:Inter,Segoe UI,Arial,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;padding:32px 16px 48px;">
+<body style="margin:0;padding:0;background:#f4f4f5;font-family:Inter,Segoe UI,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:32px 16px 48px;">
     <tr><td align="center">
-      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#f4f4f5;border-radius:28px;padding:28px 24px;">
-        <tr><td>
-          <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:24px;overflow:hidden;border:1px solid rgba(0,0,0,0.06);box-shadow:0 12px 40px -16px rgba(0,0,0,0.18);">
+      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:28px;overflow:hidden;border:1px solid rgba(0,0,0,0.06);box-shadow:0 12px 40px -16px rgba(0,0,0,0.18);">
         <tr><td style="padding:28px 40px 18px;">
           <table cellpadding="0" cellspacing="0"><tr>
             <td style="vertical-align:middle;"><img src="${LOGO_URL}" width="36" height="36" alt="Shotox" style="display:block;border-radius:10px;"></td>
@@ -29,13 +27,11 @@ function emailShell(opts) {
           </tr></table>
         </td></tr>
         ${opts.body}
-          </table>
-          <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;margin-top:16px;">
-            <tr><td style="padding:0 8px;">
-              <p style="margin:0 0 8px;font-size:12px;color:rgba(11,11,18,0.5);">You received this email because you signed up for Shotox.</p>
-              <p style="margin:0;font-size:12px;color:rgba(11,11,18,0.4);">© ${YEAR} Shotox · India · Worldwide · <a href="https://shotox.in" style="color:rgba(11,11,18,0.7);text-decoration:underline;">shotox.in</a></p>
-            </td></tr>
-          </table>
+      </table>
+      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;margin-top:16px;">
+        <tr><td style="padding:0 8px;">
+          <p style="margin:0 0 8px;font-size:12px;color:rgba(11,11,18,0.5);">You received this email because you signed up for Shotox.</p>
+          <p style="margin:0;font-size:12px;color:rgba(11,11,18,0.4);">© ${YEAR} Shotox · India · Worldwide · <a href="https://shotox.in" style="color:rgba(11,11,18,0.7);text-decoration:underline;">shotox.in</a></p>
         </td></tr>
       </table>
     </td></tr>
