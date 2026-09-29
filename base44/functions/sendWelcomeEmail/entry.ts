@@ -87,7 +87,6 @@ Tips on our blog: https://shotox.in/blog
 
     await base44.asServiceRole.integrations.Core.SendEmail({
       to: email,
-      from_name: 'Shotox',
       subject,
       html,
       text
