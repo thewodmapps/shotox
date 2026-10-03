@@ -1,13 +1,13 @@
 {
   "name": "Auto Blog Post",
-  "description": "Auto-generates and publishes one SEO blog post daily at 9:00 AM IST. AI picks a fresh long-tail topic, writes the article, generates a cover, and saves a published BlogPost.",
+  "description": "Auto-generates and publishes one SEO blog post every Monday at 9:00 AM IST. AI picks a fresh long-tail topic, writes the article, generates a cover, and saves a published BlogPost.",
   "trigger": {
     "condition": null,
     "config": {
       "trigger_type": "scheduled",
       "events": [],
       "schedule_mode": "recurring",
-      "cron_expression": "0 9 * * *",
+      "cron_expression": "0 9 * * 1",
       "one_time_date": null,
       "timezone": "Asia/Calcutta",
       "interval_value": null,
